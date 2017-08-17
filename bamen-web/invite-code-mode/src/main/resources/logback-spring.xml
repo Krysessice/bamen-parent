@@ -34,7 +34,7 @@
 		<!-- 警告日志文件 -->
 		<appender name="WarnFileAppender" class="ch.qos.logback.core.rolling.RollingFileAppender">
 			<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-				<FileNamePattern>log/warn/%d{yyyy-MM-dd}.log</FileNamePattern>
+				<FileNamePattern>log/invite_code_mode/warn/%d{yyyy-MM-dd}.log</FileNamePattern>
 				<maxHistory>30</maxHistory>
 			</rollingPolicy>
 
@@ -49,7 +49,7 @@
 		<!-- SysAgentService日志文件 -->
 		<appender name="SysAgentServiceFileAppender" class="ch.qos.logback.core.rolling.RollingFileAppender">
 			<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-				<FileNamePattern>log/SysAgentService/%d{yyyy-MM-dd}.log</FileNamePattern>
+				<FileNamePattern>log/invite_code_mode/SysAgentService/%d{yyyy-MM-dd}.log</FileNamePattern>
 				<maxHistory>30</maxHistory>
 			</rollingPolicy>
 
