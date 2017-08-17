@@ -14,10 +14,12 @@
 	<version>${bamen-web.version}</version>
 	<modules>
 		<module>invite-code-mode</module>
+		<module>room-card-mode</module>
 	</modules>
 
 	<properties>
 		<invite-code-mode.version>1.1.1</invite-code-mode.version>
+		<room-card-mode.version>1.0.1</room-card-mode.version>
 	</properties>
 
 	<dependencies>

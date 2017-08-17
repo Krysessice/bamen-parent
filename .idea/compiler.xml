@@ -8,6 +8,7 @@
         <outputRelativeToContentRoot value="true" />
         <module name="bamen-core" />
         <module name="invite-code-mode" />
+        <module name="room-card-mode" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
@@ -15,6 +16,7 @@
       <module name="bamen-parent" target="1.8" />
       <module name="bamen-web" target="1.8" />
       <module name="invite-code-mode" target="1.8" />
+      <module name="room-card-mode" target="1.8" />
     </bytecodeTargetLevel>
   </component>
 </project>

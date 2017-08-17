@@ -23,8 +23,10 @@ public final class AuthConstant {
 		public static final String ADMIN_USERNAME = "admin";
 		public static final String ADMIN_PASSWORD = "aq1sw2de";
 
+		public static final String ADMIN_NICK_NAME = "管理员";
+
 		// 数据库中管理员账号
-		public static final String[] ADMIN_ACCOUNTS = {"10001"};
+		public static final String[] ADMIN_ACCOUNTS = {"10001", "13477035189"};
 	}
 
 	/**

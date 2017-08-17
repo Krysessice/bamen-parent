@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+
+	<springProfile name="dev">
+		<appender name="consoleAppender" class="ch.qos.logback.core.ConsoleAppender">
+			<encoder>
+				<Pattern>%d{HH:mm:ss.SSS} [%thread] %highlight(%-5level) %cyan(%logger{36}) - %msg %n</Pattern>
+			</encoder>
+		</appender>
+
+		<logger name="com.bamenyouxi.room_card_mode.mapper" additivity="false">
+			<level value="TRACE" />
+			<appender-ref ref="consoleAppender"/>
+		</logger>
+
+		<root>
+			<level value="INFO" />
+			<appender-ref ref="consoleAppender" />
+		</root>
+	</springProfile>
+
+
+
+	<springProfile name="prod">
+		<appender name="consoleAppender" class="ch.qos.logback.core.ConsoleAppender">
+			<encoder>
+				<Pattern>.%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg %n</Pattern>
+			</encoder>
+			<filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+				<level>WARN</level>
+			</filter>
+		</appender>
+
+		<!-- 警告日志文件 -->
+		<appender name="WarnFileAppender" class="ch.qos.logback.core.rolling.RollingFileAppender">
+			<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+				<FileNamePattern>log/room_card_mode/warn/%d{yyyy-MM-dd}.log</FileNamePattern>
+				<maxHistory>30</maxHistory>
+			</rollingPolicy>
+
+			<encoder>
+				<Pattern>%d{HH:mm:ss.SSS} [%thread] %-5level - %msg %n</Pattern>
+			</encoder>
+			<filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+				<level>WARN</level>
+			</filter>
+		</appender>
+
+		<!-- SysAgentService日志文件 -->
+		<appender name="SysAgentServiceFileAppender" class="ch.qos.logback.core.rolling.RollingFileAppender">
+			<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+				<FileNamePattern>log/room_card_mode/SysAgentService/%d{yyyy-MM-dd}.log</FileNamePattern>
+				<maxHistory>30</maxHistory>
+			</rollingPolicy>
+
+			<encoder>
+				<Pattern>%d{HH:mm:ss.SSS} [%thread] %-5level - %msg %n</Pattern>
+			</encoder>
+			<filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+				<level>INFO</level>
+			</filter>
+		</appender>
+
+		<logger name="com.bamenyouxi.room_card_mode.service.mysql.SysAgentService" additivity="false">
+			<appender-ref ref="SysAgentServiceFileAppender"/>
+		</logger>
+
+		<root>
+			<appender-ref ref="consoleAppender" />
+			<appender-ref ref="WarnFileAppender"/>
+		</root>
+	</springProfile>
+
+</configuration>
