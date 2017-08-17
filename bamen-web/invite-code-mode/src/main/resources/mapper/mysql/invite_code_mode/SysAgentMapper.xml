@@ -130,6 +130,12 @@
             <if test="sysFlag != null">
                 F_SYS_FLAG = #{sysFlag},
             </if>
+            <if test="province != null">
+                F_PROVINCE = #{province},
+            </if>
+            <if test="city != null">
+                F_CITY = #{city},
+            </if>
 
             <choose>
                 <when test="recruitNumInt == 1">

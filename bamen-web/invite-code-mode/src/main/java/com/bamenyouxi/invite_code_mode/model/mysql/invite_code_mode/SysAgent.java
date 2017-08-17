@@ -34,6 +34,16 @@ public final class SysAgent extends AbstractUserInfoEntity {
     private Timestamp authorizedTime;
     private Integer recruitNum;
     private Boolean showAnnounce;
+    private String province;
+    private String city;
+
+    public String getProvince() {
+        return province;
+    }
+
+    public String getCity() {
+        return city;
+    }
 
     private BigDecimal clearPrice;
     private Integer _gameId;
@@ -144,7 +154,8 @@ public final class SysAgent extends AbstractUserInfoEntity {
         this.showAnnounce = builder.showAnnounce;
         this.sysFlag = builder.sysFlag;
         this.createTime = builder.createTime;
-
+        this.province=builder.Province;
+        this.city=builder.City;
         this._gameId = builder._gameId;
         this._superAgentGameId = builder._superAgentGameId;
 
@@ -173,10 +184,13 @@ public final class SysAgent extends AbstractUserInfoEntity {
         private Boolean sysFlag;
         private Timestamp createTime;
 
+
         private Integer _gameId;
         private Integer _superAgentGameId;
 
         private int recruitNumInt;
+        private String Province;
+        private String City;
 
         public Builder id(Long val) {
             id = val;
@@ -273,6 +287,16 @@ public final class SysAgent extends AbstractUserInfoEntity {
             return this;
         }
 
+        public Builder Province(String val){
+            Province =val;
+            return this;
+        }
+
+        public Builder City(String val){
+            City = val;
+            return this;
+        }
+
         public static void defaultPwdInject(SysAgent sysAgent) {
             String secretKey = UUIDUtil.genUUID();
             String password = new Md5PasswordEncoder().encodePassword(AuthConstant.SysAgentConstant.DEFAULT_PWD, secretKey);
@@ -302,5 +326,7 @@ public final class SysAgent extends AbstractUserInfoEntity {
         public SysAgent build() {
             return new SysAgent(this);
         }
+
+
     }
 }
