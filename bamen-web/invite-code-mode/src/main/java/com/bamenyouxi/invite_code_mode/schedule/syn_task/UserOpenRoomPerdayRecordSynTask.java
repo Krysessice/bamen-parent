@@ -23,7 +23,7 @@ import java.util.List;
  */
 @Component
 @Order(SysConstant.CommandLineOrder.USER_OPEN_ROOM_PERDAY_RECORD_SYN_TASK)
-final class UserOpenRoomPerdayRecordSynTask extends AbstractDataSynTask<UserFangKaCost, UserOpenRoomPerdayRecord> {
+class UserOpenRoomPerdayRecordSynTask extends AbstractDataSynTask<UserFangKaCost, UserOpenRoomPerdayRecord> {
 	@Autowired
 	private UserFangKaCostMapper userFangKaCostMapper;
 	@Autowired

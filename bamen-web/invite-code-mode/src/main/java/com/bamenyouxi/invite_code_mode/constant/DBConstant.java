@@ -4,7 +4,7 @@ package com.bamenyouxi.invite_code_mode.constant;
  * 数据源常量
  * Created by 13477 on 2017/8/16.
  */
-public class DBConstant {
+public final class DBConstant {
 	private final static String BASE_PACKAGE = "com.bamenyouxi.invite_code_mode";
 	private final static String MYSQL_MODEL_BASE_PACKAGE = BASE_PACKAGE + ".model.mysql";
 	private final static String SQLSERVER_MODEL_BASE_PACKAGE = BASE_PACKAGE + ".model.sqlserver";

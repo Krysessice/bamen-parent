@@ -6,7 +6,7 @@ import com.bamenyouxi.core.impl.model.mysql.BaseEntity;
  * model for t_card_gift_record
  * Created by 13477 on 2017/8/8.
  */
-public class CardGiftRecord extends BaseEntity {
+public final class CardGiftRecord extends BaseEntity {
 
 	private Integer presenter;
 	private Integer presentee;
