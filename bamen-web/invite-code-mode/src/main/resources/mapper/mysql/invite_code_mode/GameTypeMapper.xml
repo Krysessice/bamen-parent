@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+		PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+		"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bamenyouxi.invite_code_mode.mapper.mysql.invite_code_mode.GameTypeMapper">
+	<resultMap id="resultMap" type="com.bamenyouxi.invite_code_mode.model.mysql.invite_code_mode.GameType">
+		<id property="id" column="F_ID" />
+		<result property="sysFlag" column="F_SYS_FLAG" />
+		<result property="creator" column="F_CREATOR" />
+		<result property="createTime" column="F_CREATE_TIME" />
+		<result property="modifier" column="F_MODIFIER" />
+		<result property="modifyTime" column="F_MODIFY_TIME" />
+
+		<result property="gameTypeId" column="F_GAME_TYPE_ID" />
+		<result property="gameName" column="F_GAME_NAME" />
+	</resultMap>
+
+	<update id="truncate">
+		truncate table t_game_type
+	</update>
+
+	<insert id="saveMul">
+		insert ignore into t_game_type (F_GAME_TYPE_ID, F_GAME_NAME) values
+		<foreach item="item" collection="list" separator=",">
+			(#{item.gameTypeId}, #{item.gameName})
+		</foreach>
+	</insert>
+</mapper>

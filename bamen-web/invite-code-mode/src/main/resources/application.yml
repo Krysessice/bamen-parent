@@ -1,0 +1,33 @@
+spring:
+  profiles:
+    active: dev
+  mvc:
+    favicon:
+      enabled: false
+  datasource:
+    mysql:
+      invitecodemode:
+        jdbc-url: jdbc:mysql://127.0.0.1/invite_code_mode?useUnicode=true&characterEncoding=utf-8&useSSL=false&zeroDateTimeBehavior=convertToNull&autoReconnect=true
+        username: root
+        password: aq1sw2de
+        driver-class-name: com.mysql.jdbc.Driver
+    sqlserver:
+      account:
+        jdbc-url: jdbc:sqlserver://127.0.0.1:1433;databaseName=QPAccountsDB
+        username: sa
+        password: Joke2016
+        driver-class-name: com.microsoft.sqlserver.jdbc.SQLServerDriver
+      treasure:
+        jdbc-url: jdbc:sqlserver://127.0.0.1:1433;databaseName=QPTreasureDB
+        username: sa
+        password: Joke2016
+        driver-class-name: com.microsoft.sqlserver.jdbc.SQLServerDriver
+      platform:
+        jdbc-url: jdbc:sqlserver://127.0.0.1:1433;databaseName=QPPlatformDB
+        username: sa
+        password: Joke2016
+        driver-class-name: com.microsoft.sqlserver.jdbc.SQLServerDriver
+
+custom:
+  SysAgent:
+    resetShowAnnounce: false

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+		PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+		"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bamenyouxi.invite_code_mode.mapper.mysql.invite_code_mode.OpenRoomPerhourRecordMapper">
+	<resultMap id="resultMap" type="com.bamenyouxi.invite_code_mode.model.mysql.invite_code_mode.OpenRoomPerhourRecord">
+		<id property="id" column="F_ID" />
+		<result property="sysFlag" column="F_SYS_FLAG" />
+		<result property="creator" column="F_CREATOR" />
+		<result property="createTime" column="F_CREATE_TIME" />
+		<result property="modifier" column="F_MODIFIER" />
+		<result property="modifyTime" column="F_MODIFY_TIME" />
+
+		<result property="gameTypeId" column="F_GAME_TYPE_ID" />
+		<result property="openRoomNum" column="F_OPEN_ROOM_NUM" />
+		<result property="cardCost" column="F_CARD_COST" />
+
+		<result property="gameName" column="F_GAME_NAME" />
+	</resultMap>
+
+</mapper>

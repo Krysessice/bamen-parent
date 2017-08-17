@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="layout/head :: common_head(_, _)">
+
+</head>
+<body th:replace="layout/body :: common_body(~{::div#container}, ~{::#selfJs})">
+
+	<div id="container" class="container">
+
+		<th:block th:replace="~{layout/common :: page-header('直属会员查询')}" />
+
+		<label class="radio-inline">
+			<input type="radio" name="radio-A" value="false" checked /> 普通会员
+		</label>
+		<label class="radio-inline">
+			<input type="radio" name="radio-A" value="true" /> 代理商
+		</label>
+
+		<hr />
+
+		<th:block th:replace="~{layout/common :: table-paginator('table')}" />
+
+		<th:block th:replace="model/payOrderModel :: payOrderModel" />
+
+	</div>
+
+	<th:block id="selfJs">
+
+		<th:block th:replace="~{layout/common :: pageJs}" />
+
+		<script type="text/javascript">
+
+			$("#table").tableInit('junior', $('input[name="radio-A"]:checked').val());
+
+			$('input[name="radio-A"]').on('change', function() {
+				$("#table").tableInit('junior', $(this).val());
+			})
+
+			$('#payOrderModel').on('show.bs.modal', function (event) {
+				var modal = $(this);
+				var button = $(event.relatedTarget);
+				var element = button.parents('tr');
+				var gameId = element.find('td[name="gameId"]').text();
+
+				modal.find('.modal-title').text(gameId + ' 充值明细');
+				$('#model-table').tableInit('juniorPayOrderStatistic', gameId);
+			})
+
+		</script>
+
+	</th:block>
+
+</body>
+</html>

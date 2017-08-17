@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bamenyouxi.invite_code_mode.mapper.mysql.invite_code_mode.SysResourceMapper">
+    <resultMap id="resultMap" type="com.bamenyouxi.invite_code_mode.model.mysql.invite_code_mode.SysResource">
+        <id property="id" column="F_ID" />
+        <result property="sysFlag" column="F_SYS_FLAG" />
+        <result property="creator" column="F_CREATOR" />
+        <result property="createTime" column="F_CREATE_TIME" />
+        <result property="modifier" column="F_MODIFIER" />
+        <result property="modifyTime" column="F_MODIFY_TIME" />
+
+        <result property="userId" column="F_USER_ID" />
+        <result property="resourceId" column="F_RESOURCE_ID" />
+        <result property="resourceName" column="F_RESOURCE_NAME" />
+    </resultMap>
+
+    <select id="get" resultMap="resultMap">
+        select * from t_sys_resource
+        <where>
+            <foreach collection="params" index="key" item="value">
+                <if test="value != null">
+                    <choose>
+                        <when test="key == 'gameId1'">
+                            and F_USER_ID = (
+                                select F_ID from t_sys_agent where F_GAME_ID = #{value}
+                            )
+                        </when>
+                        <when test="key == 'gameId2'">
+                            and F_RESOURCE_ID = (
+                                select F_ID from t_sys_agent where F_GAME_ID = #{value}
+                            )
+                        </when>
+                        <otherwise>
+                            and ${key} = #{value}
+                        </otherwise>
+                    </choose>
+                </if>
+            </foreach>
+        </where>
+    </select>
+
+    <insert id="save" parameterType="com.bamenyouxi.invite_code_mode.model.mysql.invite_code_mode.SysResource">
+        insert ignore into t_sys_resource
+        (
+            F_USER_ID, F_RESOURCE_ID, F_RESOURCE_NAME
+        ) values(
+            <choose>
+                <when test="gameId1 != null">
+                    (select F_ID from t_sys_agent where F_GAME_ID = #{gameId1}),
+                </when>
+                <otherwise>
+                    #{userId},
+                </otherwise>
+            </choose>
+            <choose>
+                <when test="gameId2 != null">
+                    (select F_ID from t_sys_agent where F_GAME_ID = #{gameId2}),
+                </when>
+                <otherwise>
+                    #{resourceId},
+                </otherwise>
+            </choose>
+            #{resourceName}
+        )
+    </insert>
+
+    <!-- 批量修改资源信息 -->
+    <update id="updateMul" parameterType="map">
+        update t_sys_resource
+        <set>
+            <if test="dest.userId != null">
+                F_USER_ID = #{dest.userId},
+            </if>
+            <if test="dest.resourceId != null">
+                F_RESOURCE_ID = #{dest.resourceId},
+            </if>
+            <if test="dest.resourceName != null">
+                F_RESOURCE_NAME = #{dest.resourceName},
+            </if>
+            <if test="dest.sysFlag != null">
+                F_SYS_FLAG = #{dest.sysFlag},
+            </if>
+        </set>
+        <where>
+            F_USER_ID = #{src.userId} and F_RESOURCE_ID = #{src.resourceId}
+            <if test="src.resourceName != null">
+                and F_RESOURCE_NAME = #{src.resourceName}
+            </if>
+            <if test="src.sysFlag != null">
+                and F_SYS_FLAG = #{src.sysFlag}
+            </if>
+        </where>
+    </update>
+
+</mapper>

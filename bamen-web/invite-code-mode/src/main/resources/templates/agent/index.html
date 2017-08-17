@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="layout/head :: common_head(_, _)">
+
+</head>
+<body th:replace="layout/body :: common_body(~{::div#container}, _)">
+
+	<div id="container" class="container">
+
+		<div class="page-header"></div>
+
+		<div class="well" th:object="${principal.sysAgent}">
+			<div class="row">
+				<div class="col-xs-4">邀　请　码</div>
+				<div class="col-xs-8">[[*{gameId}]]</div>
+			</div>
+			<div class="row">
+				<div class="col-xs-4">游　戏　id</div>
+				<div class="col-xs-8">[[*{gameId}]]</div>
+			</div>
+			<div class="row">
+				<div class="col-xs-4">用 户 昵 称</div>
+				<div class="col-xs-8">[[*{nickName}]]</div>
+			</div>
+			<div class="row">
+				<div class="col-xs-4">注 册 日 期</div>
+				<div class="col-xs-8">[[*{#dates.format(createTime, 'yyyy-MM-dd')}]]</div>
+			</div>
+			<div class="row">
+				<div class="col-xs-4">招 募 人 数</div>
+				<div class="col-xs-8">[[*{recruitNum}]]</div>
+			</div>
+		</div>
+
+		<th:block th:if="${principal.sysAgent.showAnnounce}">
+			<div class="alert alert-info alert-dismissible" role="alert">
+				<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+				<span class="glyphicon glyphicon-bullhorn"></span> 后台 1.0.9 更新啦！
+				<p></p>
+				<img class="img-responsive" src="/img/remember-me.jpg" th:src="@{/img/remember-me.jpg}" th:alt-title="#{remember-me}" />
+				<p>勾选 “记住我” 可保持登录30天...</p>
+				<p class="pull-right"><button type="button" class="btn btn-link" onclick="new CommonJs().closeAnnounce()">不再提示</button></p>
+				<br />
+			</div>
+		</th:block>
+
+		<div class="list-group">
+			<th:block th:replace="~{layout/common :: list-group-item('/agent/announcement.html', 'glyphicon-bullhorn', '代理商须知')}" />
+			<th:block th:replace="~{layout/common :: list-group-item('/agent/team-pay-order.html', 'glyphicon-flag', '团队充值实时统计')}" />
+			<th:block th:replace="~{layout/common :: list-group-item('/agent/team-pay-order-statistic.html', 'glyphicon-flag', '团队充值日结算')}" />
+			<th:block th:replace="~{layout/common :: list-group-item('/agent/junior.html', 'glyphicon-chevron-down', '直属会员查询')}" />
+			<th:block th:replace="~{layout/common :: list-group-item('/agent/authorize.html', 'glyphicon-hand-right', '授权下级代理商')}" />
+			<th:block th:replace="~{layout/common :: list-group-item('/agent/pay-order.html', 'glyphicon-list-alt', '我的充值明细')}" />
+			<th:block th:replace="~{layout/common :: list-group-item('/agent/info.html', 'glyphicon-user', '查看个人资料')}" />
+		</div>
+
+	</div>
+
+</body>
+</html>

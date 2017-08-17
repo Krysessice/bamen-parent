@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="layout/head :: common_head(_, _)">
+
+</head>
+<body th:replace="layout/body :: common_body(~{::div#container}, _)">
+
+	<div id="container" class="container">
+
+		<div class="page-header"></div>
+
+		<div class="well" th:object="${principal.sysAgent}">
+			<div class="row">
+				<div class="col-xs-4">邀　请　码</div>
+				<div class="col-xs-8">[[*{gameId}]]</div>
+			</div>
+			<div class="row">
+				<div class="col-xs-4">游　戏　id</div>
+				<div class="col-xs-8">[[*{gameId}]]</div>
+			</div>
+			<div class="row">
+				<div class="col-xs-4">用 户 昵 称</div>
+				<div class="col-xs-8">[[*{nickName}]]</div>
+			</div>
+			<div class="row">
+				<div class="col-xs-4">注 册 日 期</div>
+				<div class="col-xs-8">[[*{#dates.format(createTime, 'yyyy-MM-dd')}]]</div>
+			</div>
+			<div class="row">
+				<div class="col-xs-4">招 募 人 数</div>
+				<div class="col-xs-8">[[*{recruitNum}]]</div>
+			</div>
+		</div>
+
+		<div class="list-group">
+			<th:block th:replace="~{layout/common :: list-group-item('/agent/index.html', 'glyphicon-euro', '代理商')}" />
+			<th:block th:replace="~{layout/common :: list-group-item('/admin/system-info.html', 'glyphicon-asterisk', '系统信息查询')}" />
+			<th:block th:replace="~{layout/common :: list-group-item('/admin/sys-agent-info.html', 'glyphicon-user', '用户信息查询')}" />
+			<th:block th:replace="~{layout/common :: list-group-item('/admin/card-cost-perday.html', 'glyphicon-credit-card', '每日房卡消耗')}" />
+			<th:block th:replace="~{layout/common :: list-group-item('/admin/card-gift.html', 'glyphicon-leaf', '房卡赠送')}" />
+			<th:block th:replace="~{layout/common :: list-group-item('/admin/clear.html', 'glyphicon-glass', '结算')}" />
+			<th:block th:replace="~{layout/common :: list-group-item('/admin/operation.html', 'glyphicon-off', '操作')}" />
+		</div>
+
+	</div>
+
+</body>
+</html>

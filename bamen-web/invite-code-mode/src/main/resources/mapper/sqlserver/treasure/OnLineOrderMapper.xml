@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bamenyouxi.invite_code_mode.mapper.sqlserver.treasure.OnLineOrderMapper">
+	<resultMap id="resultMap" type="com.bamenyouxi.invite_code_mode.model.sqlserver.treasure.OnLineOrder">
+		<result property="onlineId" column="OnLineID" />
+		<result property="userId" column="UserID" />
+		<result property="gameId" column="GameID" />
+		<result property="accounts" column="Accounts" />
+		<result property="orderId" column="OrderID" />
+		<result property="orderAmount" column="OrderAmount" />
+		<result property="cardGold" column="CardGold" />
+		<result property="applyDate" column="ApplyDate" />
+	</resultMap>
+
+	<sql id="field_list">
+		OnLineID, UserID, GameID, Accounts, OrderID, OrderAmount, CardGold, ApplyDate
+	</sql>
+
+	<select id="get" resultMap="resultMap">
+		select
+			<include refid="field_list" />
+		from OnLineOrder
+		<where>
+			<foreach collection="params" index="key" item="value">
+				<if test="value != null">
+					<choose>
+						<when test="key == 'startDate'">
+							and convert(varchar(10), ApplyDate, 120) &gt;= convert(varchar(10), #{value}, 120)
+						</when>
+						<when test="key == 'endDate'">
+							and convert(varchar(10), ApplyDate, 120) &lt;= convert(varchar(10), #{value}, 120)
+						</when>
+						<otherwise>
+							and ${key} = #{value}
+						</otherwise>
+					</choose>
+				</if>
+			</foreach>
+		</where>
+	</select>
+
+	<!-- 转换OnLineOrder为PayOrder输出 -->
+	<select id="getOfPayOrder" resultType="com.bamenyouxi.invite_code_mode.model.mysql.invite_code_mode.PayOrder" parameterType="map">
+		select
+			OrderID orderNo, UserID, GameID, Accounts, OrderAmount payPrice, CardGold cardGold, ApplyDate createTime
+		from
+			OnLineOrder
+		<where>
+			<if test="startDate != null">
+				and convert(varchar(10), ApplyDate, 120) &gt;= convert(varchar(10), #{startDate}, 120)
+			</if>
+			<if test="endDate != null">
+				and convert(varchar(10), ApplyDate, 120) &lt;= convert(varchar(10), #{endDate}, 120)
+			</if>
+			<if test="startTime != null">
+				and ApplyDate &gt;= #{startTime}
+			</if>
+			<if test="endTime != null">
+				and ApplyDate &lt;= #{endTime}
+			</if>
+		</where>
+	</select>
+</mapper>

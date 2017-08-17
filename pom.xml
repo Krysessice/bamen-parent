@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<groupId>com.bamenyouxi</groupId>
+	<artifactId>bamen-parent</artifactId>
+	<version>${bamen-main.version}</version>
+	<modules>
+		<module>bamen-web</module>
+		<module>bamen-core</module>
+	</modules>
+	<packaging>pom</packaging>
+
+	<properties>
+		<bamen-main.version>1.1.1</bamen-main.version>
+		<bamen-web.version>1.1.1</bamen-web.version>
+
+		<fastjson.version>1.2.34</fastjson.version>
+		<maven-plugin.version>1.5.4.RELEASE</maven-plugin.version>
+		<pagehelper.version>4.1.6</pagehelper.version>
+		<poi.version>3.16</poi.version>
+		<spring-boot.version>2.0.0.M2</spring-boot.version>
+		<spring-mybatis.version>1.3.0</spring-mybatis.version>
+		<sqlserver-jdbc.version>4.0.2206.100</sqlserver-jdbc.version>
+
+		<java.version>1.8</java.version>
+		<resource.delimiter>@</resource.delimiter> <!-- delimiter that doesn't clash with Spring ${} placeholders -->
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+		<maven.compiler.source>${java.version}</maven.compiler.source>
+		<maven.compiler.target>${java.version}</maven.compiler.target>
+	</properties>
+
+	<dependencies>
+		<!--spring boot test-->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-test</artifactId>
+			<scope>test</scope>
+		</dependency>
+	</dependencies>
+
+	<dependencyManagement>
+		<dependencies>
+			<dependency>
+				<groupId>com.bamenyouxi</groupId>
+				<artifactId>bamen-core</artifactId>
+				<version>${bamen-main.version}</version>
+			</dependency>
+
+			<dependency>
+				<!-- Import dependency management from Spring Boot -->
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-dependencies</artifactId>
+				<version>${spring-boot.version}</version>
+				<type>pom</type>
+				<scope>import</scope>
+			</dependency>
+
+			<!-- Mybatis -->
+			<dependency>
+				<groupId>org.mybatis.spring.boot</groupId>
+				<artifactId>mybatis-spring-boot-starter</artifactId>
+				<version>${spring-mybatis.version}</version>
+			</dependency>
+			<!-- PageHelper -->
+			<!--<dependency>
+				<groupId>com.github.pagehelper</groupId>
+				<artifactId>pagehelper-spring-boot-starter</artifactId>
+				<version>1.1.2</version>
+			</dependency>-->
+			<dependency>
+				<groupId>com.github.pagehelper</groupId>
+				<artifactId>pagehelper</artifactId>
+				<version>${pagehelper.version}</version>
+			</dependency>
+
+			<!-- sqlserver jdbc -->
+			<dependency>
+				<groupId>com.hynnet</groupId>
+				<artifactId>sqljdbc4-chs</artifactId>
+				<version>${sqlserver-jdbc.version}</version>
+			</dependency>
+
+			<!-- json解析工具 -->
+			<dependency>
+				<groupId>com.alibaba</groupId>
+				<artifactId>fastjson</artifactId>
+				<version>${fastjson.version}</version>
+			</dependency>
+
+			<!-- poi -->
+			<dependency>
+				<groupId>org.apache.poi</groupId>
+				<artifactId>poi</artifactId>
+				<version>${poi.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.poi</groupId>
+				<artifactId>poi-ooxml</artifactId>
+				<version>${poi.version}</version>
+			</dependency>
+		</dependencies>
+	</dependencyManagement>
+
+	<repositories>
+		<repository>
+			<id>spring-milestones</id>
+			<name>Spring Milestones</name>
+			<url>https://repo.spring.io/libs-milestone</url>
+			<snapshots>
+				<enabled>false</enabled>
+			</snapshots>
+		</repository>
+	</repositories>
+</project>

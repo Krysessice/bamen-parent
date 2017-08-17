@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+		PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+		"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bamenyouxi.invite_code_mode.mapper.mysql.invite_code_mode.SysAgentClearRecordMapper">
+	<cache />
+	<resultMap id="resultMap" type="com.bamenyouxi.invite_code_mode.model.mysql.invite_code_mode.SysAgentClearRecord">
+		<id property="id" column="F_ID" />
+		<result property="sysFlag" column="F_SYS_FLAG" />
+		<result property="creator" column="F_CREATOR" />
+		<result property="createTime" column="F_CREATE_TIME" />
+		<result property="modifier" column="F_MODIFIER" />
+		<result property="modifyTime" column="F_MODIFY_TIME" />
+
+		<result property="startDate" column="F_START_DATE" />
+		<result property="endDate" column="F_END_DATE" />
+		<result property="payPrice" column="F_PAY_PRICE" />
+		<result property="clearPrice" column="F_CLEAR_PRICE" />
+	</resultMap>
+
+	<select id="get" resultMap="resultMap">
+		select * from t_sys_agent_clear_record
+		<where>
+			<foreach collection="params" index="key" item="value">
+				<if test="value != null">
+					and ${key} = #{value}
+				</if>
+			</foreach>
+		</where>
+	</select>
+
+	<insert id="save" parameterType="com.bamenyouxi.invite_code_mode.model.mysql.invite_code_mode.SysAgentClearRecord">
+		insert into t_sys_agent_clear_record
+		(
+			F_START_DATE, F_END_DATE, F_PAY_PRICE, F_CLEAR_PRICE
+		) values(
+			#{startDate}, #{endDate}, #{payPrice}, #{clearPrice}
+		)
+	</insert>
+</mapper>

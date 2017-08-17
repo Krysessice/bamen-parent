@@ -1,0 +1,189 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bamenyouxi.invite_code_mode.mapper.mysql.invite_code_mode.TeamPayOrderMapper">
+    <cache />
+
+    <sql id="select_t1">
+        SELECT
+            't1' as teamNo,
+            '直属会员' as teamName,
+            IFNULL(sum(F_PAY_PRICE), 0) as payPrice,
+            IFNULL(sum(F_CARD_GOLD), 0) as cardGold,
+            IFNULL(sum(F_PAY_PRICE) * #{params.t1}, 0) as commission
+        FROM
+            t_sys_agent a
+        INNER JOIN ${tableName} b USING (F_GAME_ID)
+        <where>
+	        (
+            <choose>
+                <when test="params.superAgentGameId != null">
+                    (
+                        F_GAME_ID = #{params.superAgentGameId}
+                        AND F_IS_AUTHORIZED IS TRUE
+                    )
+                    OR (
+                        F_SUPER_AGENT_GAME_ID = #{params.superAgentGameId}
+                        AND F_IS_AUTHORIZED IS FALSE
+                    )
+                </when>
+                <otherwise>
+                    F_IS_AUTHORIZED IS TRUE
+                    OR (
+                        F_SUPER_AGENT_GAME_ID IS NOT NULL
+                        AND F_IS_AUTHORIZED IS FALSE
+                    )
+                </otherwise>
+            </choose>
+	        )
+            <if test="params.startDate != null">
+                and convert(b.F_CREATE_TIME, DATE) &gt;= convert(#{params.startDate}, DATE)
+            </if>
+            <if test="params.endDate != null">
+                and convert(b.F_CREATE_TIME, DATE) &lt;= convert(#{params.endDate}, DATE)
+            </if>
+        </where>
+    </sql>
+
+    <sql id="select_t2">
+	    SELECT
+            't2' as teamNo,
+            '二级团队' as teamName,
+		    IFNULL(sum(F_PAY_PRICE), 0) as payPrice,
+		    IFNULL(sum(F_CARD_GOLD), 0) as cardGold,
+		    IFNULL(sum(F_PAY_PRICE) * #{params.t2}, 0) as commission
+	    FROM
+	        t_sys_agent a
+	    INNER JOIN ${tableName} b USING (F_GAME_ID)
+	    <where>
+		    (
+		    <choose>
+			    <when test="params.superAgentGameId != null">
+				    (
+					    F_SUPER_AGENT_GAME_ID = #{params.superAgentGameId}
+					    AND F_IS_AUTHORIZED IS TRUE
+				    )
+				    or
+				    (
+			            F_SUPER_AGENT_GAME_ID in (
+			                select F_GAME_ID from t_sys_agent
+			                where F_SUPER_AGENT_GAME_ID = #{params.superAgentGameId}
+			                AND F_IS_AUTHORIZED IS TRUE
+			            ) and F_IS_AUTHORIZED is false
+				    )
+			    </when>
+			    <otherwise>
+				    (
+					    F_SUPER_AGENT_GAME_ID IS NOT NULL
+					    AND F_IS_AUTHORIZED IS TRUE
+				    )
+				    or
+				    (
+					    F_SUPER_AGENT_GAME_ID in (
+						    select F_GAME_ID from t_sys_agent
+						    where F_SUPER_AGENT_GAME_ID IS NOT NULL
+					        AND F_IS_AUTHORIZED IS TRUE
+					    ) and F_IS_AUTHORIZED is false
+				    )
+			    </otherwise>
+		    </choose>
+		    )
+		    <if test="params.startDate != null">
+			    and convert(b.F_CREATE_TIME, DATE) &gt;= convert(#{params.startDate}, DATE)
+		    </if>
+		    <if test="params.endDate != null">
+			    and convert(b.F_CREATE_TIME, DATE) &lt;= convert(#{params.endDate}, DATE)
+		    </if>
+	    </where>
+    </sql>
+
+    <sql id="select_t3">
+	    SELECT
+            't3' as teamNo,
+            '三级团队' as teamName,
+		    IFNULL(sum(F_PAY_PRICE), 0) as payPrice,
+		    IFNULL(sum(F_CARD_GOLD), 0) as cardGold,
+		    IFNULL(sum(F_PAY_PRICE) * #{params.t3}, 0) as commission
+	    FROM
+	        t_sys_agent a
+	    INNER JOIN ${tableName} b USING (F_GAME_ID)
+	    <where>
+		    (
+		    (
+			    F_SUPER_AGENT_GAME_ID in (
+				    select
+				        F_GAME_ID from t_sys_agent
+				    where
+				    <choose>
+					    <when test="params.superAgentGameId != null">
+				            F_SUPER_AGENT_GAME_ID = #{params.superAgentGameId}
+					    </when>
+					    <otherwise>
+						    F_SUPER_AGENT_GAME_ID IS NOT NULL
+					    </otherwise>
+				    </choose>
+				    and
+				        F_IS_AUTHORIZED is true
+			    )
+			    AND F_IS_AUTHORIZED IS TRUE
+		    )
+		    or
+		    (
+		        F_SUPER_AGENT_GAME_ID in (
+		            select F_GAME_ID from t_sys_agent
+		            where F_SUPER_AGENT_GAME_ID in (
+					    select
+					        F_GAME_ID from t_sys_agent
+					    where
+					    <choose>
+						    <when test="params.superAgentGameId != null">
+							    F_SUPER_AGENT_GAME_ID = #{params.superAgentGameId}
+						    </when>
+						    <otherwise>
+							    F_SUPER_AGENT_GAME_ID IS NOT NULL
+						    </otherwise>
+					    </choose>
+					    and
+					        F_IS_AUTHORIZED is true
+				    )
+				    AND F_IS_AUTHORIZED IS TRUE
+		        ) AND F_IS_AUTHORIZED IS false
+		    )
+		    )
+		    <if test="params.startDate != null">
+			    and convert(b.F_CREATE_TIME, DATE) &gt;= convert(#{params.startDate}, DATE)
+		    </if>
+		    <if test="params.endDate != null">
+			    and convert(b.F_CREATE_TIME, DATE) &lt;= convert(#{params.endDate}, DATE)
+		    </if>
+	    </where>
+    </sql>
+
+    <!-- 团队充值实时统计 -->
+    <select id="sumActual" resultType="com.bamenyouxi.invite_code_mode.model.mysql.invite_code_mode.TeamPayOrder">
+        <include refid="select_t1"><property name="tableName" value="t_pay_order" /></include>
+
+        union
+
+        <include refid="select_t2"><property name="tableName" value="t_pay_order" /></include>
+
+        union
+
+        <include refid="select_t3"><property name="tableName" value="t_pay_order" /></include>
+    </select>
+
+    <!-- 团队充值日统计 -->
+    <select id="sumDaily" resultType="com.bamenyouxi.invite_code_mode.model.mysql.invite_code_mode.TeamPayOrder">
+        <include refid="select_t1"><property name="tableName" value="t_pay_order_perday_statistic" /></include>
+
+        union
+
+        <include refid="select_t2"><property name="tableName" value="t_pay_order_perday_statistic" /></include>
+
+        union
+
+        <include refid="select_t3"><property name="tableName" value="t_pay_order_perday_statistic" /></include>
+    </select>
+
+</mapper>

@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="layout/head :: common_head(_, _)">
+
+</head>
+<body th:replace="layout/body :: common_body(~{::div#container}, ~{::#selfJs})">
+
+	<div id="container" class="container" th:with="recruitNum = ${principal.sysAgent.recruitNum}, leastRecruitNum = ${systemInfo.leastRecruitNum}">
+
+		<th:block th:replace="~{layout/common :: page-header('授权下级代理商')}" />
+
+		<div th:if="${recruitNum ge leastRecruitNum}">
+			<th:block th:replace="~{layout/common :: table-paginator('table')}" />
+		</div>
+
+		<div th:unless="${recruitNum ge leastRecruitNum}">
+
+			<div class="well">
+				<p>温馨提示：</p>
+				<p th:inline="text">1、邀请人数需达到[[${leastRecruitNum}]] (含[[${leastRecruitNum}]]) 以上，才能授权下级代理商。</p>
+				<p th:inline="text">2、您目前邀请人数为[[${recruitNum}]]人，还差[[${leastRecruitNum - recruitNum}]]人。</p>
+			</div>
+
+		</div>
+
+	</div>
+
+	<th:block id="selfJs" th:if="${principal.sysAgent.recruitNum} ge ${systemInfo.leastRecruitNum}">
+
+		<th:block th:replace="~{layout/common :: pageJs}" />
+
+		<script type="text/javascript">
+			var commonJs = new CommonJs();
+			$("#table").tableInit('authorize');
+		</script>
+
+	</th:block>
+
+</body>
+</html>

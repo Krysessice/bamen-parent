@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org">
+<body>
+	<div class="modal fade bs-example-modal-sm" id="updatePwdModel" tabindex="-1" role="dialog"
+	     aria-labelledby="updatePwd" aria-describedby="密码修改" th:fragment="updatePwdModel">
+
+		<div class="modal-dialog" role="document" aria-hidden="true">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+					<h4 class="modal-title" id="updatePwd">密码修改</h4>
+				</div>
+
+				<form id="updatePwdForm" onsubmit="return false;">
+					<div class="modal-body">
+
+						<div class="form-group">
+							<label for="oldPwd" class="control-label">原密码:</label>
+							<input type="password" class="form-control" id="oldPwd" name="oldPwd" required="required" minlength="6" maxlength="16" />
+						</div>
+						<div class="form-group">
+							<label for="newPwd" class="control-label">新密码:(6 ~ 16位 字母、数字、下划线)</label>
+							<input type="password" class="form-control" id="newPwd" name="newPwd" required="required" minlength="6" maxlength="16" />
+						</div>
+						<div class="form-group">
+							<label for="confirmPwd" class="control-label">确认新密码:</label>
+							<input type="password" class="form-control" id="confirmPwd" name="confirmPwd" required="required" minlength="6" maxlength="16" />
+						</div>
+
+					</div>
+
+					<div class="modal-footer">
+						<button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+						<button type="submit" class="btn btn-primary">保存</button>
+					</div>
+				</form>
+			</div>
+		</div>
+
+	</div>
+
+	<th:block th:fragment="updatePwdModelJs">
+
+		<script type="text/javascript">
+
+		    $('#updatePwdForm').submit(function() {
+		        var reg = /^[a-zA-Z0-9_]{6,16}$/;
+
+		        var oldPwd = $(this).find('#oldPwd').val();
+		        var newPwd = $(this).find('#newPwd').val();
+		        var confirmPwd = $(this).find('#confirmPwd').val();
+
+		        if (!(reg.test(oldPwd) && reg.test(newPwd) && reg.test(confirmPwd)))
+		            return alert('密码必须由6～16位的字母、数字和下划线组成');
+		        if (oldPwd == newPwd)
+		            return alert('新密码不可与原密码相同');
+		        if (newPwd != confirmPwd)
+		            return alert('两次输入的密码不一致');
+
+		        $.ajax({
+		            type: 'put',
+		            url: '/agent/pwd/',
+		            dataType: 'json',
+		            data: {
+		                oldPwd: oldPwd,
+		                newPwd: newPwd
+		            },
+		            success: function(data) {
+		                if (data.status)
+		                    alert('操作成功');
+		                else
+		                    return alert(data.msg);
+
+		                window.location.href = '/login.html';
+		            }
+		        });
+		    })
+
+		</script>
+
+	</th:block>
+</body>
+</html>

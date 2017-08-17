@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bamenyouxi.invite_code_mode.mapper.sqlserver.account.AccountsInfoMapper">
+	<resultMap id="resultMap" type="com.bamenyouxi.invite_code_mode.model.sqlserver.account.AccountsInfo">
+		<result property="userId" column="UserID" />
+		<result property="gameId" column="GameID" />
+		<result property="accounts" column="Accounts" />
+		<result property="nickName" column="NickName" />
+		<result property="agentLevel" column="AgentLevel" />
+		<result property="playingGame" column="PlayingGame" />
+		<result property="registerDate" column="RegisterDate" />
+		<result property="superAgentTime" column="SuperAgentTime" />
+
+		<result property="insureScore" column="InsureScore" />
+	</resultMap>
+
+	<sql id="field_list">
+		a.UserID, GameID, Accounts, NickName, AgentLevel, PlayingGame, a.RegisterDate, SuperAgentTime
+	</sql>
+
+	<select id="get" resultMap="resultMap">
+		select
+			<include refid="field_list" />
+			<if test="params.withCardNum == 1">
+				, InsureScore
+			</if>
+		from AccountsInfo a
+		<if test="params.withCardNum == 1">
+			left join QPTreasureDB.dbo.GameScoreInfo b on a.UserID = b.UserID
+		</if>
+		<where>
+			<foreach collection="params" index="key" item="value">
+				<if test="value != null">
+					<choose>
+						<when test="key == 'withCardNum'">
+
+						</when>
+						<otherwise>
+							and ${key} = #{value}
+						</otherwise>
+					</choose>
+				</if>
+			</foreach>
+		</where>
+	</select>
+
+	<update id="update" parameterType="com.bamenyouxi.invite_code_mode.model.sqlserver.account.AccountsInfo">
+		update AccountsInfo
+		<set>
+			<if test="agentLevel != null">
+				AgentLevel = #{agentLevel},
+			</if>
+			<if test="playingGame != null">
+				PlayingGame = #{playingGame},
+			</if>
+		</set>
+		<where>
+			<choose>
+				<when test="_playingGame != null">
+					and PlayingGame = #{_playingGame}
+				</when>
+				<when test="userId != null">
+					and UserID = #{userId}
+				</when>
+				<when test="gameId != null">
+					and GameID = #{gameId}
+				</when>
+				<otherwise>
+					and UserID = 0
+				</otherwise>
+			</choose>
+		</where>
+	</update>
+
+	<select id="getOfSysAgent" resultType="com.bamenyouxi.invite_code_mode.model.mysql.invite_code_mode.SysAgent" parameterType="map">
+		select
+			UserID, GameID, Accounts, NickName, RegisterDate createTime
+		from
+			AccountsInfo
+		<where>
+			<if test="startDate != null">
+				and convert(varchar(10), RegisterDate, 120) &gt;= convert(varchar(10), #{startDate}, 120)
+			</if>
+			<if test="endDate != null">
+				and convert(varchar(10), RegisterDate, 120) &lt;= convert(varchar(10), #{endDate}, 120)
+			</if>
+			<if test="startTime != null">
+				and RegisterDate &gt;= #{startTime}
+			</if>
+			<if test="endTime != null">
+				and RegisterDate &lt;= #{endTime}
+			</if>
+		</where>
+	</select>
+
+	<select id="getBySuperAgentTimeBetweenOfSysAgent" resultType="com.bamenyouxi.invite_code_mode.model.mysql.invite_code_mode.SysAgent" parameterType="map">
+		select
+			GameID, PlayingGame superAgentGameId, SuperAgentTime transMemberTime
+		from AccountsInfo
+		<where>
+			<if test="startTime != null">
+				and SuperAgentTime &gt;= #{startTime}
+			</if>
+			<if test="endTime != null">
+				and SuperAgentTime &lt;= #{endTime}
+			</if>
+		</where>
+	</select>
+
+</mapper>

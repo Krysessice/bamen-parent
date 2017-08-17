@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="layout/head :: common_head(_, _)">
+
+</head>
+<body th:replace="layout/body :: common_body(~{::div#container}, ~{::#selfJs})">
+
+	<div id="container" class="container">
+
+		<div class="page-header"></div>
+
+		<div class="jumbotron">
+			<p>正宗邵阳剥皮玩法，本土乡音，玩法地道，新增创新带碰胡玩法，让游戏更具娱乐性。</p>
+			<!--<p class="text-primary" style="font-size: 14px;">完善个人信息有助于您在忘记登录密码时进行密码重置。</p>-->
+			<p>
+				<button class="btn btn-primary btn-lg" data-toggle="modal" data-target="#fixInfoModel" role="button">完善个人信息</button>
+				<a href="/" th:href="@{/}" class="btn btn-link">跳过此步骤</a>
+			</p>
+		</div>
+
+		<th:block th:replace="model/fixInfoModel :: fixInfoModel" />
+
+	</div>
+
+	<th:block id="selfJs">
+
+		<th:block th:replace="~{model/fixInfoModel :: fixInfoModelJs}" />
+
+	</th:block>
+
+</body>
+</html>

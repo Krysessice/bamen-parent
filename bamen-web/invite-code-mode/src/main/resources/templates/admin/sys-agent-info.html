@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="layout/head :: common_head(_, _)">
+
+</head>
+<body th:replace="layout/body :: common_body(~{::div#container}, ~{::#selfJs})">
+
+	<div id="container" class="container">
+
+		<div class="page-header"></div>
+
+		<div class="well">
+			<p>
+				查询用户信息后可进行修改用户的邀请码及真实资料，
+				用户<span class="text-primary">未填写</span>邀请码不能修改，
+				<span class="text-primary">已授权</span>的代理请谨慎修改。
+			</p>
+		</div>
+
+		<div class="input-group col-xs-10">
+			<input type="text" class="form-control" name="F_GAME_ID" placeholder="请输入游戏id/代理号" aria-describedby="F_GAME_ID" />
+			<span class="input-group-addon" id="F_GAME_ID" onclick="commonJs.sysAgentInfoFormRender()">查询</span>
+		</div>
+
+		<hr />
+
+		<form id="sysAgentInfoForm" class="form-horizontal" onsubmit="return false;" th:object="${principal.sysAgent}">
+
+			<input type="hidden" name="id" value="*{id}" />
+			<!--<th:block th:replace="~{layout/common :: form-control-static('id', 'id', *{id}, ' hidden')}" />-->
+			<th:block th:replace="~{layout/common :: form-control-static('游戏id', 'gameId', *{gameId}, ~{})}" />
+			<th:block th:replace="~{layout/common :: form-control-static('用户昵称', 'nickName', *{nickName}, ~{})}" />
+
+			<div id="finishInfo" hidden>
+				<div class="form-group">
+					<label class="col-xs-4 control-label">真实姓名</label>
+					<div class="col-xs-4">
+						<input type="text" class="form-control" name="realName" th:value="*{realName}" minlength="2" maxlength="5" />
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="col-xs-4 control-label">手机号</label>
+					<div class="col-xs-8">
+						<input type="tel" class="form-control" name="tel" th:value="*{tel}"
+						       pattern="^(0|86|17951)?(13[0-9]|15[012356789]|17[0678]|18[0-9]|14[57])[0-9]{8}$" />
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="col-xs-4 control-label">开户行</label>
+					<div class="col-xs-8">
+						<input type="text" class="form-control" name="openingBank" th:value="*{openingBank}" minlength="6" maxlength="25" />
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="col-xs-4 control-label">银行账号</label>
+					<div class="col-xs-8">
+						<input type="number" class="form-control" name="bankAccount" />
+					</div>
+				</div>
+			</div>
+			<div id="unfinishInfo">
+				<th:block th:replace="~{layout/common :: form-control-static('真实姓名', 'realName', *{realName}, ~{})}" />
+				<th:block th:replace="~{layout/common :: form-control-static('手机号', 'tel', *{tel}, ~{})}" />
+				<th:block th:replace="~{layout/common :: form-control-static('开户行', 'openingBank', *{openingBank}, ~{})}" />
+				<th:block th:replace="~{layout/common :: form-control-static('银行账号', 'bankAccount', *{bankAccount}, ~{})}" />
+			</div>
+
+			<th:block th:replace="~{layout/common :: form-control-static('注册时间', 'createTime', *{createTime}, ~{})}" />
+
+			<div id="fillInvitedCode" hidden>
+				<div class="form-group">
+					<label class="col-xs-4 control-label">邀请码</label>
+					<div class="col-xs-4">
+						<input type="number" class="form-control" name="superAgentGameId" th:value="*{superAgentGameId}" min="10001" max="99999" />
+					</div>
+					<button type="button" class="btn btn-default" id="invitedCodeBtn">查询</button>
+				</div>
+			</div>
+			<div id="unfillInvitedCode">
+				<th:block th:replace="~{layout/common :: form-control-static('邀请码', 'superAgentGameId', *{superAgentGameId}, ~{})}" />
+			</div>
+
+			<th:block th:replace="~{layout/common :: form-control-static('邀请码填写时间', 'transMemberTime', *{transMemberTime}, ~{})}" />
+			<th:block th:replace="~{layout/common :: form-control-static('是否授权', 'isAuthorized', *{authorized} ? '已授权' : '未授权', ~{})}" />
+			<th:block th:replace="~{layout/common :: form-control-static('授权时间', 'authorizedTime', *{authorizedTime}, ~{})}" />
+			<th:block th:replace="~{layout/common :: form-control-static('招募人数', 'recruitNum', *{recruitNum}, ~{})}" />
+
+			<div class="col-xs-offset-8 col-xs-4" hidden>
+				<button type="submit" class="btn btn-primary">保 存</button>
+			</div>
+
+		</form>
+
+	</div>
+
+	<th:block id="selfJs">
+
+		<script type="text/javascript">
+			var commonJs = new CommonJs();
+
+			$('button#invitedCodeBtn').on('click', function() {
+				commonJs.getByGameId($('input[name="superAgentGameId"]').val(), function(data) {
+		            if (data == null)
+		                return alert('未查询到结果');
+
+					alert('游戏id : ' + data.gameId + ' 昵称 : ' + data.nickName);
+		        });
+			});
+
+		    $('#sysAgentInfoForm').submit(function() {
+		        if (window.confirm('确定修改代理信息吗？')) {
+			        $.ajax({
+						type: 'put',
+						url: '/admin/sysAgent/realInfoAndInvitedCode/',
+						dataType: 'json',
+						contentType:"application/json",
+						data: JSON.stringify($(this).serializeObject()),
+						success: function(data) {
+
+							if (data.status)
+			                    alert('操作成功');
+			                else
+			                    alert(data.msg);
+						}
+					});
+		        }
+		    });
+		</script>
+
+	</th:block>
+
+</body>
+</html>

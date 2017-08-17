@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+		PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+		"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bamenyouxi.invite_code_mode.mapper.mysql.invite_code_mode.UserOpenRoomPerdayRecordMapper">
+	<resultMap id="resultMap" type="com.bamenyouxi.invite_code_mode.model.mysql.invite_code_mode.UserOpenRoomPerdayRecord">
+		<id property="id" column="F_ID" />
+		<result property="sysFlag" column="F_SYS_FLAG" />
+		<result property="creator" column="F_CREATOR" />
+		<result property="createTime" column="F_CREATE_TIME" />
+		<result property="modifier" column="F_MODIFIER" />
+		<result property="modifyTime" column="F_MODIFY_TIME" />
+
+		<result property="gameTypeId" column="F_GAME_TYPE_ID" />
+		<result property="userId" column="F_USER_ID" />
+		<result property="gameId" column="F_GAME_ID" />
+		<result property="accounts" column="F_ACCOUNTS" />
+		<result property="openRoomNum" column="F_OPEN_ROOM_NUM" />
+		<result property="cardCost" column="F_CARD_COST" />
+
+		<result property="gameName" column="F_GAME_NAME" />
+		<result property="nickName" column="F_NICK_NAME" />
+	</resultMap>
+
+	<select id="get" resultMap="resultMap">
+		select * from t_user_open_room_perday_record
+		<where>
+			<foreach collection="params" index="key" item="value">
+				<if test="value != null">
+					and ${key} = #{value}
+				</if>
+			</foreach>
+		</where>
+	</select>
+
+	<select id="sum" resultMap="resultMap">
+		select sum(F_OPEN_ROOM_NUM) F_OPEN_ROOM_NUM, sum(F_CARD_COST) F_CARD_COST, F_CREATE_TIME
+		from t_user_open_room_perday_record
+		<where>
+			<if test="startDate != null">
+				and convert(F_CREATE_TIME, DATE) &gt;= convert(#{startDate}, DATE)
+			</if>
+			<if test="endDate != null">
+				and convert(F_CREATE_TIME, DATE) &lt;= convert(#{endDate}, DATE)
+			</if>
+			<if test="groupBy != null">
+
+			</if>
+		</where>
+		<if test="groupBy != null">
+			group by ${groupBy}
+		</if>
+	</select>
+
+	<insert id="saveMul">
+		insert ignore into t_user_open_room_perday_record(
+			F_GAME_TYPE_ID, F_USER_ID, F_GAME_ID, F_ACCOUNTS, F_OPEN_ROOM_NUM, F_CARD_COST, F_CREATE_TIME
+		) values
+		<foreach item="item" collection="list" separator=",">
+			(
+				#{item.gameTypeId}, #{item.userId}, #{item.gameId}, #{item.accounts},
+				#{item.openRoomNum}, #{item.cardCost}, #{item.createTime}
+			)
+		</foreach>
+	</insert>
+</mapper>

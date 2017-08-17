@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="layout/head :: common_head(_, _)">
+
+</head>
+<body th:replace="layout/body :: common_body(~{::div#container}, ~{::#selfJs})">
+
+	<div id="container" class="container">
+
+		<div class="page-header"></div>
+
+		<div class="well" th:object="${principal.sysAgent}">
+			<div class="row">
+				<div class="col-xs-4">邀　请　码</div>
+				<div class="col-xs-8">[[*{gameId}]]</div>
+			</div>
+			<div class="row">
+				<div class="col-xs-4">游　戏　id</div>
+				<div class="col-xs-8">[[*{gameId}]]</div>
+			</div>
+			<div class="row">
+				<div class="col-xs-4">用 户 昵 称</div>
+				<div class="col-xs-8">[[*{nickName}]]</div>
+			</div>
+			<div class="row">
+				<div class="col-xs-4">真 实 姓 名</div>
+				<div class="col-xs-8" th:text="*{realName} ?: _"><th:block th:replace="~{layout/common :: unfilled}" /></div>
+			</div>
+			<div class="row">
+				<div class="col-xs-4">手　机　号</div>
+				<div class="col-xs-8" th:text="*{tel} ?: _"><th:block th:replace="~{layout/common :: unfilled}" /></div>
+			</div>
+			<div class="row">
+				<div class="col-xs-4">开　户　行</div>
+				<div class="col-xs-8" th:text="*{openingBank} ?: _"><th:block th:replace="~{layout/common :: unfilled}" /></div>
+			</div>
+			<div class="row">
+				<div class="col-xs-4">银 行 账 号</div>
+				<div class="col-xs-8" th:text="*{bankAccount} ?: _"><th:block th:replace="~{layout/common :: unfilled}" /></div>
+			</div>
+			<div class="row">
+				<div class="col-xs-4">注 册 日 期</div>
+				<div class="col-xs-8">[[*{#dates.format(createTime, 'yyyy-MM-dd')}]]</div>
+			</div>
+			<div class="row">
+				<div class="col-xs-4">绑 定 日 期</div>
+				<div class="col-xs-8">[[*{#dates.format(transMemberTime, 'yyyy-MM-dd')}]]</div>
+			</div>
+			<div class="row">
+				<div class="col-xs-4">授 权 日 期</div>
+				<div class="col-xs-8">[[*{#dates.format(authorizedTime, 'yyyy-MM-dd')}]]</div>
+			</div>
+			<div class="row">
+				<div class="col-xs-4">招 募 人 数</div>
+				<div class="col-xs-8">[[*{recruitNum}]]</div>
+			</div>
+		</div>
+
+		<div class="list-group" th:object="${principal.sysAgent}">
+			<th:block th:replace="~{layout/common :: list-group-item-for-model('#updatePwdModel', 'glyphicon-pencil', '密码修改')}" />
+			<th:block  th:unless="*{finishInfo}">
+				<th:block th:replace="~{layout/common :: list-group-item-for-model('#fixInfoModel', 'glyphicon-pencil', '完善个人信息')}" />
+			</th:block>
+		</div>
+
+		<th:block th:replace="model/fixInfoModel :: fixInfoModel" />
+		<th:block th:replace="model/updatePwdModel :: updatePwdModel" />
+
+	</div>
+
+	<th:block id="selfJs">
+
+		<th:block th:replace="~{model/fixInfoModel :: fixInfoModelJs}" />
+		<th:block th:replace="~{model/updatePwdModel :: updatePwdModelJs}" />
+
+	</th:block>
+
+</body>
+</html>

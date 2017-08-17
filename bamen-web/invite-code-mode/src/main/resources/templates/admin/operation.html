@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="layout/head :: common_head(_, _)">
+
+</head>
+<body th:replace="layout/body :: common_body(~{::div#container}, ~{::#selfJs})">
+
+	<div id="container" class="container">
+
+		<th:block th:replace="~{layout/common :: page-header('(赠送靓号后)刷新代理信息')}" />
+
+		<form id="sysAgentRefreshForm" class="form-inline" onsubmit="return commonJs.refresh();">
+			<div class="form-group col-xs-4">
+				<label class="sr-only" for="srcGameId">原代理号</label>
+				<input type="number" class="form-control" id="srcGameId" name="srcGameId" placeholder="原代理号" min="10001" max="99999" />
+			</div>
+			<div class="form-group col-xs-1">
+				<p class="form-control-static">&gt;&gt;</p>
+			</div>
+			<div class="form-group col-xs-4">
+				<label class="sr-only" for="destGameId">靓号</label>
+				<input type="number" class="form-control" id="destGameId" name="destGameId" placeholder="靓号" min="10001" max="99999" />
+			</div>
+			<button type="submit" class="btn btn-primary">刷 新</button>
+		</form>
+
+		<div class="page-header">
+			<h4>代理冻结、密码重置...</h4>
+		</div>
+
+		<div class="input-group col-xs-10">
+			<input type="text" class="form-control" name="F_GAME_ID" placeholder="请输入游戏id/代理号" aria-describedby="F_GAME_ID" />
+			<span class="input-group-addon" id="F_GAME_ID">查询</span>
+		</div>
+
+		<br />
+
+		<div class="input-group hidden" id="sysAgentOpBtnGroup">
+			<button type="button" id="btn-freeze" class="btn btn-warning" onclick="commonJs.freeze(false)">冻结</button> &nbsp;
+			<button type="button" id="btn-unfreeze" class="btn btn-warning" onclick="commonJs.freeze(true)">解冻</button> &nbsp;
+			<button type="button" class="btn btn-info" onclick="commonJs.pwdReset()">重置密码</button>
+		</div>
+
+	</div>
+
+	<th:block id="selfJs">
+
+		<script type="text/javascript">
+			var commonJs = new CommonJs();
+			var gameId;
+
+			$('span#F_GAME_ID').on('click', function() {
+				commonJs.getByGameId($('input[name="F_GAME_ID"]').val(), function(data) {
+		            if (data == null) {
+						$('div#sysAgentOpBtnGroup').addClass('hidden');
+		                return alert('未查询到结果');
+		            }
+
+		            gameId = data.gameId;
+
+					$('div#sysAgentOpBtnGroup').removeClass('hidden');
+					if (data.sysFlag) {
+						$('button#btn-freeze').show();
+						$('button#btn-unfreeze').hide();
+					} else {
+						$('button#btn-freeze').hide();
+						$('button#btn-unfreeze').show();
+					}
+
+					alert(
+						'游戏id : ' + data.gameId + '\n' +
+						'昵称 : ' + data.nickName + '\n' +
+						'用户状态: ' + (data.sysFlag ? '正常' : '已冻结')
+					);
+		        });
+			});
+		</script>
+
+	</th:block>
+
+</body>
+</html>

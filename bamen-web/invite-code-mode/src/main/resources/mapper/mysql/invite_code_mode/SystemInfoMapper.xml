@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bamenyouxi.invite_code_mode.mapper.mysql.invite_code_mode.SystemInfoMapper">
+    <resultMap id="resultMap" type="com.bamenyouxi.invite_code_mode.model.mysql.invite_code_mode.SystemInfo">
+        <id property="id" column="F_ID" />
+        <result property="sysFlag" column="F_SYS_FLAG" />
+        <result property="creator" column="F_CREATOR" />
+        <result property="createTime" column="F_CREATE_TIME" />
+        <result property="modifier" column="F_MODIFIER" />
+        <result property="modifyTime" column="F_MODIFY_TIME" />
+
+        <result property="gameName" column="F_GAME_NAME" />
+        <result property="title" column="F_TITLE" />
+        <result property="leastRecruitNum" column="F_LEAST_RECRUIT_NUM" />
+        <result property="t1_commission" column="F_T1_COMMISSION" />
+        <result property="t2_commission" column="F_T2_COMMISSION" />
+        <result property="t3_commission" column="F_T3_COMMISSION" />
+    </resultMap>
+
+    <select id="get" resultMap="resultMap">
+        select * from t_system_info
+        <where>
+            <foreach collection="params" index="key" item="value">
+                <if test="value != null">
+                    and ${key} = #{value}
+                </if>
+            </foreach>
+        </where>
+    </select>
+
+    <insert id="save" parameterType="com.bamenyouxi.invite_code_mode.model.mysql.invite_code_mode.SystemInfo" useGeneratedKeys="true" keyProperty="id">
+        insert ignore into t_system_info
+        (
+            F_GAME_NAME, F_TITLE, F_LEAST_RECRUIT_NUM,
+            F_T1_COMMISSION, F_T2_COMMISSION, F_T3_COMMISSION
+        ) values(
+            #{gameName}, #{title}, #{leastRecruitNum},
+            #{t1_commission}, #{t2_commission}, #{t3_commission}
+        )
+    </insert>
+
+    <update id="update" parameterType="com.bamenyouxi.invite_code_mode.model.mysql.invite_code_mode.SystemInfo">
+        update t_system_info
+        <set>
+            <if test="sysFlag != null">
+                F_SYS_FLAG = #{sysFlag},
+            </if>
+        </set>
+        <where>
+            <choose>
+                <when test="id != null">
+                    and F_ID = #{id}
+                </when>
+                <when test="_sysFlag != null">
+                    and F_SYS_FLAG = #{_sysFlag}
+                </when>
+                <otherwise>
+                    and F_ID = 0
+                </otherwise>
+            </choose>
+        </where>
+    </update>
+
+</mapper>

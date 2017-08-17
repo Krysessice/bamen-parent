@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+		PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+		"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bamenyouxi.invite_code_mode.mapper.mysql.invite_code_mode.CardGiftRecordMapper">
+	<resultMap id="resultMap" type="com.bamenyouxi.invite_code_mode.model.mysql.invite_code_mode.CardGiftRecord">
+		<id property="id" column="F_ID" />
+		<result property="sysFlag" column="F_SYS_FLAG" />
+		<result property="creator" column="F_CREATOR" />
+		<result property="createTime" column="F_CREATE_TIME" />
+		<result property="modifier" column="F_MODIFIER" />
+		<result property="modifyTime" column="F_MODIFY_TIME" />
+
+		<result property="presenter" column="F_PRESENTER" />
+		<result property="presentee" column="F_PRESENTEE" />
+		<result property="cardNum" column="F_CARD_NUM" />
+		<result property="giftReason" column="F_GIFT_REASON" />
+	</resultMap>
+
+	<select id="get" resultMap="resultMap">
+		select * from t_card_gift_record
+		<where>
+			<foreach collection="params" index="key" item="value">
+				<if test="value != null">
+					and ${key} = #{value}
+				</if>
+			</foreach>
+		</where>
+	</select>
+
+	<insert id="save" parameterType="com.bamenyouxi.invite_code_mode.model.mysql.invite_code_mode.CardGiftRecord">
+		insert into t_card_gift_record (
+			F_PRESENTER, F_PRESENTEE, F_CARD_NUM
+			<if test="giftReason != null">
+				, F_GIFT_REASON
+			</if>
+		) values (
+			#{presenter}, #{presentee}, #{cardNum}
+			<if test="giftReason != null">
+				, #{giftReason}
+			</if>
+		)
+	</insert>
+</mapper>

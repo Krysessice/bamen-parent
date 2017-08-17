@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/bamen-core/bamen-core.iml" filepath="$PROJECT_DIR$/bamen-core/bamen-core.iml" />
+      <module fileurl="file://$PROJECT_DIR$/bamen-parent.iml" filepath="$PROJECT_DIR$/bamen-parent.iml" />
+      <module fileurl="file://$PROJECT_DIR$/bamen-web/invite-code-mode/invite-code-mode.iml" filepath="$PROJECT_DIR$/bamen-web/invite-code-mode/invite-code-mode.iml" />
+    </modules>
+  </component>
+</project>

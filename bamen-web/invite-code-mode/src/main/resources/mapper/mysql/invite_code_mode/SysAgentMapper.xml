@@ -1,0 +1,214 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bamenyouxi.invite_code_mode.mapper.mysql.invite_code_mode.SysAgentMapper">
+    <cache />
+    <resultMap id="resultMap" type="com.bamenyouxi.invite_code_mode.model.mysql.invite_code_mode.SysAgent">
+        <id property="id" column="F_ID" />
+        <result property="sysFlag" column="F_SYS_FLAG" />
+        <result property="creator" column="F_CREATOR" />
+        <result property="createTime" column="F_CREATE_TIME" />
+        <result property="modifier" column="F_MODIFIER" />
+        <result property="modifyTime" column="F_MODIFY_TIME" />
+
+        <result property="userId" column="F_USER_ID" />
+        <result property="gameId" column="F_GAME_ID" />
+        <result property="accounts" column="F_ACCOUNTS" />
+        <result property="nickName" column="F_NICK_NAME" />
+        <result property="realName" column="F_REAL_NAME" />
+        <result property="tel" column="F_TEL" />
+        <result property="openingBank" column="F_OPENING_BANK" />
+        <result property="bankAccount" column="F_BANK_ACCOUNT" />
+        <result property="isFinishInfo" column="F_IS_FINISH_INFO" />
+        <result property="password" column="F_PASSWORD" />
+        <result property="secretKey" column="F_SECRET_KEY" />
+        <result property="lastLoginTime" column="F_LAST_LOGIN_TIME" />
+        <result property="superAgentGameId" column="F_SUPER_AGENT_GAME_ID" />
+        <result property="transMemberTime" column="F_TRANS_MEMBER_TIME" />
+        <result property="isAuthorized" column="F_IS_AUTHORIZED" />
+        <result property="authorizedTime" column="F_AUTHORIZED_TIME" />
+        <result property="recruitNum" column="F_RECRUIT_NUM" />
+        <result property="showAnnounce" column="F_SHOW_ANNOUNCE" />
+
+        <result property="payPrice" column="F_PAY_PRICE" />
+    </resultMap>
+
+    <select id="get" resultMap="resultMap">
+        select * from t_sys_agent
+        <where>
+            <foreach collection="params" index="key" item="value">
+                <if test="value != null">
+                    <choose>
+                        <when test="key == 'nickNameCharLength'">
+                            and CHAR_LENGTH(TRIM(F_NICK_NAME)) > #{value}
+                        </when>
+                        <otherwise>
+                            and ${key} = #{value}
+                        </otherwise>
+                    </choose>
+                </if>
+            </foreach>
+        </where>
+    </select>
+
+    <select id="getWithPayOrderStatistic" resultMap="resultMap" parameterType="map">
+        SELECT
+            F_REAL_NAME, F_BANK_ACCOUNT, F_OPENING_BANK, SUM(F_PAY_PRICE) F_PAY_PRICE
+        FROM
+            t_sys_agent a
+        RIGHT JOIN
+            t_pay_order_perday_statistic b
+        USING(F_GAME_ID)
+        <where>
+            <if test="startDate != null">
+                and convert(b.F_CREATE_TIME, DATE) &gt;= convert(#{startDate}, DATE)
+            </if>
+            <if test="endDate != null">
+                and convert(b.F_CREATE_TIME, DATE) &lt;= convert(#{endDate}, DATE)
+            </if>
+        </where>
+        GROUP BY F_GAME_ID
+    </select>
+
+    <insert id="save" parameterType="com.bamenyouxi.invite_code_mode.model.mysql.invite_code_mode.SysAgent" useGeneratedKeys="true" keyProperty="id">
+        insert ignore into t_sys_agent
+        (
+            F_USER_ID, F_GAME_ID, F_ACCOUNTS, F_NICK_NAME,
+            F_PASSWORD, F_SECRET_KEY, F_CREATE_TIME
+        ) values(
+            #{userId}, #{gameId}, #{accounts}, #{nickName},
+            #{password}, #{secretKey}, #{createTime}
+        )
+    </insert>
+
+    <update id="update" parameterType="com.bamenyouxi.invite_code_mode.model.mysql.invite_code_mode.SysAgent">
+        update t_sys_agent
+        <set>
+            <if test="gameId != null">
+                F_GAME_ID = #{gameId},
+            </if>
+            <if test="nickName != null">
+                F_NICK_NAME = #{nickName},
+            </if>
+            <if test="realName != null">
+                F_REAL_NAME = #{realName},
+            </if>
+            <if test="tel != null">
+                F_TEL = #{tel},
+            </if>
+            <if test="openingBank != null">
+                F_OPENING_BANK = #{openingBank},
+            </if>
+            <if test="bankAccount != null">
+                F_BANK_ACCOUNT = #{bankAccount},
+            </if>
+            <if test="isFinishInfo != null">
+                F_IS_FINISH_INFO = #{isFinishInfo},
+            </if>
+            <if test="password != null">
+                F_PASSWORD = #{password},
+            </if>
+            <if test="secretKey != null">
+                F_SECRET_KEY = #{secretKey},
+            </if>
+            <if test="superAgentGameId != null">
+                F_SUPER_AGENT_GAME_ID = #{superAgentGameId},
+            </if>
+            <if test="transMemberTime != null">
+                F_TRANS_MEMBER_TIME = #{transMemberTime},
+            </if>
+            <if test="isAuthorized != null">
+                F_IS_AUTHORIZED = #{isAuthorized},
+            </if>
+            <if test="authorizedTime != null">
+                F_AUTHORIZED_TIME = #{authorizedTime},
+            </if>
+            <if test="showAnnounce != null">
+                F_SHOW_ANNOUNCE = #{showAnnounce},
+            </if>
+            <if test="sysFlag != null">
+                F_SYS_FLAG = #{sysFlag},
+            </if>
+
+            <choose>
+                <when test="recruitNumInt == 1">
+                    F_RECRUIT_NUM = F_RECRUIT_NUM + 1,
+                </when>
+                <when test="recruitNumInt == -1">
+                    F_RECRUIT_NUM = F_RECRUIT_NUM - 1,
+                </when>
+                <otherwise>
+                    <if test="recruitNum != null">
+                        F_RECRUIT_NUM = #{recruitNum},
+                    </if>
+                </otherwise>
+            </choose>
+        </set>
+        <where>
+            <choose>
+                <when test="_superAgentGameId != null">
+                    and F_SUPER_AGENT_GAME_ID = #{_superAgentGameId}
+                </when>
+                <when test="id != null">
+                    and F_ID = #{id}
+                </when>
+                <when test="_gameId != null">
+                    and F_GAME_ID = #{_gameId}
+                </when>
+                <otherwise>
+                    and F_ID = 0
+                </otherwise>
+            </choose>
+        </where>
+    </update>
+
+    <delete id="delete" parameterType="com.bamenyouxi.invite_code_mode.model.mysql.invite_code_mode.SysAgent">
+        update t_sys_agent set F_SYS_FLAG = 0
+        <where>
+            <choose>
+                <when test="id != null">
+                    and F_ID = #{id}
+                </when>
+                <when test="gameId != null">
+                    and F_GAME_ID = #{gameId}
+                </when>
+                <otherwise>
+                    and F_ID = 0
+                </otherwise>
+            </choose>
+        </where>
+    </delete>
+
+    <!-- 查询代理招募人数 -->
+    <select id="findAgentRecruitNum" resultMap="resultMap">
+        SELECT
+            F_SUPER_AGENT_GAME_ID AS F_GAME_ID, COUNT(0) AS F_RECRUIT_NUM
+        FROM
+            t_sys_agent
+        GROUP BY
+            F_SUPER_AGENT_GAME_ID
+        HAVING
+            F_SUPER_AGENT_GAME_ID is not null
+
+        UNION
+
+        SELECT
+            F_GAME_ID, 0 as F_RECRUIT_NUM
+        FROM
+            t_sys_agent
+        WHERE
+            F_GAME_ID not in (
+                SELECT
+                    F_SUPER_AGENT_GAME_ID
+                FROM
+                    t_sys_agent
+                GROUP BY
+                    F_SUPER_AGENT_GAME_ID
+                HAVING
+                    F_SUPER_AGENT_GAME_ID is not null
+            )
+        AND
+            F_RECRUIT_NUM > 0
+    </select>
+</mapper>

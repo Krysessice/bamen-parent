@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="layout/head :: common_head(_, _)">
+
+</head>
+<body th:replace="layout/body :: common_body(~{::div#container}, ~{::#selfJs})">
+
+	<div id="container" class="container">
+
+		<div class="page-header"></div>
+
+		<div class="well">
+			<p>
+				可修改系统常量，修改后<span class="text-primary">即时生效</span>。
+			</p>
+		</div>
+
+		<hr />
+
+		<form id="systemInfoForm" class="form-horizontal" onsubmit="return false;" th:object="${systemInfo}">
+
+			<div class="form-group">
+				<label for="gameName" class="col-xs-4 control-label">游戏名</label>
+				<div class="col-xs-6">
+					<input type="text" class="form-control" id="gameName" name="gameName" th:value="*{gameName}" minlength="1" maxlength="10" />
+				</div>
+			</div>
+			<div class="form-group">
+				<label for="title" class="col-xs-4 control-label">标题</label>
+				<div class="col-xs-6">
+					<input type="text" class="form-control" id="title" name="title" th:value="*{title}" minlength="1" maxlength="15" />
+				</div>
+			</div>
+			<div class="form-group">
+				<label for="leastRecruitNum" class="col-xs-4 control-label">最少招募人数(授权)</label>
+				<div class="col-xs-3">
+					<input type="number" class="form-control" id="leastRecruitNum" name="leastRecruitNum"
+					       th:value="*{leastRecruitNum}" min="0" max="9999" />
+				</div>
+			</div>
+			<div class="form-group">
+				<label for="t1_commission" class="col-xs-4 control-label">直属团队提成</label>
+				<div class="col-xs-4">
+					<input type="text" class="form-control" id="t1_commission" name="t1_commission" th:value="*{t1_commission}" />
+				</div>
+			</div>
+			<div class="form-group">
+				<label for="t2_commission" class="col-xs-4 control-label">二级团队提成</label>
+				<div class="col-xs-4">
+					<input type="text" class="form-control" id="t2_commission" name="t2_commission" th:value="*{t2_commission}" />
+				</div>
+			</div>
+			<div class="form-group">
+				<label for="t3_commission" class="col-xs-4 control-label">三级团队提成</label>
+				<div class="col-xs-4">
+					<input type="text" class="form-control" id="t3_commission" name="t3_commission" th:value="*{t3_commission}" />
+				</div>
+			</div>
+
+			<div class="col-xs-3">
+				<button type="reset" class="btn btn-warning">重 置</button>
+			</div>
+			<div class="col-xs-3">
+				<button type="submit" class="btn btn-primary">保 存</button>
+			</div>
+
+		</form>
+
+	</div>
+
+	<th:block id="selfJs">
+
+		<script type="text/javascript">
+			$('#systemInfoForm').submit(function() {
+				if (window.confirm('确定修改系统信息吗？')) {
+			        $.ajax({
+						type: 'put',
+						url: '/admin/systemInfo/',
+						dataType: 'json',
+						contentType:"application/json",
+						data: JSON.stringify($(this).serializeObject()),
+						success: function(data) {
+
+							if (data.status)
+			                    alert('操作成功');
+			                else
+			                    alert(data.msg);
+						}
+					});
+		        }
+			})
+		</script>
+
+	</th:block>
+
+</body>
+</html>

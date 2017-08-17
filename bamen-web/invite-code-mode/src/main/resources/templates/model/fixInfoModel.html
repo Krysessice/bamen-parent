@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org">
+<body>
+	<div class="modal fade bs-example-modal-sm" id="fixInfoModel" tabindex="-1" role="dialog"
+	     aria-labelledby="fixInfo" aria-describedby="代理个人信息填写" th:fragment="fixInfoModel">
+
+		<div class="modal-dialog" role="document" aria-hidden="true">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+					<h4 class="modal-title" id="fixInfo">完善个人信息</h4>
+				</div>
+
+				<form id="updateInfoForm" onsubmit="return false;">
+					<div class="modal-body">
+
+						<div class="well">
+							<p>提示：个人资料关系到您的返利提成发放，请务必仔细填写。</p>
+						</div>
+
+						<div class="form-group">
+							<label for="realName" class="control-label">真实姓名:</label>
+							<!-- autofocus 无效 -->
+							<input type="text" class="form-control" id="realName" name="realName" required="required" minlength="2" maxlength="5" />
+						</div>
+						<div class="form-group">
+							<label for="tel" class="control-label">手机号:</label>
+							<!-- pattern 无效 -->
+							<input type="tel" class="form-control" id="tel" name="tel"
+							       required="required" pattern="^(0|86|17951)?(13[0-9]|15[012356789]|17[0678]|18[0-9]|14[57])[0-9]{8}$" />
+						</div>
+						<div class="form-group">
+							<label for="openingBank" class="control-label">开户行:</label>
+							<input type="text" class="form-control" id="openingBank" name="openingBank" required="required" minlength="6" maxlength="25" />
+						</div>
+						<div class="form-group">
+							<label for="bankAccount" class="control-label">银行账号:</label>
+							<input type="number" class="form-control" id="bankAccount" name="bankAccount" required="required" />
+						</div>
+
+					</div>
+
+					<div class="modal-footer">
+						<button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+						<button type="submit" class="btn btn-primary">保存</button>
+					</div>
+				</form>
+			</div>
+		</div>
+
+	</div>
+
+	<th:block th:fragment="fixInfoModelJs">
+
+		<script type="text/javascript">
+		    $('#updateInfoForm').submit(function() {
+		        var $this = $(this);
+
+		        var telReg = /^(0|86|17951)?(13[0-9]|15[012356789]|17[0678]|18[0-9]|14[57])[0-9]{8}$/;
+		        var bankAccountReg = /^\d{16,19}$/;
+
+		        if (!telReg.test($this.find('#tel').val()))
+		            return alert('请输入合法的手机号');
+		        if (!bankAccountReg.test($this.find('#bankAccount').val()))
+		            return alert('请输入合法的银行账号');
+
+		        if (window.confirm('请确认以上信息，保存后无法修改')) {
+			        $.ajax({
+			            type: 'put',
+			            url: '/agent/info/',
+			            dataType: 'json',
+			            data: $this.serialize(),
+			            success: function(data) {
+			                if (data.status) {
+			                    alert('操作成功');
+			                    window.location.href = '/';
+			                } else
+			                    return alert(data.msg);
+			            }
+			        });
+		        }
+		    })
+		</script>
+
+	</th:block>
+</body>
+</html>
