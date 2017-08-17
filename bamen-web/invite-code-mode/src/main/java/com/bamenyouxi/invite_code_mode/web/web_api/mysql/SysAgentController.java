@@ -36,18 +36,16 @@ final class SysAgentController extends AbstractCrudController<SysAgent, Long> {
 	}
 
 	@PutMapping("/info/")
-	private WebResult updateInfo(String realName, String tel, String openingBank, String bankAccount,String province,String city) {
+	private WebResult updateInfo(String realName, String tel, String openingBank, String bankAccount, String province, String city) {
 		Assert.isTrue(!UserDetailsUtil.isFinishInfo(), TipMsgConstant.OPERATION_EXCEPTION_AND_LOGOUT);
 		SysAgent sysAgent = sysAgentService.update(new SysAgent.Builder()
 				.id(UserDetailsUtil.getId())
 				.realName(realName).tel(tel)
 				.openingBank(openingBank)
 				.bankAccount(bankAccount)
-				.Province(province)
-				.City(city)
+				.province(province)
+				.city(city)
 				.isFinishInfo(true).build());
-
-
 		UserDetailsUtil.refresh(sysAgent);
 		return WebResult.of();
 	}

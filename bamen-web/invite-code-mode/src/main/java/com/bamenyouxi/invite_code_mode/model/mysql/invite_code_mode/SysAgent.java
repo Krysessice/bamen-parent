@@ -154,8 +154,8 @@ public final class SysAgent extends AbstractUserInfoEntity {
         this.showAnnounce = builder.showAnnounce;
         this.sysFlag = builder.sysFlag;
         this.createTime = builder.createTime;
-        this.province=builder.Province;
-        this.city=builder.City;
+        this.province=builder.province;
+        this.city=builder.city;
         this._gameId = builder._gameId;
         this._superAgentGameId = builder._superAgentGameId;
 
@@ -189,8 +189,8 @@ public final class SysAgent extends AbstractUserInfoEntity {
         private Integer _superAgentGameId;
 
         private int recruitNumInt;
-        private String Province;
-        private String City;
+        private String province;
+        private String city;
 
         public Builder id(Long val) {
             id = val;
@@ -287,13 +287,13 @@ public final class SysAgent extends AbstractUserInfoEntity {
             return this;
         }
 
-        public Builder Province(String val){
-            Province =val;
+        public Builder province(String val){
+            province = val;
             return this;
         }
 
-        public Builder City(String val){
-            City = val;
+        public Builder city(String val){
+            city = val;
             return this;
         }
 
@@ -326,7 +326,5 @@ public final class SysAgent extends AbstractUserInfoEntity {
         public SysAgent build() {
             return new SysAgent(this);
         }
-
-
     }
 }
