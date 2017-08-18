@@ -11,7 +11,7 @@
 					<h4 class="modal-title" id="fixInfo">完善个人信息</h4>
 				</div>
 
-				<form id="updateInfoForm" onsubmit="return false;">
+				<form id="updateInfoForm" onsubmit="return false;" th:object="${principal.sysAgent}">
 					<div class="modal-body">
 
 						<div class="well">
@@ -21,29 +21,29 @@
 						<div class="form-group">
 							<label for="realName" class="control-label">真实姓名:</label>
 							<!-- autofocus 无效 -->
-							<input type="text" class="form-control" id="realName" name="realName" required="required" minlength="2" maxlength="5" />
+							<input type="text" class="form-control" id="realName" name="realName" required="required" minlength="2" maxlength="5" th:value="*{realName}"/>
 						</div>
 						<div class="form-group">
 							<label for="tel" class="control-label">手机号:</label>
 							<!-- pattern 无效 -->
 							<input type="tel" class="form-control" id="tel" name="tel"
-							       required="required" pattern="^(0|86|17951)?(13[0-9]|15[012356789]|17[0678]|18[0-9]|14[57])[0-9]{8}$" />
+							       required="required" pattern="^(0|86|17951)?(13[0-9]|15[012356789]|17[0678]|18[0-9]|14[57])[0-9]{8}$" th:value="*{tel}" />
 						</div>
 						<div class="form-group">
 							<label for="openingBank" class="control-label">开户行:</label>
-							<input type="text" class="form-control" id="openingBank" name="openingBank" required="required" minlength="4" maxlength="25" />
+							<input type="text" class="form-control" id="openingBank" name="openingBank" required="required" minlength="4" maxlength="25" th:value="*{openingBank}" />
 						</div>
 						<div class="form-group">
 							<label for="bankAccount" class="control-label">银行账号:</label>
-							<input type="number" class="form-control" id="bankAccount" name="bankAccount" required="required" />
+							<input type="number" class="form-control" id="bankAccount" name="bankAccount" required="required"   th:value="*{bankAccount}" />
 						</div>
 						<div class="form-group">
 							<label for="province" class="control-label">省:</label>
-							<input type="text" class="form-control" id="province" name="province" required="required" />
+							<input type="text" class="form-control" id="province" name="province" required="required"  th:value="*{province}" />
 						</div>
 						<div class="form-group">
 							<label for="city" class="control-label">市:</label>
-							<input type="text" class="form-control" id="city" name="city" required="required" />
+							<input type="text" class="form-control" id="city" name="city" required="required"  th:value="*{city}" />
 						</div>
 
 					</div>

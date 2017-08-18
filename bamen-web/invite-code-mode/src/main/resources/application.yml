@@ -31,3 +31,4 @@ spring:
 custom:
   SysAgent:
     resetShowAnnounce: false
+    resetIsFinishInfo: false

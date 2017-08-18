@@ -356,5 +356,10 @@ public class SysAgentService extends AbstractSysAgentService implements CommandL
 			this.sysAgentMapper.resetShowAnnounce();
 			LOGGER.info("重置代理公告显示...");
 		}
+
+		if(propertiesMapper.getResetIsFinishInfo()){
+			this.sysAgentMapper.resetIsFinishInfo();
+		}
+
 	}
 }

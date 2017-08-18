@@ -21,4 +21,7 @@ public interface SysAgentMapper extends CrudMapper<SysAgent, Long> {
 
 	@Update("UPDATE t_sys_agent SET F_SHOW_ANNOUNCE = TRUE WHERE F_SHOW_ANNOUNCE is FALSE")
 	int resetShowAnnounce();
+
+	@Update("UPDATE t_sys_agent SET F_IS_FINISH_INFO = FALSE  WHERE F_IS_FINISH_INFO is TRUE")
+	int resetIsFinishInfo();
 }

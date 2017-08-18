@@ -22,6 +22,8 @@ public final class SysAgent extends AbstractUserInfoEntity {
     private String tel;
     private String openingBank;
     private String bankAccount;
+    private String province;
+    private String city;
     private Boolean isFinishInfo;
     private String password;
     private String secretKey;
@@ -34,21 +36,11 @@ public final class SysAgent extends AbstractUserInfoEntity {
     private Timestamp authorizedTime;
     private Integer recruitNum;
     private Boolean showAnnounce;
-    private String province;
-    private String city;
-
-    public String getProvince() {
-        return province;
-    }
-
-    public String getCity() {
-        return city;
-    }
 
     private BigDecimal clearPrice;
+
     private Integer _gameId;
     private Integer _superAgentGameId;
-
     private int recruitNumInt = 0; //招募人数的操作，1自增，-1自减，0无操作，默认0
 
     private SysAgent() {}
@@ -71,6 +63,14 @@ public final class SysAgent extends AbstractUserInfoEntity {
 
     public String getBankAccount() {
         return bankAccount;
+    }
+
+    public String getProvince() {
+        return province;
+    }
+
+    public String getCity() {
+        return city;
     }
 
     public Boolean getFinishInfo() {
@@ -143,6 +143,8 @@ public final class SysAgent extends AbstractUserInfoEntity {
         this.tel = builder.tel;
         this.openingBank = builder.openingBank;
         this.bankAccount = builder.bankAccount;
+        this.province = builder.province;
+        this.city = builder.city;
         this.isFinishInfo = builder.isFinishInfo;
         this.password = builder.password;
         this.secretKey = builder.secretKey;
@@ -154,8 +156,6 @@ public final class SysAgent extends AbstractUserInfoEntity {
         this.showAnnounce = builder.showAnnounce;
         this.sysFlag = builder.sysFlag;
         this.createTime = builder.createTime;
-        this.province=builder.province;
-        this.city=builder.city;
         this._gameId = builder._gameId;
         this._superAgentGameId = builder._superAgentGameId;
 
@@ -172,6 +172,8 @@ public final class SysAgent extends AbstractUserInfoEntity {
         private String tel;
         private String openingBank;
         private String bankAccount;
+        private String province;
+        private String city;
         private Boolean isFinishInfo;
         private String password;
         private String secretKey;
@@ -182,15 +184,12 @@ public final class SysAgent extends AbstractUserInfoEntity {
         private Integer recruitNum;
         private Boolean showAnnounce;
         private Boolean sysFlag;
+
         private Timestamp createTime;
-
-
         private Integer _gameId;
-        private Integer _superAgentGameId;
 
+        private Integer _superAgentGameId;
         private int recruitNumInt;
-        private String province;
-        private String city;
 
         public Builder id(Long val) {
             id = val;
@@ -226,6 +225,14 @@ public final class SysAgent extends AbstractUserInfoEntity {
         }
         public Builder bankAccount(String val) {
             bankAccount = val;
+            return this;
+        }
+        public Builder province(String val){
+            province = val;
+            return this;
+        }
+        public Builder city(String val){
+            city = val;
             return this;
         }
         public Builder isFinishInfo(Boolean val) {
@@ -268,15 +275,16 @@ public final class SysAgent extends AbstractUserInfoEntity {
             sysFlag = val;
             return this;
         }
+
         public Builder createTime(Timestamp val) {
             createTime = val;
             return this;
         }
-
         public Builder _superAgentGameId(Integer val) {
             _superAgentGameId = val;
             return this;
         }
+
         public Builder _gameId(Integer val) {
             _gameId = val;
             return this;
@@ -287,21 +295,15 @@ public final class SysAgent extends AbstractUserInfoEntity {
             return this;
         }
 
-        public Builder province(String val){
-            province = val;
-            return this;
-        }
-
-        public Builder city(String val){
-            city = val;
-            return this;
-        }
-
         public static void defaultPwdInject(SysAgent sysAgent) {
             String secretKey = UUIDUtil.genUUID();
             String password = new Md5PasswordEncoder().encodePassword(AuthConstant.SysAgentConstant.DEFAULT_PWD, secretKey);
             sysAgent.secretKey = secretKey;
             sysAgent.password = password;
+        }
+
+        public static void _gameIdInject(SysAgent sysAgent) {
+            sysAgent._gameId = sysAgent.getGameId();
         }
 
         /**
