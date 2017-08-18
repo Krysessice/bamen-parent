@@ -211,7 +211,9 @@ public class SysAgentService extends AbstractSysAgentService implements CommandL
 				);
 		if (!record.getFinishInfo()) return;
 		Assert.isTrue(
-				!(sysAgent.getRealName().isEmpty() || sysAgent.getTel().isEmpty() || sysAgent.getOpeningBank().isEmpty() || sysAgent.getBankAccount().isEmpty()),
+				!(sysAgent.getRealName().isEmpty() || sysAgent.getTel().isEmpty() ||
+						sysAgent.getOpeningBank().isEmpty() || sysAgent.getBankAccount().isEmpty() ||
+						sysAgent.getProvince().isEmpty() || sysAgent.getCity().isEmpty()),
 				TipMsgConstant.CONDITION_UNMET
 		);
 		int i =
@@ -222,6 +224,8 @@ public class SysAgentService extends AbstractSysAgentService implements CommandL
 								.tel(sysAgent.getTel())
 								.openingBank(sysAgent.getOpeningBank())
 								.bankAccount(sysAgent.getBankAccount())
+								.province(sysAgent.getProvince())
+								.city(sysAgent.getCity())
 								.build()
 				);
 		Assert.isTrue(i > 0, TipMsgConstant.OPERATION_FAILED);
