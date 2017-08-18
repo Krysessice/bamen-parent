@@ -17,7 +17,6 @@ public final class PropertiesMapper {
 		return resetShowAnnounce;
 	}
 
-
 	@Value("${custom.SysAgent.resetIsFinishInfo}")
 	private boolean resetIsFinishInfo;
 
