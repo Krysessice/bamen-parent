@@ -141,6 +141,8 @@ CREATE TABLE `t_sys_agent` (
   `F_TEL` char(11) DEFAULT NULL COMMENT '手机号',
   `F_OPENING_BANK` varchar(32) DEFAULT NULL COMMENT '开户行',
   `F_BANK_ACCOUNT` char(19) DEFAULT NULL COMMENT '银行账号',
+  `F_PROVINCE` varchar(25) DEFAULT NULL COMMENT '省',
+  `F_CITY` varchar(25) DEFAULT NULL COMMENT '市',
   `F_IS_FINISH_INFO` bit(1) NOT NULL DEFAULT b'0' COMMENT '是否已完成基本信息的填写，默认为0',
   `F_PASSWORD` varchar(32) NOT NULL,
   `F_SECRET_KEY` varchar(36) NOT NULL,
@@ -159,7 +161,7 @@ CREATE TABLE `t_sys_agent` (
   PRIMARY KEY (`F_ID`),
   UNIQUE KEY `idx_sys_agent_unique1` (`F_GAME_ID`) USING BTREE COMMENT '游戏id唯一',
   KEY `fgk_sys_agent_f1` (`F_SUPER_AGENT_GAME_ID`)
-) ENGINE=InnoDB AUTO_INCREMENT=2311 DEFAULT CHARSET=utf8 COMMENT='后台代理表';
+) ENGINE=InnoDB AUTO_INCREMENT=2469 DEFAULT CHARSET=utf8 COMMENT='后台代理表';
 
 -- ----------------------------
 -- Table structure for t_sys_agent_clear_record
