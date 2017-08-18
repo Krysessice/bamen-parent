@@ -30,6 +30,8 @@
         <result property="authorizedTime" column="F_AUTHORIZED_TIME" />
         <result property="recruitNum" column="F_RECRUIT_NUM" />
         <result property="showAnnounce" column="F_SHOW_ANNOUNCE" />
+        <result property="province" column="F_PROVINCE" />
+        <result property="city" column="F_CITY" />
 
         <result property="payPrice" column="F_PAY_PRICE" />
     </resultMap>
