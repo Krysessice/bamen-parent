@@ -304,6 +304,10 @@ public final class SysAgent extends AbstractUserInfoEntity {
             sysAgent.password = password;
         }
 
+        public static void _gameIdInject(SysAgent sysAgent) {
+            sysAgent._gameId = sysAgent.getGameId();
+        }
+
         /**
          * 利用反射改变对象属性
          * @param sysAgent  代理对象

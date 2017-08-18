@@ -66,6 +66,7 @@ class SysAgentInviteCodeSynTask extends AbstractDataSynTask<AccountsInfo, SysAge
 
 	@Transactional
 	private void dataSyn(SysAgent sysAgent) {
+		SysAgent.Builder._gameIdInject(sysAgent);
 		this.sysAgentMapper.update(sysAgent);
 		this.sysAgentMapper.update(
 				new SysAgent.Builder()
