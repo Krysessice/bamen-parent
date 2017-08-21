@@ -47,8 +47,8 @@ class OmitPayOrderDataSynTask implements BaseScheduleTask {
 	public void run(String... strings) throws Exception {
 		startDate = LocalDate.now().minusDays(7).toString();
 		endDate = LocalDate.now().toString();
-		if (this.countOnlineOrder() > this.countPayOrder())
-			this.omitPayOrderSyn();
+		if (countOnlineOrder() > countPayOrder())
+			omitPayOrderSyn();
 	}
 
 	/**
