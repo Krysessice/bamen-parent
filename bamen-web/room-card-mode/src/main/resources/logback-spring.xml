@@ -19,8 +19,6 @@
 		</root>
 	</springProfile>
 
-
-
 	<springProfile name="prod">
 		<appender name="consoleAppender" class="ch.qos.logback.core.ConsoleAppender">
 			<encoder>
