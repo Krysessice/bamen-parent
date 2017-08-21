@@ -21,7 +21,7 @@ public final class RedisUtil extends AbstractRedisUtil {
      * 存储 更新系统数据
      * @param systemInfo    com.bamenyouxi.room_card_mode.model.mysql.room_card_mode.SystemInfo
      */
-    public void SaveSystemInfo(SystemInfo systemInfo){
+    public void saveSystemInfo(SystemInfo systemInfo){
          getSystemInfoDB().opsForValue().set(SystemInfo.class.getName(),systemInfo);
     }
 
