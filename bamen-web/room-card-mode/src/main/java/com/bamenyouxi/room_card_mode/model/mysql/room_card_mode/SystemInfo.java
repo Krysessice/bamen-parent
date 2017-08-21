@@ -2,15 +2,13 @@ package com.bamenyouxi.room_card_mode.model.mysql.room_card_mode;
 
 import com.bamenyouxi.core.impl.model.mysql.BaseEntity;
 
-public final class SystemInfo  extends BaseEntity{
-
+public final class SystemInfo extends BaseEntity{
 
     private String  gameName;
     private String title;
     private Boolean _sysFlag;
 
-
-    public SystemInfo(){}
+    public SystemInfo() {}
 
     public String getGameName() {
         return gameName;
@@ -23,7 +21,6 @@ public final class SystemInfo  extends BaseEntity{
     public Boolean get_sysFlag() {
         return _sysFlag;
     }
-
 
     private SystemInfo(Builder builder) {
         this.sysFlag = builder.sysFlag;
@@ -48,6 +45,5 @@ public final class SystemInfo  extends BaseEntity{
             return new SystemInfo(this);
         }
     }
-
 
 }

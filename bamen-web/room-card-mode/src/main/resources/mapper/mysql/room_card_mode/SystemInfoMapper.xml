@@ -26,8 +26,6 @@
     </select>
 
     <insert id="save" parameterType="com.bamenyouxi.room_card_mode.model.mysql.room_card_mode.SystemInfo" useGeneratedKeys="true" keyProperty="id">
-        insert into t_system_info(F_GAME_NAME, F_TITLE , F_SYS_FLAG) values(#{gameName},#{title},#{sysFlag})
+        insert ignore into t_system_info(F_GAME_NAME, F_TITLE, F_SYS_FLAG) values(#{gameName}, #{title}, #{sysFlag})
     </insert>
-
-
 </mapper>
