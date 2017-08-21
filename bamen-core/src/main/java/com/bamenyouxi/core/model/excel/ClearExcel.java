@@ -52,10 +52,12 @@ public class ClearExcel<T extends ClearExcel.Field> extends AbstractExportExcel<
 
 		public static class BuilderField {
 			private static int serialNumber = 0;
-			private String accountName;
 			private String bankAccount;
+			private String accountName;
 			private BigDecimal clearPrice;
 			private String openingBank;
+			private String province;
+			private String city;
 			private Integer gameId;
 			private String nickName;
 
@@ -85,6 +87,14 @@ public class ClearExcel<T extends ClearExcel.Field> extends AbstractExportExcel<
 			}
 			public BuilderField openingBank(String val) {
 				openingBank = val;
+				return this;
+			}
+			public BuilderField province(String val) {
+				province = val;
+				return this;
+			}
+			public BuilderField city(String val) {
+				city = val;
 				return this;
 			}
 			public BuilderField gameId(Integer val) {
@@ -127,6 +137,8 @@ public class ClearExcel<T extends ClearExcel.Field> extends AbstractExportExcel<
 			this.accountName = build.accountName;
 			this.clearPrice = build.clearPrice;
 			this.openingBank = build.openingBank;
+			this.province = build.province;
+			this.city = build.city;
 			this.gameId = build.gameId;
 			this.nickName = build.nickName;
 		}

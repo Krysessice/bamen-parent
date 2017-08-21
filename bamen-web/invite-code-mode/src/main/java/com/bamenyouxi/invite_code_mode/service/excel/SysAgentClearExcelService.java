@@ -72,6 +72,8 @@ public class SysAgentClearExcelService {
 				.accountName(item.getRealName())
 				.clearPrice(item.getClearPrice())
 				.openingBank(item.getOpeningBank())
+				.province(item.getProvince())
+				.city(item.getCity())
 				.gameId(item.getGameId())
 				.nickName(item.getNickName())
 				.build()
