@@ -31,7 +31,7 @@ CREATE TABLE `t_card_gift_record` (
   `F_MODIFIER` bigint(20) unsigned DEFAULT NULL COMMENT '修改者',
   `F_MODIFY_TIME` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '修改时间',
   PRIMARY KEY (`F_ID`)
-) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8 COMMENT='房卡赠送记录';
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 COMMENT='房卡赠送记录';
 
 -- ----------------------------
 -- Table structure for t_game_type
@@ -47,7 +47,7 @@ CREATE TABLE `t_game_type` (
   `F_MODIFIER` bigint(20) unsigned DEFAULT NULL COMMENT '修改者',
   `F_MODIFY_TIME` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '修改时间',
   PRIMARY KEY (`F_ID`)
-) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8 COMMENT='游戏类型';
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 COMMENT='游戏类型';
 
 -- ----------------------------
 -- Table structure for t_open_room_perhour_record
@@ -85,7 +85,7 @@ CREATE TABLE `t_pay_order` (
   `F_MODIFY_TIME` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '修改时间',
   PRIMARY KEY (`F_ID`),
   UNIQUE KEY `idx_pay_order_unique1` (`F_ORDER_NO`) USING BTREE COMMENT '订单号唯一'
-) ENGINE=InnoDB AUTO_INCREMENT=203 DEFAULT CHARSET=utf8 COMMENT='订单表';
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 COMMENT='订单表';
 
 -- ----------------------------
 -- Table structure for t_pay_order_perday_statistic
@@ -105,7 +105,7 @@ CREATE TABLE `t_pay_order_perday_statistic` (
   `F_MODIFY_TIME` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '修改时间',
   PRIMARY KEY (`F_ID`),
   UNIQUE KEY `idx_pops_unique1` (`F_GAME_ID`,`F_CREATE_TIME`) USING BTREE COMMENT 'gameId, createDate 联合唯一'
-) ENGINE=InnoDB AUTO_INCREMENT=452 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Table structure for t_system_info
@@ -125,7 +125,7 @@ CREATE TABLE `t_system_info` (
   `F_MODIFIER` bigint(20) unsigned DEFAULT NULL COMMENT '修改者',
   `F_MODIFY_TIME` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '修改时间',
   PRIMARY KEY (`F_ID`)
-) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8 COMMENT='系统信息';
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 COMMENT='系统信息';
 
 -- ----------------------------
 -- Table structure for t_sys_agent
@@ -161,7 +161,7 @@ CREATE TABLE `t_sys_agent` (
   PRIMARY KEY (`F_ID`),
   UNIQUE KEY `idx_sys_agent_unique1` (`F_GAME_ID`) USING BTREE COMMENT '游戏id唯一',
   KEY `fgk_sys_agent_f1` (`F_SUPER_AGENT_GAME_ID`)
-) ENGINE=InnoDB AUTO_INCREMENT=2469 DEFAULT CHARSET=utf8 COMMENT='后台代理表';
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 COMMENT='后台代理表';
 
 -- ----------------------------
 -- Table structure for t_sys_agent_clear_record
@@ -179,7 +179,7 @@ CREATE TABLE `t_sys_agent_clear_record` (
   `F_MODIFIER` bigint(20) unsigned DEFAULT NULL COMMENT '修改者',
   `F_MODIFY_TIME` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '修改时间',
   PRIMARY KEY (`F_ID`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 COMMENT='代理结算记录';
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 COMMENT='代理结算记录';
 
 -- ----------------------------
 -- Table structure for t_sys_resource
@@ -198,7 +198,7 @@ CREATE TABLE `t_sys_resource` (
   PRIMARY KEY (`F_ID`),
   UNIQUE KEY `idx_sys_resource_unique1` (`F_USER_ID`,`F_RESOURCE_ID`,`F_RESOURCE_NAME`) COMMENT '用户id，资源id，资源名联合唯一',
   CONSTRAINT `fgk_sys_resource_f1` FOREIGN KEY (`F_USER_ID`) REFERENCES `t_sys_agent` (`F_ID`) ON DELETE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=7065 DEFAULT CHARSET=utf8 COMMENT='用户资源表';
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 COMMENT='用户资源表';
 
 -- ----------------------------
 -- Table structure for t_user_open_room_perday_record
@@ -219,6 +219,6 @@ CREATE TABLE `t_user_open_room_perday_record` (
   `F_MODIFY_TIME` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '修改时间',
   PRIMARY KEY (`F_ID`),
   UNIQUE KEY `idx_uorpr_unique1` (`F_GAME_TYPE_ID`,`F_GAME_ID`,`F_CREATE_TIME`)
-) ENGINE=InnoDB AUTO_INCREMENT=3672 DEFAULT CHARSET=utf8 COMMENT='每小时开房记录表';
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 COMMENT='每小时开房记录表';
 
-INSERT INTO `invite_code_mode`.`t_system_info` (`F_ID`, `F_GAME_NAME`, `F_TITLE`, `F_LEAST_RECRUIT_NUM`, `F_T1_COMMISSION`, `F_T2_COMMISSION`, `F_T3_COMMISSION`, `F_SYS_FLAG`, `F_CREATOR`, `F_CREATE_TIME`, `F_MODIFIER`, `F_MODIFY_TIME`) VALUES ('1', '湘约棋牌', '湘约棋牌邀请码后台', '1', '0.4', '0.08', '0.05', '', NULL, '2017-07-01 00:00:00', NULL, '2017-07-01 00:00:00');
+INSERT INTO t_system_info VALUES();
