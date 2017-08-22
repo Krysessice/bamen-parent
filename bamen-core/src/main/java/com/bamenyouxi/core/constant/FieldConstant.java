@@ -48,6 +48,7 @@ public final class FieldConstant {
         public static final String MODIFY_TIME_DESC = "F_MODIFY_TIME desc";
         public static final String TRANS_MEMBER_TIME_DESC = "F_TRANS_MEMBER_TIME desc";
         public static final String END_DATE_DESC = "F_END_DATE desc";
+        public static final String COLLECT_DATE_DESC = "CollectDate desc";
         public static final String SEND_TIME_DESC = "SendTime desc";
     }
 

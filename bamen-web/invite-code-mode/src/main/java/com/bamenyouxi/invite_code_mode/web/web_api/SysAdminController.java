@@ -7,9 +7,11 @@ import com.bamenyouxi.core.model.result.WebResult;
 import com.bamenyouxi.core.util.FileUtil;
 import com.bamenyouxi.invite_code_mode.model.mysql.invite_code_mode.SysAgent;
 import com.bamenyouxi.invite_code_mode.model.mysql.invite_code_mode.SystemInfo;
+import com.bamenyouxi.invite_code_mode.model.sqlserver.treasure.GameScoreLocker;
 import com.bamenyouxi.invite_code_mode.service.excel.SysAgentClearExcelService;
 import com.bamenyouxi.invite_code_mode.service.mysql.*;
 import com.bamenyouxi.invite_code_mode.service.sqlserver.GameScoreInfoService;
+import com.bamenyouxi.invite_code_mode.service.sqlserver.GameScoreLockerService;
 import com.bamenyouxi.invite_code_mode.util.RedisUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -40,6 +42,8 @@ final class SysAdminController {
 	@Autowired
 	private GameScoreInfoService gameScoreInfoService;
 	@Autowired
+	private GameScoreLockerService gameScoreLockerService;
+	@Autowired
 	private RedisUtil redisUtil;
 
 	/* 修改代理真实资料与邀请码 */
@@ -49,7 +53,7 @@ final class SysAdminController {
 		return WebResult.of();
 	}
 
-	@PutMapping("/sysAgent/freeze/{gameId}/")
+	@PutMapping("/sysAgent/ freeze/{gameId}/")
 	private WebResult sysAgentFreeze(@PathVariable int gameId, boolean sysFlag) {
 		sysAgentService.sysAgentFreeze(gameId, sysFlag);
 		return WebResult.of();
@@ -118,4 +122,27 @@ final class SysAdminController {
 		gameScoreInfoService.cardGift(presentee, cardNum, giftReason);
 		return WebResult.of();
 	}
+
+	/**
+	 * 显示卡线列表
+	 */
+	@GetMapping("/gameScoreLocker/list/")
+	public WebResult gameScoreLockerList(
+			@RequestParam(value = SysConstant.PageConstant.DEFAULT_PAGE_NAME, defaultValue = "" + SysConstant.PageConstant.DEFAULT_PAGE) Integer page,
+			@RequestParam(value = SysConstant.PageConstant.DEFAULT_SIZE_NAME, defaultValue = "" + SysConstant.PageConstant.DEFAULT_SIZE) Integer size,
+			@RequestParam Map<String, Object> params) {
+		return WebResult.of(gameScoreLockerService.list(page, size, params));
+	}
+
+	/**
+	 * 清理卡线
+	 *
+	 * @param userId 用户id
+	 */
+	@DeleteMapping("/gameScoreLocker/{userId}/")
+	public WebResult delGameScoreLocker(@PathVariable int userId) {
+		gameScoreLockerService.delete(GameScoreLocker.of(userId));
+		return WebResult.of();
+	}
+
 }

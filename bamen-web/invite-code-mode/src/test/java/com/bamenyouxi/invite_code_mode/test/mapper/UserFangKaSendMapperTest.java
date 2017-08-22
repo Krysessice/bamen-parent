@@ -18,7 +18,7 @@ import java.util.HashMap;
  */
 @RunWith(SpringRunner.class)
 @SpringBootTest
-public class UserFangKaSendMapperTest {
+class UserFangKaSendMapperTest {
 	@Autowired
 	private UserFangKaSendMapper userFangKaSendMapper;
 

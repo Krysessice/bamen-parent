@@ -229,6 +229,26 @@ CommonJs.prototype.cardGift = function() {
     return false;
 }
 
+/* 清理卡线 */
+CommonJs.prototype.delGameScoreLocker = function(e) {
+    var $e = $(e);
+    var userId = $e.parents('tr').find('td[name="userId"]').text();
+    if (window.confirm("确定要为" + userId + "清理卡线吗？")) {
+        $.ajax({
+            type: 'delete',
+            url: '/admin/gameScoreLocker/' + userId + '/',
+            dataType: 'json',
+            success: function(data) {
+                if(data.status)
+                    alert('操作成功');
+                else
+                    return alert(data.msg);
+                $e.parents('table').bootstrapTable('reloadGrid');
+            }
+        });
+    }
+}
+
 Date.prototype.format = function(format) {
     /*
     * 使用例子:format="yyyy-MM-dd HH:mm:ss";

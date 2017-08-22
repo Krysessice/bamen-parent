@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bamenyouxi.invite_code_mode.mapper.sqlserver.treasure.UserStatusMapper">
+    <resultMap id="resultMap" type="com.bamenyouxi.invite_code_mode.model.sqlserver.treasure.UserStatus">
+        <result column="UserID" property="userId" />
+        <result column="KindID" property="kindID" />
+        <result column="GameID" property="gameId" />
+        <result column="RoomID" property="roomId" />
+    </resultMap>
+
+    <delete id="delete" parameterType="com.bamenyouxi.invite_code_mode.model.sqlserver.treasure.UserStatus">
+        DELETE UserStatus
+        <where>
+            <choose>
+                <when test="userId != null">
+                    UserID = #{userId}
+                </when>
+                <otherwise>
+                    UserID = 0
+                </otherwise>
+            </choose>
+        </where>
+    </delete>
+</mapper>
