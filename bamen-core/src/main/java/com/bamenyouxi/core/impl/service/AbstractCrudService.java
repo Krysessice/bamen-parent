@@ -8,6 +8,7 @@ import com.bamenyouxi.core.impl.model.mysql.BaseEntity;
 import com.bamenyouxi.core.util.CommonUtil;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import org.apache.commons.collections4.Put;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 
@@ -41,6 +42,7 @@ public abstract class AbstractCrudService<T, ID extends Serializable> implements
 	protected void getBefore(Map<String, Object> params) {}
 	protected void saveBefore(T t) {}
 	protected void updateBefore(T t) {}
+	protected  void DeleteBefore(T t){}
 
 	protected void listBefore(Map<String, Object> params) {
 		params.put(SysConstant.PageConstant.DEFAULT_PAGE_NAME, null);
@@ -77,6 +79,11 @@ public abstract class AbstractCrudService<T, ID extends Serializable> implements
 		this.listBefore(params);
 		PageHelper.startPage(page, size, sort());
 		return new PageInfo<>(getMapper().get(params));
+	}
+
+	public void delete(T t){
+		this.DeleteBefore(t);
+		Assert.isTrue(getMapper().delete(t)>0,TipMsgConstant.OPERATION_FAILED);
 	}
 
 }

@@ -139,6 +139,9 @@ CommonJs.prototype.authorize = function(e) {
     }
 }
 
+
+
+
 CommonJs.prototype.datetimeInit = function(fn) {
     $('.form_date').datetimepicker({
         language: 'zh-CN',
@@ -270,3 +273,23 @@ $.fn.serializeObject = function() {
     });
     return o;
 };
+
+CommonJs.prototype.DelCardMessge=function(id){
+    var userId=$(id).parents('tr').find('td[name="userId"]').text();
+    if(window.confirm("确定要删除"+userId+"的信息吗？")){
+        $.ajax({
+            type:'delete',
+            url:'/admin/DelCardMessage/'+ userId +'/',
+            dataType:'json',
+            success:function(data){
+                if(data.status){
+                    alert('删除成功！')
+                }else{
+                    return alert(data.msg);
+                }
+                $(id).parents('table').bootstrapTable('reloadGrid');
+            }
+        });
+    }
+
+}

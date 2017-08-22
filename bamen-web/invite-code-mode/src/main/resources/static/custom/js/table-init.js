@@ -80,8 +80,15 @@ document.write("<script language=javascript src='/custom/js/bootstrap-table.js'>
             case 'cardGiftRecord':
                 $element.bootstrapTable(this.paramsMap.cardGiftRecord);
                 break;
+            case 'QueryMessage':
+                 this.paramsMap.GameScoreLocker.queryParams = {
+                     startDate: $('#startDate').val(),
+                     endDate: $('#endDate').val()
+                   }
+                $element.bootstrapTable(this.paramsMap.GameScoreLocker);
             }
         },
+
 
         paramsMap: {
 
@@ -111,7 +118,7 @@ document.write("<script language=javascript src='/custom/js/bootstrap-table.js'>
                     },
                     {
                         title: '操作',
-                        content: '<button type="button" class="btn btn-primary btn-sm" onclick="commonJs.authorize(this)">授权</button>'
+                        content: '<button type="button" class="btn btn-primary btn-sm" onclick="commonJs.DelCardMessge(this)">授权</button>'
                     }
                 ]
             },
@@ -407,9 +414,49 @@ document.write("<script language=javascript src='/custom/js/bootstrap-table.js'>
                         formatter: 'yy-MM-dd'
                     }
                 ]
-            }
+            },
 
-        }
+            GameScoreLocker: {
+                        url: '/admin/GameScoreLocker/list/',
+                        queryParams: {
+                            F_IS_AUTHORIZED: 0
+                        },
+                        columns: [
+                            {
+                                field: 'userId',
+                                title: '用户ID',
+                                hidden:true
+                             },
+                            {
+                                field: 'gameId',
+                                title: '游戏ID',
+                            },
+                            {
+                                field: 'nickName',
+                                title: '用户昵称'
+                            },
+                            {
+                                field: 'kindName',
+                                title: '游戏名称'
+                            },
+                            {
+                                field: 'roomId',
+                                title: '房间号',
+                            },
+                             {
+                                field: 'collectDate',
+                                title: '进房时间',
+                                formatter: 'yy-MM-dd HH:mm'
+
+                             },
+                            {
+                                title: '操作',
+                                content: '<button type="button" class="btn btn-primary btn-sm" onclick="commonJs.DelCardMessge(this)">删除</button>'
+                            }
+                        ]
+
+                     }
+                 }
 
     }
 

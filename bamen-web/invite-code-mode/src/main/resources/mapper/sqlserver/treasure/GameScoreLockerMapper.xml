@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bamenyouxi.invite_code_mode.mapper.sqlserver.treasure.GameScoreLockerMapper">
+    <resultMap id="resultMap" type="com.bamenyouxi.invite_code_mode.model.sqlserver.treasure.GameScoreLocker">
+        <id column="UserID" property="userId"></id>
+        <result property="KindID" column="kindId"/>
+        <result column="GameID" property="gameId"/>
+        <result column="NickName" property="nickName"/>
+        <result column="KindName" property="kindName"/>
+        <result column="RoomId" property="roomId"/>
+        <result column="CollectDate" property="collectDate"/>
+
+    </resultMap>
+
+    <select id="get" resultMap="resultMap">
+        SELECT
+        b.GameID,
+        b.NickName,
+        c.KindName,
+        D.RoomID,
+        a.CollectDate,
+        a.UserID
+        FROM
+        GameScoreLocker a
+        LEFT JOIN QPAccountsDB.dbo.AccountsInfo b ON a.UserID = b.UserID
+        LEFT JOIN QPPlatformDB.dbo.GameKindItem c ON a.KindID = c.KindID
+        LEFT JOIN QPTreasureDB.dbo.UserStatus d ON a.UserID=d.UserID
+        <where>
+            <foreach collection="params" index="key" item="value">
+                <choose>
+                    <when test="key == 'KindID'">
+                        AND a.KindID = #{value}
+                    </when>
+                    <when test="key == 'UserID'">
+                        AND a.UserID = #{value}
+                    </when>
+                </choose>
+            </foreach>
+        </where>
+    </select>
+
+
+    <delete id="delete" parameterType="com.bamenyouxi.invite_code_mode.model.sqlserver.treasure.GameScoreLocker">
+        DELETE GameScoreLocker
+        <where>
+            <choose>
+                <when test="userId !=null">
+                    UserID = ${userId}
+                </when>
+                <otherwise>
+                    UserID = 0
+                </otherwise>
+            </choose>
+        </where>
+    </delete>
+
+
+</mapper>

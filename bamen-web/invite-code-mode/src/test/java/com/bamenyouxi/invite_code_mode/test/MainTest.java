@@ -1,4 +1,4 @@
-package com.bamenyouxi.test;
+package com.bamenyouxi.invite_code_mode.test;
 
 import com.bamenyouxi.invite_code_mode.model.mysql.invite_code_mode.SystemInfo;
 
