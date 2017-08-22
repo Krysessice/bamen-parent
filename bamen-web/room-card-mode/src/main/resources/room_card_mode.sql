@@ -22,7 +22,7 @@ DROP TABLE IF EXISTS `t_system_info`;
 CREATE TABLE `t_system_info` (
   `F_ID` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `F_GAME_NAME` varchar(25) DEFAULT '开心游戏' COMMENT '游戏名',
-  `F_TITLE` varchar(50) DEFAULT '开心游戏代理商后台' COMMENT '代理后台标题',
+  `F_TITLE` varchar(50) DEFAULT '开心游戏房卡模式后台' COMMENT '代理后台标题',
   `F_SYS_FLAG` bit(1) NOT NULL DEFAULT b'1' COMMENT '标识，1为可用，0为禁用',
   `F_CREATOR` bigint(20) unsigned DEFAULT NULL COMMENT '创建者',
   `F_CREATE_TIME` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',

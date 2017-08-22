@@ -114,7 +114,7 @@ DROP TABLE IF EXISTS `t_system_info`;
 CREATE TABLE `t_system_info` (
   `F_ID` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `F_GAME_NAME` varchar(25) DEFAULT '开心游戏' COMMENT '游戏名',
-  `F_TITLE` varchar(50) DEFAULT '开心游戏代理商后台' COMMENT '代理后台标题',
+  `F_TITLE` varchar(50) DEFAULT '开心游戏邀请码后台' COMMENT '代理后台标题',
   `F_LEAST_RECRUIT_NUM` int(10) unsigned DEFAULT '0' COMMENT '最小招募人数',
   `F_T1_COMMISSION` float unsigned DEFAULT '0.4' COMMENT '直属团队提成',
   `F_T2_COMMISSION` float unsigned DEFAULT '0.08' COMMENT '二级团队提成',

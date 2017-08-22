@@ -6,6 +6,7 @@ import com.bamenyouxi.core.util.UUIDUtil;
 import com.bamenyouxi.invite_code_mode.model.mysql.invite_code_mode.impl.AbstractUserInfoEntity;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import org.springframework.security.authentication.encoding.Md5PasswordEncoder;
+import org.springframework.util.StringUtils;
 
 import java.lang.reflect.Field;
 import java.math.BigDecimal;
@@ -228,11 +229,11 @@ public final class SysAgent extends AbstractUserInfoEntity {
             return this;
         }
         public Builder province(String val){
-            province = val;
+            province = StringUtils.isEmpty(val) ? null : val;
             return this;
         }
         public Builder city(String val){
-            city = val;
+            city = StringUtils.isEmpty(val) ? null : val;
             return this;
         }
         public Builder isFinishInfo(Boolean val) {
