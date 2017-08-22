@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+		PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+		"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bamenyouxi.invite_code_mode.mapper.sqlserver.treasure.UserFangKaSendMapper">
+	<resultMap id="resultMap" type="com.bamenyouxi.invite_code_mode.model.sqlserver.treasure.UserFangKaSend">
+		<result property="sendGameId" column="SendGameID" />
+		<result property="receiveGameId" column="ReciveGameID" />
+		<result property="sendTime" column="SendTime" />
+	</resultMap>
+
+	<select id="get" resultMap="resultMap">
+		SELECT
+			SendGameID,
+			b.NickName sendNickName,
+			ReciveGameID,
+			c.NickName receiveNickName,
+			SendTime
+		FROM
+			UserFangKaSend a
+		LEFT JOIN QPAccountsDB.dbo.AccountsInfo b ON a.SendGameID = b.GameID
+		LEFT JOIN QPAccountsDB.dbo.AccountsInfo c ON a.ReciveGameID = c.GameID
+	</select>
+</mapper>
