@@ -14,7 +14,7 @@ import java.util.Map;
 @Mapper
 public interface UserFangKaCostMapper {
 
-	List<OpenRoomPerhourRecord> findOpenRoomPerhourRecord();
+	List<OpenRoomPerhourRecord> findOpenRoomPerhourRecord(Map<String, Object> params);
 
 	List<UserOpenRoomPerdayRecord> findUserOpenRoomPerdayRecord(Map<String, Object> params);
 }

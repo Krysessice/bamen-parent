@@ -8,4 +8,6 @@ import com.bamenyouxi.invite_code_mode.model.mysql.invite_code_mode.impl.Abstrac
  */
 public final class OpenRoomPerhourRecord extends AbstractOpenRoomRecordEntity {
 
+
+
 }

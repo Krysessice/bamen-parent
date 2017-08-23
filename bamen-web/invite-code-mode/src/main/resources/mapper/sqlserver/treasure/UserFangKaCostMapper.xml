@@ -10,11 +10,20 @@
 		<result property="costTime" column="CostTime" />
 	</resultMap>
 
-	<select id="findOpenRoomPerhourRecord">
-		SELECT
-			KindID F_GAME_TYPE_ID, CONVERT(VARCHAR(13), CostTime, 120) F_CREATE_TIME, SUM(FangKa) F_CARD_COST, COUNT(0) F_OPEN_ROOM_NUM
-		FROM
-			QPTreasureDB.dbo.UserFangKaCost
+	<select id="findOpenRoomPerhourRecord" resultType="com.bamenyouxi.invite_code_mode.model.mysql.invite_code_mode.OpenRoomPerhourRecord">
+			SELECT
+				KindID gameTypeId,
+				CONVERT(VARCHAR(13), CostTime, 120) + ':00:00' createTime, SUM(FangKa) cardCost, COUNT(0) openRoomNum
+			FROM
+				QPTreasureDB.dbo.UserFangKaCost
+		<where>
+			<if test="startDate != null">
+			  	AND CONVERT (VARCHAR(13), CostTime, 120) &gt;= CONVERT (VARCHAR(13), #{startDate}, 120)
+			</if>
+			<if test="endDate != null">
+				AND CONVERT (VARCHAR(13), CostTime, 120) &gt;= CONVERT (VARCHAR(13), #{endDate}, 120)
+			</if>
+		</where>
 		GROUP BY
 			KindID, CONVERT(VARCHAR(13), CostTime, 120)
 	</select>
