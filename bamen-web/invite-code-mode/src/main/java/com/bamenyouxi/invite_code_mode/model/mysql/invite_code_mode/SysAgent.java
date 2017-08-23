@@ -228,11 +228,11 @@ public final class SysAgent extends AbstractUserInfoEntity {
             bankAccount = val;
             return this;
         }
-        public Builder province(String val){
+        public Builder province(String val) {
             province = StringUtils.isEmpty(val) ? null : val;
             return this;
         }
-        public Builder city(String val){
+        public Builder city(String val) {
             city = StringUtils.isEmpty(val) ? null : val;
             return this;
         }

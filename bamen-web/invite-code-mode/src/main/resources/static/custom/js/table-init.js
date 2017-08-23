@@ -114,7 +114,7 @@ document.write("<script language=javascript src='/custom/js/bootstrap-table.js'>
                     },
                     {
                         title: '操作',
-                        content: '<button type="button" class="btn btn-primary btn-sm" onclick="commonJs.DelCardMessge(this)">授权</button>'
+                        content: '<button type="button" class="btn btn-primary btn-sm" onclick="commonJs.authorize(this)">授权</button>'
                     }
                 ]
             },
