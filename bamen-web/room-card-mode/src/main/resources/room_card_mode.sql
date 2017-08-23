@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50718
 File Encoding         : 65001
 
-Date: 2017-08-21 10:50:22
+Date: 2017-08-23 10:49:44
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -23,13 +23,15 @@ CREATE TABLE `t_system_info` (
   `F_ID` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `F_GAME_NAME` varchar(25) DEFAULT '开心游戏' COMMENT '游戏名',
   `F_TITLE` varchar(50) DEFAULT '开心游戏房卡模式后台' COMMENT '代理后台标题',
+  `F_RATE_LV1` decimal(2,2) unsigned NOT NULL DEFAULT '0.20' COMMENT '上级代理返利',
+  `F_RATE_LV2` decimal(2,2) unsigned NOT NULL DEFAULT '0.05' COMMENT '上上级代理返利',
   `F_SYS_FLAG` bit(1) NOT NULL DEFAULT b'1' COMMENT '标识，1为可用，0为禁用',
   `F_CREATOR` bigint(20) unsigned DEFAULT NULL COMMENT '创建者',
   `F_CREATE_TIME` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
   `F_MODIFIER` bigint(20) unsigned DEFAULT NULL COMMENT '修改者',
   `F_MODIFY_TIME` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '修改时间',
   PRIMARY KEY (`F_ID`)
-) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 COMMENT='系统信息';
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8 COMMENT='系统信息';
 
 -- ----------------------------
 -- Table structure for t_sys_agent
@@ -51,6 +53,23 @@ CREATE TABLE `t_sys_agent` (
   `F_MODIFY_TIME` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '修改时间',
   PRIMARY KEY (`F_ID`),
   UNIQUE KEY `idx_sys_agent_unique1` (`F_ACCOUNT`) USING BTREE COMMENT '账号唯一'
-) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 COMMENT='后台代理';
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 COMMENT='后台代理';
 
-INSERT INTO t_system_info VALUES();
+-- ----------------------------
+-- Table structure for t_sys_agent_extend
+-- ----------------------------
+DROP TABLE IF EXISTS `t_sys_agent_extend`;
+CREATE TABLE `t_sys_agent_extend` (
+  `F_ID` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `F_SYS_AGENT_ID` bigint(20) unsigned NOT NULL COMMENT '关联代理主键id',
+  `F_LEFT_CARD_NUM` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '剩余房卡数量',
+  `F_SOLD_CARD_NUM` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '已售房卡数量',
+  `F_SYS_FLAG` bit(1) NOT NULL DEFAULT b'1' COMMENT '标识，1为可用，0为禁用',
+  `F_CREATOR` bigint(20) unsigned DEFAULT NULL COMMENT '创建者',
+  `F_CREATE_TIME` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  `F_MODIFIER` bigint(20) unsigned DEFAULT NULL COMMENT '修改者',
+  `F_MODIFY_TIME` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '修改时间',
+  PRIMARY KEY (`F_ID`),
+  UNIQUE KEY `idx_sys_agent_extend_unique1` (`F_SYS_AGENT_ID`) USING BTREE COMMENT '代理主键id唯一',
+  CONSTRAINT `fgk_F_SYS_AGENT_ID` FOREIGN KEY (`F_SYS_AGENT_ID`) REFERENCES `t_sys_agent` (`F_ID`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='后台代理扩展表';

@@ -2,6 +2,7 @@ package com.bamenyouxi.invite_code_mode.mapper.mysql.invite_code_mode;
 
 import com.bamenyouxi.core.impl.mapper.CrudMapper;
 import com.bamenyouxi.invite_code_mode.model.mysql.invite_code_mode.SystemInfo;
+import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
 
 /**
@@ -11,4 +12,6 @@ import org.apache.ibatis.annotations.Mapper;
 @Mapper
 public interface SystemInfoMapper extends CrudMapper<SystemInfo, Long> {
 
+	@Insert("INSERT INTO t_system_info VALUES()")
+	int systemInfoInit();
 }

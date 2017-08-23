@@ -46,11 +46,21 @@ public class SystemInfoService extends AbstractCrudService<SystemInfo, Long> imp
 	public void run(String... strings) throws Exception {
 		RedisTemplate<String, SystemInfo> redisTemplate = redisUtil.getSystemInfoDB();
 		if (redisTemplate.hasKey(SystemInfo.class.getName())) return;
+
+		long count = PageHelper.count(
+				() -> getMapper().get(new HashMap<String, Object>() {{
+					put(FieldConstant.DBFieldConstant.F_SYS_FLAG.name(), SysConstant.SysFlagConstant.ENABLE);
+				}})
+		);
+		if (count <= 0)
+			Assert.isTrue(systemInfoMapper.systemInfoInit() > 0, TipMsgConstant.RUN_EXCEPTION);
+
 		PageHelper.startPage(1, 1, FieldConstant.SortConstant.MODIFY_TIME_DESC);
 		List<SystemInfo> list = getMapper().get(new HashMap<String, Object>() {{
 			put(FieldConstant.DBFieldConstant.F_SYS_FLAG.name(), SysConstant.SysFlagConstant.ENABLE);
 		}});
 		Assert.notEmpty(list, TipMsgConstant.CONDITION_UNMET);
+
 		redisUtil.saveSystemInfo(list.get(0));
 	}
 }

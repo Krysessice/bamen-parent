@@ -16,4 +16,5 @@ public final class TipMsgConstant {
 	public static final String NOT_GIVING_UP = "未赠送靓号";
 	public static final String REPORT_GENERATION_FAILED = "报表生成失败，请重试";
 	public static final String EXCEPTION_FILE_DOWNLOAD = "文件下载异常，请重试";
+	public static final String RUN_EXCEPTION = "run异常，程序启动失败";
 }

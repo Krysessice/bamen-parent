@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50718
 File Encoding         : 65001
 
-Date: 2017-08-16 17:58:35
+Date: 2017-08-23 10:03:01
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -31,7 +31,7 @@ CREATE TABLE `t_card_gift_record` (
   `F_MODIFIER` bigint(20) unsigned DEFAULT NULL COMMENT '修改者',
   `F_MODIFY_TIME` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '修改时间',
   PRIMARY KEY (`F_ID`)
-) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 COMMENT='房卡赠送记录';
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8 COMMENT='房卡赠送记录';
 
 -- ----------------------------
 -- Table structure for t_game_type
@@ -47,7 +47,7 @@ CREATE TABLE `t_game_type` (
   `F_MODIFIER` bigint(20) unsigned DEFAULT NULL COMMENT '修改者',
   `F_MODIFY_TIME` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '修改时间',
   PRIMARY KEY (`F_ID`)
-) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 COMMENT='游戏类型';
+) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8 COMMENT='游戏类型';
 
 -- ----------------------------
 -- Table structure for t_open_room_perhour_record
@@ -85,7 +85,7 @@ CREATE TABLE `t_pay_order` (
   `F_MODIFY_TIME` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '修改时间',
   PRIMARY KEY (`F_ID`),
   UNIQUE KEY `idx_pay_order_unique1` (`F_ORDER_NO`) USING BTREE COMMENT '订单号唯一'
-) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 COMMENT='订单表';
+) ENGINE=InnoDB AUTO_INCREMENT=1644 DEFAULT CHARSET=utf8 COMMENT='订单表';
 
 -- ----------------------------
 -- Table structure for t_pay_order_perday_statistic
@@ -97,7 +97,7 @@ CREATE TABLE `t_pay_order_perday_statistic` (
   `F_GAME_ID` mediumint(8) unsigned NOT NULL COMMENT '游戏id',
   `F_ACCOUNTS` varchar(100) DEFAULT NULL COMMENT '微信标识',
   `F_PAY_PRICE` decimal(10,0) unsigned NOT NULL DEFAULT '0' COMMENT '支付金额',
-  `F_CARD_GOLD` tinyint(3) unsigned NOT NULL DEFAULT '0' COMMENT '房卡',
+  `F_CARD_GOLD` smallint(5) unsigned NOT NULL DEFAULT '0' COMMENT '房卡',
   `F_SYS_FLAG` bit(1) NOT NULL DEFAULT b'1' COMMENT '标识，1为可用，0为禁用',
   `F_CREATOR` bigint(20) unsigned DEFAULT NULL COMMENT '创建者',
   `F_CREATE_TIME` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
@@ -105,7 +105,7 @@ CREATE TABLE `t_pay_order_perday_statistic` (
   `F_MODIFY_TIME` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '修改时间',
   PRIMARY KEY (`F_ID`),
   UNIQUE KEY `idx_pops_unique1` (`F_GAME_ID`,`F_CREATE_TIME`) USING BTREE COMMENT 'gameId, createDate 联合唯一'
-) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=1495 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Table structure for t_system_info
@@ -125,7 +125,7 @@ CREATE TABLE `t_system_info` (
   `F_MODIFIER` bigint(20) unsigned DEFAULT NULL COMMENT '修改者',
   `F_MODIFY_TIME` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '修改时间',
   PRIMARY KEY (`F_ID`)
-) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 COMMENT='系统信息';
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8 COMMENT='系统信息';
 
 -- ----------------------------
 -- Table structure for t_sys_agent
@@ -161,7 +161,7 @@ CREATE TABLE `t_sys_agent` (
   PRIMARY KEY (`F_ID`),
   UNIQUE KEY `idx_sys_agent_unique1` (`F_GAME_ID`) USING BTREE COMMENT '游戏id唯一',
   KEY `fgk_sys_agent_f1` (`F_SUPER_AGENT_GAME_ID`)
-) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 COMMENT='后台代理表';
+) ENGINE=InnoDB AUTO_INCREMENT=2469 DEFAULT CHARSET=utf8 COMMENT='后台代理表';
 
 -- ----------------------------
 -- Table structure for t_sys_agent_clear_record
@@ -179,7 +179,7 @@ CREATE TABLE `t_sys_agent_clear_record` (
   `F_MODIFIER` bigint(20) unsigned DEFAULT NULL COMMENT '修改者',
   `F_MODIFY_TIME` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '修改时间',
   PRIMARY KEY (`F_ID`)
-) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 COMMENT='代理结算记录';
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 COMMENT='代理结算记录';
 
 -- ----------------------------
 -- Table structure for t_sys_resource
@@ -198,7 +198,7 @@ CREATE TABLE `t_sys_resource` (
   PRIMARY KEY (`F_ID`),
   UNIQUE KEY `idx_sys_resource_unique1` (`F_USER_ID`,`F_RESOURCE_ID`,`F_RESOURCE_NAME`) COMMENT '用户id，资源id，资源名联合唯一',
   CONSTRAINT `fgk_sys_resource_f1` FOREIGN KEY (`F_USER_ID`) REFERENCES `t_sys_agent` (`F_ID`) ON DELETE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 COMMENT='用户资源表';
+) ENGINE=InnoDB AUTO_INCREMENT=8527 DEFAULT CHARSET=utf8 COMMENT='用户资源表';
 
 -- ----------------------------
 -- Table structure for t_user_open_room_perday_record
@@ -219,6 +219,4 @@ CREATE TABLE `t_user_open_room_perday_record` (
   `F_MODIFY_TIME` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '修改时间',
   PRIMARY KEY (`F_ID`),
   UNIQUE KEY `idx_uorpr_unique1` (`F_GAME_TYPE_ID`,`F_GAME_ID`,`F_CREATE_TIME`)
-) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 COMMENT='每小时开房记录表';
-
-INSERT INTO t_system_info VALUES();
+) ENGINE=InnoDB AUTO_INCREMENT=4627 DEFAULT CHARSET=utf8 COMMENT='每小时开房记录表';
