@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+		PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+		"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bamenyouxi.room_card_mode.mapper.mysql.room_card_mode.PayOrderMapper">
+	<resultMap id="resultMap" type="com.bamenyouxi.room_card_mode.model.mysql.room_card_mode.PayOrder">
+		<id property="id" column="F_ID" />
+		<result property="sysFlag" column="F_SYS_FLAG" />
+		<result property="creator" column="F_CREATOR" />
+		<result property="createTime" column="F_CREATE_TIME" />
+		<result property="modifier" column="F_MODIFIER" />
+		<result property="modifyTime" column="F_MODIFY_TIME" />
+
+		<result property="orderNo" column="F_ORDER_NO" />
+		<result property="sysAgentId" column="F_SYS_AGENT_ID" />
+		<result property="payPrice" column="F_PAY_PRICE" />
+		<result property="cardNum" column="F_CARD_NUM" />
+	</resultMap>
+</mapper>

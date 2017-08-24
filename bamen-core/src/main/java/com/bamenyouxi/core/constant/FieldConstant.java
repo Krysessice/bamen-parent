@@ -12,6 +12,7 @@ public final class FieldConstant {
     public enum DBFieldConstant {
         F_ID, F_USER_ID, F_GAME_ID, F_SUPER_AGENT_GAME_ID, F_IS_AUTHORIZED, F_SYS_FLAG, F_CREATE_TIME,
         F_RESOURCE_ID, F_RESOURCE_NAME,
+        F_ACCOUNT,
         UserID, GameID
     }
 

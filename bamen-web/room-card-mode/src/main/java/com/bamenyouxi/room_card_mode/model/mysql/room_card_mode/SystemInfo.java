@@ -4,7 +4,7 @@ import com.bamenyouxi.core.impl.model.mysql.BaseEntity;
 
 public final class SystemInfo extends BaseEntity{
 
-    private String  gameName;
+    private String gameName;
     private String title;
     private Boolean _sysFlag;
 

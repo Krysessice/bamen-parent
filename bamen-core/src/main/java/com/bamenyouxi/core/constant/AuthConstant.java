@@ -26,7 +26,7 @@ public final class AuthConstant {
 		public static final String ADMIN_NICK_NAME = "管理员";
 
 		// 数据库中管理员账号
-		public static final String[] ADMIN_ACCOUNTS = {"10001", "13477035189"};
+		public static final String[] ADMIN_ACCOUNTS = {"10001", "13477035189", "13477035190"};
 	}
 
 	/**
