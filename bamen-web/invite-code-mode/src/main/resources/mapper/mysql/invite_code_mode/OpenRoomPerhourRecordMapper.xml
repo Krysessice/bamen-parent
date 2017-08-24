@@ -27,39 +27,16 @@
 		</where>
 	</select>
 
-	<select id="sum" resultMap="resultMap">
-		select sum(F_OPEN_ROOM_NUM) F_OPEN_ROOM_NUM, sum(F_CARD_COST) F_CARD_COST, F_CREATE_TIME from
-		t_open_room_perhour_record
-		<where>
-			<if test="startDate!=null">
-				AND	CONVERT (F_CREATE_TIME , DATE) >= CONVERT (#{startDate} , DATE)
-			</if>
-			<if test="endDate !=null">
-				and convert(F_CREATE_TIME, DATE) &lt;= convert(#{endDate}, DATE)
-			</if>
-			<if test="groupBy!=null"></if>
-
-		</where>
-			<if test="groupBy !=null">
-				GROUP BY ${groupBy}
-			</if>
-
-
-	</select>
-
-
-		<insert id="saveMul">
-			INSERT ignore INTO t_open_room_perhour_record
-				(
-				F_GAME_TYPE_ID,F_OPEN_ROOM_NUM,F_CARD_COST,F_CREATE_TIME
-				)
-			VALUES
-			<foreach collection="list" item="item" separator=",">
-				(
-					#{item.gameTypeId},#{item.openRoomNum},#{item.cardCost},#{item.createTime}
-				)
-			</foreach>
-		</insert>
-
-
+	<insert id="saveMul">
+		INSERT ignore INTO t_open_room_perhour_record
+			(
+			F_GAME_TYPE_ID, F_OPEN_ROOM_NUM, F_CARD_COST, F_CREATE_TIME
+			)
+		VALUES
+		<foreach collection="list" item="item" separator=",">
+			(
+				#{item.gameTypeId}, #{item.openRoomNum}, #{item.cardCost}, #{item.createTime}
+			)
+		</foreach>
+	</insert>
 </mapper>

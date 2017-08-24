@@ -5,7 +5,6 @@ import com.bamenyouxi.invite_code_mode.model.mysql.invite_code_mode.OpenRoomPerh
 import org.apache.ibatis.annotations.Mapper;
 
 @Mapper
-public interface OpenRoomPerhourRecordMapper extends CrudMapper<OpenRoomPerhourRecord,Long>{
-
+public interface OpenRoomPerhourRecordMapper extends CrudMapper<OpenRoomPerhourRecord, Long> {
 
 }

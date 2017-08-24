@@ -1,4 +1,4 @@
-package com.bamenyouxi.invite_code_mode.schedule.syn_task;
+package com.bamenyouxi.invite_code_mode.schedule.statistic_task;
 
 import com.bamenyouxi.core.constant.FieldConstant;
 import com.bamenyouxi.core.constant.SysConstant;
@@ -23,7 +23,7 @@ import java.util.List;
  */
 @Component
 @Order(SysConstant.CommandLineOrder.USER_OPEN_ROOM_PERDAY_RECORD_SYN_TASK)
-class UserOpenRoomPerdayRecordSynTask extends AbstractDataSynTask<UserFangKaCost, UserOpenRoomPerdayRecord> {
+class UserOpenRoomPerdayRecordStatisticTask extends AbstractDataSynTask<UserFangKaCost, UserOpenRoomPerdayRecord> {
 	@Autowired
 	private UserFangKaCostMapper userFangKaCostMapper;
 	@Autowired

@@ -68,7 +68,7 @@ public final class SysConstant {
 		public static final int SYSTEM_INFO_INIT = 1;                       // 系统信息初始化
 		public static final int SYS_AGENT_DATA_SYN_TASK = 2;                // 用户数据同步
 		public static final int PAY_ORDER_DATA_SYN_TASK = 3;                // 订单数据同步
-		public static final int OPEN_ROOM_PERHOUR_RECORD_TASk=13;			//每时房卡消耗
+		public static final int OPEN_ROOM_PERHOUR_RECORD_TASk = 4;			//每时房卡消耗
 		public static final int PAY_ORDER_PERDAY_STATISTIC_TASK = 5;        // 每日订单统计
 		public static final int USER_OPEN_ROOM_PERDAY_RECORD_SYN_TASK = 6;  // 每日房卡消耗
 		public static final int OMIT_PAY_ORDER_DATA_SYN_TASK = 7;           // 遗漏订单数据同步
