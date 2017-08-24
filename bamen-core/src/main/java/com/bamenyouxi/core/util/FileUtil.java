@@ -12,7 +12,7 @@ import java.net.URLEncoder;
  */
 public final class FileUtil {
 
-	public static void download(HttpServletResponse response, String filePath) throws Exception {
+	public static void read(HttpServletResponse response, String filePath) throws Exception {
 		InputStream input = null;
 		OutputStream output = null;
 

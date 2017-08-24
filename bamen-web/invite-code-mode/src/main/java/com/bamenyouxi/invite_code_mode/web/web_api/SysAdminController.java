@@ -98,7 +98,7 @@ final class SysAdminController {
 
 	@GetMapping("/download/excel/clear/{fileName}")
 	private void downClearExcel(HttpServletResponse response, @PathVariable String fileName) throws Exception {
-		FileUtil.download(response, FileConstant.ExcelConstant.CLEAR_EXCEL_PARENT + fileName + ".xlsx");
+		FileUtil.read(response, FileConstant.ExcelConstant.CLEAR_EXCEL_PARENT + fileName + ".xlsx");
 	}
 
 	@GetMapping("/cardCost/perday/list/")
@@ -144,5 +144,4 @@ final class SysAdminController {
 		gameScoreLockerService.delete(GameScoreLocker.of(userId));
 		return WebResult.of();
 	}
-
 }

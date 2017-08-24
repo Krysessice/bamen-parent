@@ -1,18 +1,19 @@
 package com.bamenyouxi.invite_code_mode.web.web_api.mysql;
 
+import com.bamenyouxi.core.constant.FileConstant;
 import com.bamenyouxi.core.constant.TipMsgConstant;
 import com.bamenyouxi.core.impl.service.AbstractCrudService;
 import com.bamenyouxi.core.impl.web.AbstractCrudController;
 import com.bamenyouxi.core.model.result.WebResult;
+import com.bamenyouxi.core.util.FileUtil;
 import com.bamenyouxi.invite_code_mode.model.mysql.invite_code_mode.SysAgent;
 import com.bamenyouxi.invite_code_mode.service.mysql.SysAgentService;
 import com.bamenyouxi.invite_code_mode.util.UserDetailsUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.Assert;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import javax.servlet.http.HttpServletResponse;
 
 /**
  * 后台代理 controller
@@ -66,5 +67,10 @@ final class SysAgentController extends AbstractCrudController<SysAgent, Long> {
 				.showAnnounce(false).build());
 		UserDetailsUtil.refresh(sysAgent);
 		return WebResult.of();
+	}
+
+	@GetMapping("/file/default/")
+	private void read(HttpServletResponse response) throws Exception {
+		FileUtil.read(response, FileConstant.DEFAULT_FILE_PATH);
 	}
 }

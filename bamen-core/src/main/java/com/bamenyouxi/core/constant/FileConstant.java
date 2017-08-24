@@ -6,6 +6,8 @@ package com.bamenyouxi.core.constant;
  */
 public final class FileConstant {
 
+	public static final String DEFAULT_FILE_PATH = "D:/jar/default.txt";
+
 	/**
 	 * excel file
 	 */
