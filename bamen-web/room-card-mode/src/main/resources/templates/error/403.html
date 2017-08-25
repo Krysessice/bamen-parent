@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="layout/head :: common_head(_, _)">
+
+</head>
+<body>
+
+    <div id="container" class="container">
+
+        <div class="page-header"></div>
+
+        <div class="starter-template">
+
+            <img class="img-responsive" src="/img/404.png" th:src="@{/img/404.png}" th:alt-title="#{403 error}" />
+            <h1>Oops! 访问被拒绝了...</h1>
+
+        </div>
+
+    </div>
+
+</body>
+</html>
