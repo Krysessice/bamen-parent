@@ -6,12 +6,11 @@
     <cache />
     <resultMap id="resultMap" type="com.bamenyouxi.room_card_mode.model.mysql.room_card_mode.SysAgent">
         <id property="id" column="F_ID" />
-        <result property="sysFlag" column="F_SYS_FLAG" />
+        <result property="sysflag" column="F_SYS_FLAG"/>
         <result property="creator" column="F_CREATOR" />
         <result property="createTime" column="F_CREATE_TIME" />
         <result property="modifier" column="F_MODIFIER" />
         <result property="modifyTime" column="F_MODIFY_TIME" />
-
         <result property="account" column="F_ACCOUNT" />
         <result property="nickName" column="F_NICK_NAME" />
         <result property="password" column="F_PASSWORD" />
@@ -31,6 +30,8 @@
             </foreach>
         </where>
     </select>
+
+
 
     <insert id="save" parameterType="com.bamenyouxi.room_card_mode.model.mysql.room_card_mode.SysAgent" useGeneratedKeys="true" keyProperty="id">
         insert ignore into t_sys_agent
