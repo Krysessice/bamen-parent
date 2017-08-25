@@ -10,62 +10,66 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashSet;
 
-public final class CustomUser implements UserDetails{
+public final class CustomUser implements UserDetails {
 
-    private SysAgent sysAgent;
+	private SysAgent sysAgent;
 
-    public CustomUser(SysAgent sysAgent){}
+	private CustomUser() {}
 
-    public SysAgent getSysAgent() {
-        return sysAgent;
-    }
-    public CustomUser setSysAgent(SysAgent sysAgent) {
-        this.sysAgent = sysAgent;
-        return this;
-    }
+	public CustomUser(SysAgent sysAgent) {}
 
-    /**
-     * 登录判断是管理员还是用户
-     * 是管理员就给管理员的权限
-     * 是用户就给用户的权限
-     * @return Collection
-     */
-    @Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {
-        return new HashSet<SimpleGrantedAuthority>(){{
-            add(new SimpleGrantedAuthority(AuthConstant.RoleNames.ROLE_USER));
-            if(Arrays.asList(AuthConstant.AdminAuthInfo.ADMIN_ACCOUNTS).contains(getUsername()));
-            add(new SimpleGrantedAuthority(AuthConstant.RoleNames.ROLE_ADMIN));
-        }};
-    }
+	public SysAgent getSysAgent() {
+		return sysAgent;
+	}
 
-    @Override
-    public String getPassword() {
-        return sysAgent.getPassword();
-    }
+	public CustomUser setSysAgent(SysAgent sysAgent) {
+		this.sysAgent = sysAgent;
+		return this;
+	}
 
-    @Override
-    public String getUsername() {
-        return sysAgent.getAccount().toString();
-    }
+	/**
+	 * 登录判断是管理员还是用户
+	 * 是管理员就给管理员的权限
+	 * 是用户就给用户的权限
+	 *
+	 * @return Collection
+	 */
+	@Override
+	public Collection<? extends GrantedAuthority> getAuthorities() {
+		return new HashSet<SimpleGrantedAuthority>() {{
+			add(new SimpleGrantedAuthority(AuthConstant.RoleNames.ROLE_USER));
+			if (Arrays.asList(AuthConstant.AdminAuthInfo.ADMIN_ACCOUNTS).contains(getUsername()))
+				add(new SimpleGrantedAuthority(AuthConstant.RoleNames.ROLE_ADMIN));
+		}};
+	}
 
-    @Override
-    public boolean isAccountNonExpired() {
-        return false;
-    }
+	@Override
+	public String getPassword() {
+		return sysAgent.getPassword();
+	}
 
-    @Override
-    public boolean isAccountNonLocked() {
-        return false;
-    }
+	@Override
+	public String getUsername() {
+		return sysAgent.getAccount();
+	}
 
-    @Override
-    public boolean isCredentialsNonExpired() {
-        return false;
-    }
+	@Override
+	public boolean isAccountNonExpired() {
+		return true;
+	}
 
-    @Override
-    public boolean isEnabled() {
-        return false;
-    }
+	@Override
+	public boolean isAccountNonLocked() {
+		return true;
+	}
+
+	@Override
+	public boolean isCredentialsNonExpired() {
+		return true;
+	}
+
+	@Override
+	public boolean isEnabled() {
+		return true;
+	}
 }

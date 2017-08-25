@@ -1,4 +1,4 @@
-package com.bamenyouxi.room_card_mode.SecurityConfig;
+package com.bamenyouxi.room_card_mode.config.SecurityConfig;
 
 import com.bamenyouxi.room_card_mode.model.mysql.room_card_mode.impl.Spring.CustomUser;
 import com.bamenyouxi.room_card_mode.util.UserDetailsUtil;

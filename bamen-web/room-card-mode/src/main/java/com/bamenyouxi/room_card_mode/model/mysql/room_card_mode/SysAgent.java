@@ -14,23 +14,13 @@ import java.util.Date;
  */
 public final class SysAgent extends BaseEntity {
 
-
     private String account;
     private String nickName;
     private String password;
     private String secretKey;
-    private String sysflag;
     private Long superAgentId;
     private Date firstChargeTime;
     private Timestamp lastLoginTime;
-    private Boolean isFinishInfo;
-    private Boolean showAnnounce;
-    private Boolean isAuthorized;
-
-
-    public String getSysflag() {
-        return sysflag;
-    }
 
     private SysAgent() {}
 
@@ -72,16 +62,6 @@ public final class SysAgent extends BaseEntity {
         this.superAgentId = builder.superAgentId;
     }
 
-    public Boolean getFinishInfo() {
-        return isFinishInfo;
-    }
-
-    public Boolean getShowAnnounce() {
-        return showAnnounce;
-    }
-
-
-
     public static class Builder {
 
         private String account;
@@ -102,8 +82,6 @@ public final class SysAgent extends BaseEntity {
             superAgentId = val;
             return this;
         }
-
-
 
         public static void defaultPwdInject(SysAgent sysAgent) {
             String secretKey = UUIDUtil.genUUID();

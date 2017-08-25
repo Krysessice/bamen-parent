@@ -4,7 +4,7 @@ package com.bamenyouxi.room_card_mode.constant;
  * 系统常量
  * Created by 13477 on 2017/8/23.
  */
-public class SysConstant {
+public final class SysConstant {
 
 	public enum SysAgentConstant {
 		ACCOUNT_LENGTH("11");
