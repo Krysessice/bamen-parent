@@ -6,7 +6,7 @@ import com.bamenyouxi.core.impl.model.mysql.BaseEntity;
  * model for t_card_bonus_record
  * Created by 13477 on 2017/8/23.
  */
-public class CardBonusRecord extends BaseEntity {
+public final class CardBonusRecord extends BaseEntity {
 
 	private Long sysAgentId;
 	private Long payOrderId;

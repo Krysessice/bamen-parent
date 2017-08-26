@@ -3,7 +3,7 @@ package com.bamenyouxi.room_card_mode.config.SecurityConfig;
 import com.bamenyouxi.core.constant.*;
 import com.bamenyouxi.room_card_mode.mapper.mysql.room_card_mode.SysAgentMapper;
 import com.bamenyouxi.room_card_mode.model.mysql.room_card_mode.SysAgent;
-import com.bamenyouxi.room_card_mode.model.mysql.room_card_mode.impl.Spring.CustomUser;
+import com.bamenyouxi.room_card_mode.model.Spring.CustomUser;
 import com.bamenyouxi.room_card_mode.util.RedisUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
