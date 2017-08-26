@@ -82,6 +82,10 @@ document.write("<script language=javascript src='/custom/js/bootstrap-table.js'>
                 break;
             case 'gameScoreLockerList':
                 $element.bootstrapTable(this.paramsMap.gameScoreLockerList);
+                break;
+            case 'payOrderPerday':
+                $element.bootstrapTable(this.paramsMap.payOrderPerday);
+                break;
             }
         },
 
@@ -447,10 +451,29 @@ document.write("<script language=javascript src='/custom/js/bootstrap-table.js'>
                         content: '<button type="button" class="btn btn-primary btn-sm" onclick="commonJs.delGameScoreLocker(this)">删除</button>'
                     }
                 ]
+            },
 
+            payOrderPerday: {
+                url: '/admin/payOrder/perday/list/',
+                queryParams: {},
+                columns: [
+                    {
+                        field: 'payPrice',
+                        title: '总充值金额'
+                    },
+                    {
+                        field: 'cardGold',
+                        title: '总购买房卡',
+                    },
+                    {
+                        field: 'createTime',
+                        title: '充值日期',
+                        formatter: 'yy-MM-dd'
+                    }
+                ]
             }
-        }
 
+        }
     }
 
     $.fn.tableInit = function(tableName) {

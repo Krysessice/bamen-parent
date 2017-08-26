@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -43,6 +44,8 @@ final class SysAdminController {
 	private GameScoreInfoService gameScoreInfoService;
 	@Autowired
 	private GameScoreLockerService gameScoreLockerService;
+	@Autowired
+	private PayOrderPerdayStatisticService payOrderPerdayStatisticService;
 	@Autowired
 	private RedisUtil redisUtil;
 
@@ -123,25 +126,27 @@ final class SysAdminController {
 		return WebResult.of();
 	}
 
-	/**
-	 * 显示卡线列表
-	 */
+	/* 卡线用户列表 */
 	@GetMapping("/gameScoreLocker/list/")
-	public WebResult gameScoreLockerList(
+	private WebResult gameScoreLockerList(
 			@RequestParam(value = SysConstant.PageConstant.DEFAULT_PAGE_NAME, defaultValue = "" + SysConstant.PageConstant.DEFAULT_PAGE) Integer page,
 			@RequestParam(value = SysConstant.PageConstant.DEFAULT_SIZE_NAME, defaultValue = "" + SysConstant.PageConstant.DEFAULT_SIZE) Integer size,
 			@RequestParam Map<String, Object> params) {
 		return WebResult.of(gameScoreLockerService.list(page, size, params));
 	}
 
-	/**
-	 * 清理卡线
-	 *
-	 * @param userId 用户id
-	 */
+	/* 清理卡线 */
 	@DeleteMapping("/gameScoreLocker/{userId}/")
-	public WebResult delGameScoreLocker(@PathVariable int userId) {
+	private WebResult delGameScoreLocker(@PathVariable int userId) {
 		gameScoreLockerService.delete(GameScoreLocker.of(userId));
 		return WebResult.of();
+	}
+
+	/* 每日订单列表 */
+	@GetMapping("/payOrder/perday/list/")
+	private WebResult payOrderPerdayList(
+			@RequestParam(value = SysConstant.PageConstant.DEFAULT_PAGE_NAME, defaultValue = "" + SysConstant.PageConstant.DEFAULT_PAGE) Integer page,
+			@RequestParam(value = SysConstant.PageConstant.DEFAULT_SIZE_NAME, defaultValue = "" + SysConstant.PageConstant.DEFAULT_SIZE) Integer size) {
+		return WebResult.of(payOrderPerdayStatisticService.list(page, size, new HashMap<>()));
 	}
 }

@@ -21,7 +21,7 @@
             b.GameID,
             b.NickName,
             c.KindName,
-            D.RoomID
+            d.RoomID
         FROM
             GameScoreLocker a
         LEFT JOIN QPAccountsDB.dbo.AccountsInfo b ON a.UserID = b.UserID
