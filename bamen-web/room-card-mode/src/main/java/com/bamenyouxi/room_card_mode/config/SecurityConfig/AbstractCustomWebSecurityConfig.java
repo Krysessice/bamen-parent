@@ -64,13 +64,9 @@ abstract class AbstractCustomWebSecurityConfig extends WebSecurityConfigurerAdap
 				.userDetailsService(customUserDetailsService())
 				.authenticationSuccessHandler(customLoginHandle)
 				.tokenValiditySeconds(30 * 24 * 20 * 60);
-
 	}
 
 
-	/**
-	 * 把密码加密
-	 */
 	@Bean
 	AuthenticationProvider daoAuthenticationProvider() {
 		DaoAuthenticationProvider daoAuthenticationProvider = new DaoAuthenticationProvider();
@@ -100,7 +96,6 @@ abstract class AbstractCustomWebSecurityConfig extends WebSecurityConfigurerAdap
 		return u -> {
 			Assert.isTrue(u instanceof CustomUser, TipMsgConstant.SYS_AGENT_INFO_INVALID);
 			SysAgent sysAgent = ((CustomUser) u).getSysAgent();
-			System.out.println(sysAgent + "---");
 			String salt = sysAgent.getSecretKey();
 			redisUtil.saveSalt(u.getUsername(), salt);
 			sysAgent.emptySecretKey();

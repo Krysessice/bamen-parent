@@ -16,7 +16,9 @@ public final class CustomUser implements UserDetails {
 
 	private CustomUser() {}
 
-	public CustomUser(SysAgent sysAgent) {}
+	public CustomUser(SysAgent sysAgent) {
+		this.sysAgent = sysAgent;
+	}
 
 	public SysAgent getSysAgent() {
 		return sysAgent;
@@ -27,13 +29,6 @@ public final class CustomUser implements UserDetails {
 		return this;
 	}
 
-	/**
-	 * 登录判断是管理员还是用户
-	 * 是管理员就给管理员的权限
-	 * 是用户就给用户的权限
-	 *
-	 * @return Collection
-	 */
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
 		return new HashSet<SimpleGrantedAuthority>() {{

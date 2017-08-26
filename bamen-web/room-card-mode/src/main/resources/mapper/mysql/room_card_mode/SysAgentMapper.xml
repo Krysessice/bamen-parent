@@ -39,7 +39,7 @@
             <if test="superAgentId != null">
                 , F_SUPER_AGENT_ID
             </if>
-        ) values(
+        ) values (
             #{account}, #{nickName}, #{password}, #{secretKey}
             <if test="superAgentId != null">
                 , #{superAgentId}

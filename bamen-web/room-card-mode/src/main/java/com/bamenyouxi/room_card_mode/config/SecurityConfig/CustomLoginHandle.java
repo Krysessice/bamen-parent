@@ -15,24 +15,24 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 @Component
-public class CustomLoginHandle implements  AuthenticationSuccessHandler,LogoutSuccessHandler{
+class CustomLoginHandle implements AuthenticationSuccessHandler, LogoutSuccessHandler {
 
-    @Autowired
-    private StringRedisTemplate stringRedisTemplate;
+	@Autowired
+	private StringRedisTemplate stringRedisTemplate;
 
+	@Override
+	public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
+		if (UserDetailsUtil.isAdmin()) {
+			response.sendRedirect("/admin/index.html");
+			return;
+		}
+		response.sendRedirect("/agent/index.html");
+	}
 
-    @Override
-    public void onAuthenticationSuccess(HttpServletRequest httpServletRequest, HttpServletResponse Response, Authentication authentication) throws IOException, ServletException {
-            if(UserDetailsUtil.isAdmin()){
-                Response.sendRedirect("/admin/index.html");
-            }
-            Response.sendRedirect(UserDetailsUtil.isFinishInfo() ? "/agent/index.html" : "/agent/cover.html");
-    }
-
-    @Override
-    public void onLogoutSuccess(HttpServletRequest httpServletRequest, HttpServletResponse Response, Authentication authentication) throws IOException, ServletException {
-        String username = ((CustomUser) authentication.getPrincipal()).getUsername();
-        stringRedisTemplate.delete(UserDetailsUtil.getRedisKey_Salt(username));
-         Response.sendRedirect("/login ? logout");
-    }
+	@Override
+	public void onLogoutSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
+		String username = ((CustomUser) authentication.getPrincipal()).getUsername();
+		stringRedisTemplate.delete(UserDetailsUtil.getRedisKey_Salt(username));
+		response.sendRedirect("/login?logout");
+	}
 }

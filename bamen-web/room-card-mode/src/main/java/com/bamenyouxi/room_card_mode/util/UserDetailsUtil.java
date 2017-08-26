@@ -68,14 +68,6 @@ public final class UserDetailsUtil {
 		return getSysAgent().getId();
 	}
 
-	public static boolean isFinishInfo() {
-		return getSysAgent().getFinishInfo();
-	}
-
-	public static boolean isShowAnnounce() {
-		return getSysAgent().getShowAnnounce();
-	}
-
 	public static boolean isAdmin() {
 		return (getUserDetails() != null) && AuthorityUtils.authorityListToSet(getUserDetails().getAuthorities()).contains(AuthConstant.RoleNames.ROLE_ADMIN);
 	}
