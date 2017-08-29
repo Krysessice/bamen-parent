@@ -4,9 +4,7 @@ import com.bamenyouxi.core.constant.FieldConstant;
 import com.bamenyouxi.core.constant.SysConstant;
 import com.bamenyouxi.core.impl.service.AbstractCrudService;
 import com.bamenyouxi.core.model.result.WebResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 import java.io.Serializable;
 import java.util.HashMap;
@@ -40,5 +38,11 @@ public abstract class AbstractCrudController<T, ID extends Serializable> impleme
 	        @RequestParam(value = SysConstant.PageConstant.DEFAULT_SIZE_NAME, defaultValue = "" + SysConstant.PageConstant.DEFAULT_SIZE) Integer size,
 	        @RequestParam Map<String, Object> params) {
 		return WebResult.of(getService().list(page, size, params));
+	}
+
+	@PostMapping("/")
+	protected WebResult save(@RequestBody T t) {
+		getService().save(t);
+		return WebResult.of();
 	}
 }

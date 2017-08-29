@@ -9,6 +9,7 @@ public final class TipMsgConstant {
 	public static final String SYS_AGENT_INFO_INVALID = "代理信息不合法";
 	public static final String ACCESS_TO_RESOURCES_WITHOUT_AUTHORITY = "无权限访问资源";
 	public static final String CONDITION_UNMET = "未满足执行条件";
+	public static final String OPERATION_SUCCESS = "操作成功";
 	public static final String OPERATION_FAILED = "操作失败";
 	public static final String OPERATION_EXCEPTION_AND_LOGOUT = "操作异常，请退出后重试";
 	public static final String ORIGIN_PWD_WRONG = "原密码错误";

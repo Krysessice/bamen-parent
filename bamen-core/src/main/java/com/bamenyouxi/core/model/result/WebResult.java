@@ -1,6 +1,7 @@
 package com.bamenyouxi.core.model.result;
 
 import com.bamenyouxi.core.constant.SysConstant;
+import com.bamenyouxi.core.constant.TipMsgConstant;
 import com.bamenyouxi.core.model.result.impl.AbstractResult;
 
 /**
@@ -14,7 +15,7 @@ public final class WebResult<T> extends AbstractResult<T> {
 	}
 
 	public static <T> WebResult of(T content) {
-		return of(SysConstant.SysFlagConstant.ENABLE, null, content);
+		return of(SysConstant.SysFlagConstant.ENABLE, TipMsgConstant.OPERATION_SUCCESS, content);
 	}
 
 	public static <T> WebResult of(int status, String msg, T content) {

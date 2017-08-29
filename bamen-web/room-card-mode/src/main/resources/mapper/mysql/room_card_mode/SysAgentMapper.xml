@@ -22,11 +22,12 @@
     </resultMap>
 
     <select id="get" resultMap="resultMap">
-        select * from t_sys_agent
+        select a.*, b.F_ACCOUNT superAccount, b.F_NICK_NAME superNickName from t_sys_agent a
+        left join t_sys_agent b on a.F_SUPER_AGENT_ID = b.F_ID
         <where>
             <foreach collection="params" index="key" item="value">
                 <if test="value != null">
-                    and ${key} = #{value}
+                    and a.${key} = #{value}
                 </if>
             </foreach>
         </where>

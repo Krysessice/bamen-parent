@@ -66,7 +66,6 @@ abstract class AbstractCustomWebSecurityConfig extends WebSecurityConfigurerAdap
 				.tokenValiditySeconds(30 * 24 * 20 * 60);
 	}
 
-
 	@Bean
 	AuthenticationProvider daoAuthenticationProvider() {
 		DaoAuthenticationProvider daoAuthenticationProvider = new DaoAuthenticationProvider();
@@ -89,7 +88,6 @@ abstract class AbstractCustomWebSecurityConfig extends WebSecurityConfigurerAdap
 			return new CustomUser(list.get(0));
 		};
 	}
-
 
 	@Bean
 	SaltSource customSaltSource() {

@@ -22,6 +22,9 @@ public final class SysAgent extends BaseEntity {
     private Date firstChargeTime;
     private Timestamp lastLoginTime;
 
+    private String superAccount;    // 上级代理号
+    private String superNickName;   // 上级代理昵称
+
     private SysAgent() {}
 
     public void emptySecretKey() {
@@ -54,6 +57,14 @@ public final class SysAgent extends BaseEntity {
 
     public Timestamp getLastLoginTime() {
         return lastLoginTime;
+    }
+
+    public String getSuperAccount() {
+        return superAccount;
+    }
+
+    public String getSuperNickName() {
+        return superNickName;
     }
 
     private SysAgent(Builder builder) {

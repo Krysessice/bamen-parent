@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="layout/head :: common_head(_, _)">
+
+</head>
+<body th:replace="layout/body :: common_body(~{::div#container}, _)">
+
+	<div id="container" class="container">
+
+		<div class="page-header"></div>
+
+		<div class="well" th:object="${principal.sysAgent}">
+			<div class="row">
+				<div class="col-xs-4">代　理　号</div>
+				<div class="col-xs-8">[[*{account}]]</div>
+			</div>
+			<div class="row">
+				<div class="col-xs-4">用 户 昵 称</div>
+				<div class="col-xs-8">[[*{nickName}]]</div>
+			</div>
+			<div class="row">
+				<div class="col-xs-4">注 册 日 期</div>
+				<div class="col-xs-8">[[*{#dates.format(createTime, 'yyyy-MM-dd')}]]</div>
+			</div>
+			<div class="row">
+				<div class="col-xs-4">上级代理号</div>
+				<div class="col-xs-8">[[*{superAccount}]]</div>
+			</div>
+			<div class="row">
+				<div class="col-xs-4">上 级 昵 称</div>
+				<div class="col-xs-8">[[*{superNickName}]]</div>
+			</div>
+		</div>
+
+		<div class="list-group">
+			<th:block th:replace="~{layout/common :: list-group-item('/agent/index.html', 'glyphicon-euro', '代理商')}" />
+			<th:block th:replace="~{layout/common :: list-group-item('/admin/agent-register.html', 'glyphicon-plus', '开通代理')}" />
+		</div>
+
+	</div>
+
+</body>
+</html>
