@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org">
+<body>
+	<div class="modal fade bs-example-modal-sm" id="groupRoomMemberModel" tabindex="-1" role="dialog"
+	     aria-labelledby="groupRoomMember" aria-describedby="玩家列表" th:fragment="groupRoomMemberModel">
+
+		<div class="modal-dialog" role="document" aria-hidden="true">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+					<h4 class="modal-title" id="groupRoomMember">玩家列表</h4>
+				</div>
+
+				<div class="modal-body">
+
+					<input type="hidden" id="groupRoomId" />
+
+					<th:block th:replace="~{layout/common :: table-paginator('model-table')}" />
+
+				</div>
+
+				<div class="modal-footer">
+					<button type="button" class="btn btn-primary" onclick="addGroupMember()">添加</button>
+					<button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+				</div>
+			</div>
+		</div>
+
+	</div>
+
+	<th:block th:fragment="groupRoomMemberModelJs">
+
+		<script type="text/javascript">
+		    $('#groupRoomMemberModel').on('show.bs.modal', function (event) {
+		        var $button = $(event.relatedTarget);
+		        var groupRoomId = $button.parents('tr').find('td[name="id"]').text();
+		        $('input#groupRoomId').val(groupRoomId);
+				$('#model-table').tableInit('groupRoomMember', groupRoomId);
+			})
+
+			function addGroupMember() {
+				var gameId = prompt("请输入游戏id");
+				if (!gameId || gameId.length == 0) return;
+				if (gameId.length != 5) {
+					alert('请输入有效的游戏id');
+					return addGroupMember();
+				}
+				$.ajax({
+					type: 'post',
+					url: '/groupRoomMember/',
+					dataType: 'json',
+					contentType: "application/json",
+					data: JSON.stringify({
+						gameId: gameId,
+						groupRoomId: $('input#groupRoomId').val()
+					}),
+					success: function(data) {
+						if (data.status)
+							$('#model-table').bootstrapTable('reloadGrid');
+						alert(data.msg);
+					}
+				});
+			}
+
+			function delGroupRoomMember(e) {
+				var $e = $(e);
+				var $tr = $e.parents('tr');
+				var userId = $tr.find('td[name="userId"]').text();
+				var groupRoomId = $tr.find('td[name="groupRoomId"]').text();
+				if (window.confirm("确定将" + $tr.find('td[name="gameId"]').text() + "从群房间中移除吗？")) {
+			        $.ajax({
+			            type: 'delete',
+			            url: '/groupRoomMember/',
+			            dataType: 'json',
+			            contentType: "application/json",
+						data: JSON.stringify({
+							userId: userId,
+							groupRoomId: groupRoomId
+						}),
+			            success: function(data) {
+			                if (data.status)
+								$('#model-table').bootstrapTable('reloadGrid');
+							alert(data.msg);
+			            }
+			        });
+		        }
+			}
+		</script>
+
+	</th:block>
+</body>
+</html>

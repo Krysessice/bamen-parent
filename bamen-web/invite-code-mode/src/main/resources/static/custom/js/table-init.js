@@ -86,6 +86,15 @@ document.write("<script language=javascript src='/custom/js/bootstrap-table.js'>
             case 'payOrderPerday':
                 $element.bootstrapTable(this.paramsMap.payOrderPerday);
                 break;
+            case 'groupRoom':
+                $element.bootstrapTable(this.paramsMap.groupRoom);
+                break;
+            case 'groupRoomMember':
+                this.paramsMap.groupRoomMember.queryParams = {
+                    AgentRoomid: args[0]
+                }
+                $element.bootstrapTable(this.paramsMap.groupRoomMember, 'refresh');
+                break;
             }
         },
 
@@ -469,6 +478,73 @@ document.write("<script language=javascript src='/custom/js/bootstrap-table.js'>
                         field: 'createTime',
                         title: '充值日期',
                         formatter: 'yy-MM-dd'
+                    }
+                ]
+            },
+
+            groupRoom: {
+                url: '/groupRoom/listSelf/',
+                queryParams: {},
+                columns: [
+                    {
+                        field: 'id',
+                        title: 'id',
+                        hidden: true
+                    },
+                    {
+                        field: 'groupName',
+                        title: '群房间名',
+                    },
+                    {
+                        field: 'roomStatus',
+                        title: '房间状态',
+                        content: function(field) {
+                            return field ? '<button type="button" class="btn btn-info btn-sm" onclick="commonJs.group_room_status(this, 0)">开放中</button>' :
+                                            '<button type="button" class="btn btn-warning btn-sm" onclick="commonJs.group_room_status(this, 1)">已禁用</button>';
+                        }
+                    },
+                    {
+                        field: 'playerNum',
+                        title: '玩家数量',
+                    },
+                    {
+                        field: 'createTime',
+                        title: '创建时间',
+                        formatter: 'yy-MM-dd HH:mm'
+                    },
+                    {
+                        title: '操作',
+                        content: '<button type="button" class="btn btn-default btn-sm" role="button" data-toggle="modal" data-target="#groupRoomMemberModel">详细</button>' +
+                                    '&nbsp;<button type="button" class="btn btn-danger btn-sm" onclick="delGroupRoom(this)">删除</button>'
+                    }
+                ]
+            },
+
+            groupRoomMember: {
+                url: '/groupRoomMember/list/',
+                queryParams: {},
+                columns: [
+                    {
+                        field: 'userId',
+                        title: '用户id',
+                        hidden: true
+                    },
+                    {
+                        field: 'groupRoomId',
+                        title: '群房间号',
+                        hidden: true
+                    },
+                    {
+                        field: 'gameId',
+                        title: '游戏id'
+                    },
+                    {
+                        field: 'nickName',
+                        title: '昵称'
+                    },
+                    {
+                        title: '操作',
+                        content: '<button type="button" class="btn btn-default btn-sm" onclick="delGroupRoomMember(this)">移除</button>'
                     }
                 ]
             }

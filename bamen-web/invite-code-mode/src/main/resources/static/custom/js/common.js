@@ -249,6 +249,25 @@ CommonJs.prototype.delGameScoreLocker = function(e) {
     }
 }
 
+CommonJs.prototype.group_room_status = function(e, status) {
+    var $e = $(e);
+    $.ajax({
+        type: 'put',
+        url: '/groupRoom/',
+        dataType: 'json',
+        contentType:"application/json",
+        data: JSON.stringify({
+            id : $e.parents('tr').find('td[name="id"]').text(),
+            roomStatus : status
+        }),
+        success: function(data) {
+            if (!data.status)
+                return alert(data.msg);
+            $('#table').bootstrapTable('reloadGrid');
+        }
+    });
+}
+
 Date.prototype.format = function(format) {
     /*
     * 使用例子:format="yyyy-MM-dd HH:mm:ss";

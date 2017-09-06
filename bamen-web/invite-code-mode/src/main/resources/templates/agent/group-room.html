@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="layout/head :: common_head(_, _)">
+
+</head>
+<body th:replace="layout/body :: common_body(~{::div#container}, ~{::#selfJs})">
+
+<div id="container" class="container">
+
+	<th:block th:replace="~{layout/common :: page-header('群开房')}" />
+
+	<div class="input-group col-xs-10">
+		<input type="text" class="form-control" name="groupName" placeholder="请输入群房间名" aria-describedby="groupName" />
+		<span class="input-group-addon" id="groupName">开通</span>
+	</div>
+
+	<div class="page-header">
+		<h4>群房间列表</h4>
+	</div>
+
+	<div class="table-responsive">
+		<th:block th:replace="~{layout/common :: table-paginator('table')}" />
+	</div>
+
+	<th:block th:replace="model/groupRoomMemberModel :: groupRoomMemberModel" />
+
+</div>
+
+<th:block id="selfJs">
+
+	<th:block th:replace="~{layout/common :: pageJs}" />
+	<th:block th:replace="~{model/groupRoomMemberModel :: groupRoomMemberModelJs}" />
+
+	<script type="text/javascript">
+		var commonJs = new CommonJs();
+	    $("#table").tableInit('groupRoom');
+
+	    $('span#groupName').on('click', function() {
+	        var groupName = $('input[name="groupName"]').val();
+	        if (groupName.length < 2 || groupName.length > 10)
+	            return alert('群房间名需要2～10个字');
+
+	        $.ajax({
+				type: 'post',
+				url: '/groupRoom/',
+				dataType: 'json',
+				contentType: "application/json",
+				data: JSON.stringify({
+					groupName : groupName
+				}),
+				success: function(data) {
+					if (data.status)
+						$('#table').bootstrapTable('reloadGrid');
+					alert(data.msg);
+				}
+			});
+	    })
+
+	    function delGroupRoom(e) {
+	        var $e = $(e);
+	        if (window.confirm("确定要删除'" + $e.parents('tr').find('td[name="groupName"]').text() + "'房间吗？")) {
+		        $.ajax({
+					type: 'delete',
+					url: '/groupRoom/',
+					dataType: 'json',
+					contentType:"application/json",
+					data: JSON.stringify({
+						id : $e.parents('tr').find('td[name="id"]').text()
+					}),
+					success: function(data) {
+			            if (data.status)
+			                $('#table').bootstrapTable('reloadGrid');
+						alert(data.msg);
+			        }
+				});
+			}
+	    }
+	</script>
+
+</th:block>
+
+</body>
+</html>

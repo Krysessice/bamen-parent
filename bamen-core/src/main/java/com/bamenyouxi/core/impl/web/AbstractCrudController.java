@@ -45,4 +45,16 @@ public abstract class AbstractCrudController<T, ID extends Serializable> impleme
 		getService().save(t);
 		return WebResult.of();
 	}
+
+	@PutMapping("/")
+	protected WebResult update(@RequestBody T t) {
+		getService().update(t);
+		return WebResult.of();
+	}
+
+	@DeleteMapping("/")
+	protected WebResult delete(@RequestBody T t) {
+		getService().delete(t);
+		return WebResult.of();
+	}
 }

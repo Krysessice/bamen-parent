@@ -17,6 +17,7 @@
         <result property="t1_commission" column="F_T1_COMMISSION" />
         <result property="t2_commission" column="F_T2_COMMISSION" />
         <result property="t3_commission" column="F_T3_COMMISSION" />
+        <result property="inGroupLimit" column="F_IN_GROUP_LIMIT" />
     </resultMap>
 
     <select id="get" resultMap="resultMap">
@@ -34,10 +35,12 @@
         insert ignore into t_system_info
         (
             F_GAME_NAME, F_TITLE, F_LEAST_RECRUIT_NUM,
-            F_T1_COMMISSION, F_T2_COMMISSION, F_T3_COMMISSION
+            F_T1_COMMISSION, F_T2_COMMISSION, F_T3_COMMISSION,
+            F_IN_GROUP_LIMIT
         ) values(
             #{gameName}, #{title}, #{leastRecruitNum},
-            #{t1_commission}, #{t2_commission}, #{t3_commission}
+            #{t1_commission}, #{t2_commission}, #{t3_commission},
+            #{inGroupLimit}
         )
     </insert>
 

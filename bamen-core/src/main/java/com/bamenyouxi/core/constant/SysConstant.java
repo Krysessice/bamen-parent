@@ -6,7 +6,7 @@ import java.time.LocalDate;
  * 系统常量
  * Created by 13477 on 2017/6/19.
  */
-public final class SysConstant {
+public class SysConstant {
 
 	/**
 	 * sysFlag

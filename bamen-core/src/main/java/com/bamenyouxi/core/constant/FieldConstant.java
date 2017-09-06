@@ -13,7 +13,8 @@ public final class FieldConstant {
         F_ID, F_USER_ID, F_GAME_ID, F_SUPER_AGENT_GAME_ID, F_IS_AUTHORIZED, F_SYS_FLAG, F_CREATE_TIME,
         F_RESOURCE_ID, F_RESOURCE_NAME,
         F_ACCOUNT,
-        UserID, GameID
+        UserID, GameID,
+        Gameid, qunName, Userid, AgentRoomid
     }
 
     /**
@@ -51,6 +52,8 @@ public final class FieldConstant {
         public static final String END_DATE_DESC = "F_END_DATE desc";
         public static final String COLLECT_DATE_DESC = "CollectDate desc";
         public static final String SEND_TIME_DESC = "SendTime desc";
+        public static final String BUILD_DATE_DESC = "BuilDate desc";
+        public static final String AGENTROOMID_ASC = "AgentRoomid asc";
     }
 
     /**
