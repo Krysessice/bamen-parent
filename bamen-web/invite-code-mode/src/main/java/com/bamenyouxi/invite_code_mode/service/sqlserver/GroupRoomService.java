@@ -49,7 +49,7 @@ public class GroupRoomService extends AbstractCrudService<GroupRoom, Integer> {
 		groupRoom
 				.gameId(UserDetailsUtil.getGameId())
 				.nickName(UserDetailsUtil.getNickName())
-				.roomStatus(SysConstant.SysFlagConstant.ENABLE)
+				.roomStatus(SysConstant.SqlserverFlagConstant.SUCCESS)
 				.playerNumInit();
 		List<GroupRoom> list = getMapper().get(new HashMap<String, Object>() {{
 			put(FieldConstant.DBFieldConstant.Gameid.name(), groupRoom.getGameId());

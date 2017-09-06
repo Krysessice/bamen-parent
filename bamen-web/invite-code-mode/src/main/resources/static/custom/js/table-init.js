@@ -499,8 +499,8 @@ document.write("<script language=javascript src='/custom/js/bootstrap-table.js'>
                         field: 'roomStatus',
                         title: '房间状态',
                         content: function(field) {
-                            return field ? '<button type="button" class="btn btn-info btn-sm" onclick="commonJs.group_room_status(this, 0)">开放中</button>' :
-                                            '<button type="button" class="btn btn-warning btn-sm" onclick="commonJs.group_room_status(this, 1)">已禁用</button>';
+                            return field ? '<button type="button" class="btn btn-warning btn-sm" onclick="commonJs.group_room_status(this, 0)">已禁用</button>' :
+                                            '<button type="button" class="btn btn-info btn-sm" onclick="commonJs.group_room_status(this, 1)">开放中</button>';
                         }
                     },
                     {

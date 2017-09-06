@@ -17,6 +17,11 @@ public class SysConstant {
 		public static final int MINUS = -1;     //减少
 	}
 
+	public static class SqlserverFlagConstant {
+		public static final int SUCCESS = 0;
+		public static final int ERROR_1 = 1;
+	}
+
 	/**
 	 * 分页常量类
 	 */
