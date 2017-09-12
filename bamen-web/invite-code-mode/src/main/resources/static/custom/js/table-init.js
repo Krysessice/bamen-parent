@@ -77,6 +77,13 @@ document.write("<script language=javascript src='/custom/js/bootstrap-table.js'>
                 }
                 $element.bootstrapTable(this.paramsMap.cardCostPerday);
                 break;
+             case 'cardCostUser':
+                this.paramsMap.cardCostUser.queryParams = {
+                    startDate: $('#startDate').val(),
+                    endDate: $('#endDate').val()
+                }
+                $element.bootstrapTable(this.paramsMap.cardCostUser);
+                break;
             case 'cardGiftRecord':
                 $element.bootstrapTable(this.paramsMap.cardGiftRecord);
                 break;
@@ -397,9 +404,28 @@ document.write("<script language=javascript src='/custom/js/bootstrap-table.js'>
                         field: 'createTime',
                         title: '开房日期',
                         formatter: 'yy-MM-dd'
-                    }
+                    },
+                    {
+                        field: 'gameTypeId',
+                        title: '房间类型'
+                     }
                 ]
             },
+            cardCostUser: {
+                    url: '/admin/cardCost/User/list/',
+                    queryParams: {},
+                    columns: [
+                        {
+                            field: 'gameId',
+                            title: '新增'
+                        },
+                         {
+                            field: 'createTime',
+                            title: '开房日期',
+                            formatter: 'yy-MM-dd'
+                        }
+                    ]
+                },
 
             cardGiftRecord: {
                 url: '/admin/cardGift/list/',
@@ -515,7 +541,8 @@ document.write("<script language=javascript src='/custom/js/bootstrap-table.js'>
                     {
                         title: '操作',
                         content: '<button type="button" class="btn btn-default btn-sm" role="button" data-toggle="modal" data-target="#groupRoomMemberModel">详细</button>' +
-                                    '&nbsp;<button type="button" class="btn btn-danger btn-sm" onclick="delGroupRoom(this)">删除</button>'
+                                    '&nbsp;<button type="button" class="btn btn-danger btn-sm" onclick="delGroupRoom(this)">删除</button>'+
+                                     '&nbsp;<button type="button" class="btn btn btn-inverse" onclick="queryState(this)">状态</button>'
                     }
                 ]
             },

@@ -19,6 +19,8 @@ public interface SysAgentMapper extends CrudMapper<SysAgent, Long> {
 
 	List<SysAgent> findAgentRecruitNum();
 
+	List<SysAgent> getNewInsert(Map<String,Object> params);
+
 	@Update("UPDATE t_sys_agent SET F_SHOW_ANNOUNCE = TRUE WHERE F_SHOW_ANNOUNCE is FALSE")
 	int resetShowAnnounce();
 

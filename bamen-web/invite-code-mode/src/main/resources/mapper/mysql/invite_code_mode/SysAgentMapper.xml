@@ -54,6 +54,26 @@
         </where>
     </select>
 
+    <select id="getNewInsert" resultMap="resultMap">
+        SELECT count(F_GAME_ID)F_GAME_ID,F_CREATE_TIME FROM t_sys_agent
+        <where>
+            <if test="startDate != null">
+                and convert(F_CREATE_TIME, DATE) &gt;= convert(#{startDate},DATE)
+            </if>
+            <if test="endDate != null">
+                and convert(F_CREATE_TIME, DATE) &lt;= convert(#{endDate}, DATE)
+            </if>
+            <if test="groupBy != null">
+
+            </if>
+        </where>
+        <if test="groupBy != null">
+            group by ${groupBy}
+        </if>
+    </select>
+
+
+
     <select id="getWithPayOrderStatistic" resultMap="resultMap" parameterType="map">
         SELECT
             F_REAL_NAME, F_BANK_ACCOUNT, F_OPENING_BANK, SUM(F_PAY_PRICE) F_PAY_PRICE

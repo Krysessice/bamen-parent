@@ -20,6 +20,9 @@
 
 		<result property="gameName" column="F_GAME_NAME" />
 		<result property="nickName" column="F_NICK_NAME" />
+		<result property="lastLoginTime" column="F_LAST_LOGIN_TIME" />
+		<result property="gameId" column="F_GAME_ID"/>
+
 	</resultMap>
 
 	<select id="get" resultMap="resultMap">
@@ -34,11 +37,29 @@
 	</select>
 
 	<select id="sum" resultMap="resultMap">
-		select sum(F_OPEN_ROOM_NUM) F_OPEN_ROOM_NUM, sum(F_CARD_COST) F_CARD_COST, F_CREATE_TIME
+		select sum(F_OPEN_ROOM_NUM) F_OPEN_ROOM_NUM, sum(F_CARD_COST) F_CARD_COST, F_CREATE_TIME,F_GAME_TYPE_ID
 		from t_user_open_room_perday_record
 		<where>
 			<if test="startDate != null">
 				and convert(F_CREATE_TIME, DATE) &gt;= convert(#{startDate}, DATE)
+			</if>
+			<if test="endDate != null">
+				and convert(F_CREATE_TIME, DATE) &lt;= convert(#{endDate}, DATE)
+			</if>
+			<if test="groupBy != null">
+
+			</if>
+		</where>
+		<if test="groupBy != null">
+			group by ${groupBy}
+		</if>
+	</select>
+
+	<select id="getNewInsert" resultMap="resultMap">
+		SELECT count(F_GAME_ID)F_GAME_ID FROM t_sys_agent
+		<where>
+			<if test="startDate != null">
+				and convert(F_CREATE_TIME, DATE) &gt;= convert(#{startDate},DATE)
 			</if>
 			<if test="endDate != null">
 				and convert(F_CREATE_TIME, DATE) &lt;= convert(#{endDate}, DATE)
