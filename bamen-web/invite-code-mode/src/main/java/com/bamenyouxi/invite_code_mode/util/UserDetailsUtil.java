@@ -58,6 +58,10 @@ public final class UserDetailsUtil {
 		return getSysAgent().getGameId();
 	}
 
+	public static String getNickName() {
+		return getSysAgent().getNickName();
+	}
+
 	public static String getPassword() {
 		String pwd = getUserDetails().getPassword();
 		Assert.isTrue(!StringUtils.isEmpty(pwd) && pwd.equals(getSysAgent().getPassword()), TipMsgConstant.OPERATION_EXCEPTION_AND_LOGOUT);

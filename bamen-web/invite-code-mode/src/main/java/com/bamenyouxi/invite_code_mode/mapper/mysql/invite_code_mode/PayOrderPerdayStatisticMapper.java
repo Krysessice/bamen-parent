@@ -15,7 +15,7 @@ import java.util.List;
 @Mapper
 public interface PayOrderPerdayStatisticMapper extends CrudMapper<PayOrderPerdayStatistic, Long> {
 
-	@Select("select sum(F_PAY_PRICE) as payPrice, sum(F_CARD_GOLD) as cardGold from t_pay_order_perday_statistic")
+	@Select("select ifnull(sum(F_PAY_PRICE), 0) as payPrice, ifnull(sum(F_CARD_GOLD), 0) as cardGold from t_pay_order_perday_statistic")
 	PayOrderPerdayStatistic sumTotal();
 
 	List<PayOrderPerdayStatistic> payOrderPerdayStatistic(@Param("createTime") String createTime);

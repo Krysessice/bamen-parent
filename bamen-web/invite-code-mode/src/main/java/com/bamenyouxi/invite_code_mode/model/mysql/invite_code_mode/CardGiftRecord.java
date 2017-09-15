@@ -8,9 +8,9 @@ import com.bamenyouxi.core.impl.model.mysql.BaseEntity;
  */
 public final class CardGiftRecord extends BaseEntity {
 
+	private Integer cardNum;
 	private Integer presenter;
 	private Integer presentee;
-	private Integer cardNum;
 	private String giftReason;
 
 	public static CardGiftRecord of(Integer presenter, Integer presentee, Integer cardNum) {

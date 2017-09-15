@@ -2,11 +2,24 @@ package com.bamenyouxi.room_card_mode.model.mysql.room_card_mode;
 
 import com.bamenyouxi.core.impl.model.mysql.BaseEntity;
 
+import java.math.BigDecimal;
+
 public final class SystemInfo extends BaseEntity{
 
     private String gameName;
     private String title;
     private Boolean _sysFlag;
+
+    private BigDecimal ratelv1;
+    private BigDecimal ratelv2;
+
+    public BigDecimal getRatelv1() {
+        return ratelv1;
+    }
+
+    public BigDecimal getRatelv2() {
+        return ratelv2;
+    }
 
     public SystemInfo() {}
 

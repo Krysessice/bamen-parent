@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+		PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+		"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bamenyouxi.invite_code_mode.mapper.sqlserver.account.GroupRoomMemberMapper">
+	<resultMap id="resultMap" type="com.bamenyouxi.invite_code_mode.model.sqlserver.account.GroupRoomMember">
+		<result property="groupRoomId" column="AgentRoomid" />
+		<result property="userId" column="Userid" />
+	</resultMap>
+
+	<select id="get" resultMap="resultMap">
+		select a.AgentRoomid, a.Userid, b.GameID gameId, b.NickName nickName from userAgentmap a
+		left join AccountsInfo b on a.Userid = b.UserID
+		<where>
+			<foreach collection="params" index="key" item="value">
+				<if test="value != null">
+					and a.${key} = #{value}
+				</if>
+			</foreach>
+		</where>
+	</select>
+
+	<insert id="save" parameterType="com.bamenyouxi.invite_code_mode.model.sqlserver.account.GroupRoomMember">
+		insert into userAgentmap (
+			AgentRoomid, Userid
+		) values (
+			#{groupRoomId}, #{userId}
+		)
+	</insert>
+
+	<delete id="delete" parameterType="com.bamenyouxi.invite_code_mode.model.sqlserver.account.GroupRoomMember">
+		delete userAgentmap
+		where
+			AgentRoomid = #{groupRoomId}
+		and
+			Userid = #{userId}
+	</delete>
+</mapper>

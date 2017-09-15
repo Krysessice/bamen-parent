@@ -95,10 +95,14 @@
 
                 $tr = "<tr>";
                 $(columns).each(function(index, column) {
-                    if (column.content)
-                        return $tr += "<td>" + column.content + "</td>";
-
                     field = item[column.field];
+
+                    var c_content = column.content;
+                    if (typeof c_content == 'string')
+                        return $tr += "<td>" + c_content + "</td>";
+                    else if ((typeof c_content) == 'function')
+                        return $tr += "<td>" + c_content(field) + "</td>";
+
                     if (field == null)
                         return $tr += "<td name='" + column.field + "'>" + '<font color="grey"><i>未填写</i></font>' + "</td>";
                     if ((typeof field == 'string') && field.match(reg))

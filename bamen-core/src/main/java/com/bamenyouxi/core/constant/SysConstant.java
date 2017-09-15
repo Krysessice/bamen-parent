@@ -6,7 +6,7 @@ import java.time.LocalDate;
  * 系统常量
  * Created by 13477 on 2017/6/19.
  */
-public final class SysConstant {
+public class SysConstant {
 
 	/**
 	 * sysFlag
@@ -15,6 +15,11 @@ public final class SysConstant {
 		public static final int ENABLE = 1;     //可用
 		public static final int DISABLE = 0;    //禁用
 		public static final int MINUS = -1;     //减少
+	}
+
+	public static class SqlserverFlagConstant {
+		public static final int SUCCESS = 0;
+		public static final int ERROR_1 = 1;
 	}
 
 	/**

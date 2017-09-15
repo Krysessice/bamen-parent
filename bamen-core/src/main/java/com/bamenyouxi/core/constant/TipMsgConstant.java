@@ -7,6 +7,8 @@ package com.bamenyouxi.core.constant;
 public final class TipMsgConstant {
 	public static final String PARAM_INVALID = "参数不合法";
 	public static final String SYS_AGENT_INFO_INVALID = "代理信息不合法";
+	public static final String PLAYER_NOT_EXIST = "玩家不存在";
+	public static final String PLAYER_ALREADY_EXIST = "玩家已存在";
 	public static final String ACCESS_TO_RESOURCES_WITHOUT_AUTHORITY = "无权限访问资源";
 	public static final String CONDITION_UNMET = "未满足执行条件";
 	public static final String OPERATION_SUCCESS = "操作成功";
@@ -18,4 +20,10 @@ public final class TipMsgConstant {
 	public static final String REPORT_GENERATION_FAILED = "报表生成失败，请重试";
 	public static final String EXCEPTION_FILE_DOWNLOAD = "文件下载异常，请重试";
 	public static final String RUN_EXCEPTION = "run异常，程序启动失败";
+	public static final String GROUP_NAME_EXIST = "群房间已存在";
+	public static final String PLAYER_IN_GROUP_UPPER_LIMIT = "玩家加群房间达到上限";
+	public static final String SYS_AGENT = "代理号不存在";
+	public static final String SYS_NOTAGENT = "赠送代理不存在";
+	public static final String SYS_ACCOUNT = "已经有该代理";
+	public static final String SYS_MAXACCOUNT = "你是管理员哦";
 }

@@ -20,6 +20,8 @@ import com.bamenyouxi.invite_code_mode.model.sqlserver.account.AccountsInfo;
 import com.bamenyouxi.invite_code_mode.service._impl.AbstractSysAgentService;
 import com.bamenyouxi.invite_code_mode.util.SysResourceUtil;
 import com.bamenyouxi.invite_code_mode.util.UserDetailsUtil;
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,6 +36,8 @@ import org.springframework.util.Assert;
 import java.sql.Timestamp;
 import java.time.Instant;
 import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.regex.Pattern;
 
 /**
@@ -138,6 +142,8 @@ public class SysAgentService extends AbstractSysAgentService implements CommandL
 		LOGGER.info("{} 修改密码: {} -> {}", UserDetailsUtil.getGameId(), oldPwd, newPwd);
 	}
 
+
+
 	/**
 	 * 修改用户真实资料与邀请码
 	 * @param sysAgent  待修改信息
@@ -229,6 +235,21 @@ public class SysAgentService extends AbstractSysAgentService implements CommandL
 				);
 		Assert.isTrue(i > 0, TipMsgConstant.OPERATION_FAILED);
 	}
+
+	/**
+	 * 统计每天新增
+	 */
+	@Transactional
+	public PageInfo<SysAgent> getNewInsert(int page, int size, Map<String, Object> params){
+		super.listBefore(params);
+		PageHelper.startPage(page,size,FieldConstant.SortConstant.CREATE_TIME_DESC);
+		params.put(FieldConstant.CommonFieldConstant.groupBy.name(),FieldConstant.GroupConstant.CREATE_DATE);
+		List<SysAgent> list=sysAgentMapper.getNewInsert(params);
+		if (list.isEmpty() || list.get(0) == null)
+			return new PageInfo<>();
+		return new PageInfo<>(list);
+	}
+
 
 	/**
 	 * 修改代理邀请码

@@ -78,7 +78,7 @@ public abstract class AbstractCrudService<T, ID extends Serializable> implements
 				}})).get(0) : null;
 	}
 
-	public void delete(T t){
+	public void delete(T t) {
 		this.deleteBefore(t);
 		Assert.isTrue(getMapper().delete(t) > 0, TipMsgConstant.OPERATION_FAILED);
 	}

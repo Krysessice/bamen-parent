@@ -17,6 +17,7 @@ public final class SystemInfo extends BaseEntity {
 	private BigDecimal t1_commission;
 	private BigDecimal t2_commission;
 	private BigDecimal t3_commission;
+	private Integer inGroupLimit;
 	private BigDecimal payOrderPerdayTotalPayPrice;
 
 	private Date latestClearDate; //最近结算时间
@@ -48,6 +49,10 @@ public final class SystemInfo extends BaseEntity {
 
 	public BigDecimal getT3_commission() {
 		return t3_commission;
+	}
+
+	public Integer getInGroupLimit() {
+		return inGroupLimit;
 	}
 
 	public BigDecimal getPayOrderPerdayTotalPayPrice() {

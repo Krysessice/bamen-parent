@@ -19,7 +19,7 @@ import javax.sql.DataSource;
  * sqlserver 游戏用户数据源
  * Created by 13477 on 2017/8/16.
  */
-//@Configuration
+@Configuration
 @MapperScan(basePackages = DBConstant.QPAccountsDB.MAPPER_PACKAGE, sqlSessionFactoryRef = DBConstant.QPAccountsDB.FACTORY_NAME)
 class QPAccountsDBConfig {
 

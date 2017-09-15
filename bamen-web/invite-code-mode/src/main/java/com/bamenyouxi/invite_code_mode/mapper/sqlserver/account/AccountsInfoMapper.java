@@ -21,7 +21,7 @@ public interface AccountsInfoMapper extends CrudMapper<AccountsInfo, Integer> {
 	List<SysAgent> getBySuperAgentTimeBetweenOfSysAgent(Map<String, Object> params);
 
 	@Select("select " +
-			"   GameID gameId, PlayingGame superAgentGameId, SuperAgentTime transMemberTime " +
+			"   GameID gameId, PlayingGame superAgentGameId, SuperAgentTime transMemberTime LastLogonDate" +
 			"from AccountsInfo " +
 			"where SuperAgentTime is not null")
 	List<SysAgent> findBySuperAgentTimeNotNullOfSysAgent();

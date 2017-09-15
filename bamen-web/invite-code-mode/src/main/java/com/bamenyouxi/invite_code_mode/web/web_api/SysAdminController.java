@@ -7,18 +7,21 @@ import com.bamenyouxi.core.model.result.WebResult;
 import com.bamenyouxi.core.util.FileUtil;
 import com.bamenyouxi.invite_code_mode.model.mysql.invite_code_mode.SysAgent;
 import com.bamenyouxi.invite_code_mode.model.mysql.invite_code_mode.SystemInfo;
+import com.bamenyouxi.invite_code_mode.model.mysql.invite_code_mode.UserOpenRoomPerdayRecord;
 import com.bamenyouxi.invite_code_mode.model.sqlserver.treasure.GameScoreLocker;
 import com.bamenyouxi.invite_code_mode.service.excel.SysAgentClearExcelService;
 import com.bamenyouxi.invite_code_mode.service.mysql.*;
 import com.bamenyouxi.invite_code_mode.service.sqlserver.GameScoreInfoService;
 import com.bamenyouxi.invite_code_mode.service.sqlserver.GameScoreLockerService;
 import com.bamenyouxi.invite_code_mode.util.RedisUtil;
+import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -111,6 +114,15 @@ final class SysAdminController {
 			@RequestParam Map<String, Object> params) {
 		return WebResult.of(userOpenRoomPerdayRecordService.sumPerday(page, size, params));
 	}
+
+	@GetMapping("/cardCost/User/list/")
+	private WebResult cardCostUserRecord(
+			@RequestParam(value = SysConstant.PageConstant.DEFAULT_PAGE_NAME, defaultValue = "" + SysConstant.PageConstant.DEFAULT_PAGE) Integer page,
+			@RequestParam(value = SysConstant.PageConstant.DEFAULT_SIZE_NAME, defaultValue = "" + SysConstant.PageConstant.DEFAULT_SIZE) Integer size,
+			@RequestParam Map<String, Object> params) {
+		return WebResult.of(sysAgentService.getNewInsert(page,size,params));
+	}
+
 
 	@GetMapping("/cardGift/list/")
 	private WebResult cardGiftRecord(

@@ -1,6 +1,8 @@
 package com.bamenyouxi.invite_code_mode.config.DBConfig;
 
 import com.bamenyouxi.invite_code_mode.constant.DBConstant;
+import com.github.pagehelper.PageHelper;
+import org.apache.ibatis.plugin.Interceptor;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.mybatis.spring.SqlSessionFactoryBean;
 import org.mybatis.spring.SqlSessionTemplate;
@@ -35,6 +37,10 @@ class QPAccountsDBConfig {
 		bean.setDataSource(dataSource);
 		bean.setMapperLocations(new PathMatchingResourcePatternResolver().getResources(DBConstant.QPAccountsDB.XML_PATH));
 		bean.setTypeAliasesPackage(DBConstant.QPAccountsDB.MODEL_PACKAGE);
+
+		// 分页插件
+		bean.setPlugins(new Interceptor[]{ new PageHelper() });
+
 		return bean.getObject();
 	}
 

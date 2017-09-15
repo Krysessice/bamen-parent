@@ -69,6 +69,7 @@ final class SysAgentController extends AbstractCrudController<SysAgent, Long> {
 		return WebResult.of();
 	}
 
+
 	@GetMapping("/file/default/")
 	private void read(HttpServletResponse response) throws Exception {
 		FileUtil.read(response, FileConstant.DEFAULT_FILE_PATH);

@@ -10,4 +10,6 @@ import org.apache.ibatis.annotations.Mapper;
  */
 @Mapper
 public interface CardBonusRecordMapper extends CrudMapper<CardBonusRecord, Long> {
+
+    int saves(CardBonusRecord cardBonusRecord);
 }

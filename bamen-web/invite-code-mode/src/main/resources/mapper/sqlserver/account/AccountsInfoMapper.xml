@@ -12,6 +12,7 @@
 		<result property="playingGame" column="PlayingGame" />
 		<result property="registerDate" column="RegisterDate" />
 		<result property="superAgentTime" column="SuperAgentTime" />
+		<result property="lastlogonDate" column="LastLogonDate" />
 
 		<result property="insureScore" column="InsureScore" />
 	</resultMap>
@@ -108,5 +109,4 @@
 			</if>
 		</where>
 	</select>
-
 </mapper>

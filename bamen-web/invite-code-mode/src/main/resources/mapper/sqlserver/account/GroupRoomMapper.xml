@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+		PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+		"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bamenyouxi.invite_code_mode.mapper.sqlserver.account.GroupRoomMapper">
+	<resultMap id="resultMap" type="com.bamenyouxi.invite_code_mode.model.sqlserver.account.GroupRoom">
+		<id property="id" column="AgentRoom" />
+		<result property="gameId" column="Gameid" />
+		<result property="nickName" column="NickName" />
+		<result property="groupName" column="qunName" />
+		<result property="roomStatus" column="RoomStatus" />
+		<result property="playerNum" column="Players" />
+		<result property="createTime" column="BuilDate" />
+		<result property="modifyTime" column="ChangTime" />
+	</resultMap>
+
+	<select id="get" resultMap="resultMap">
+		select * from userAgentInfor
+		<where>
+			<foreach collection="params" index="key" item="value">
+				<if test="value != null">
+					and ${key} = #{value}
+				</if>
+			</foreach>
+		</where>
+	</select>
+
+	<insert id="save" parameterType="com.bamenyouxi.invite_code_mode.model.sqlserver.account.GroupRoom">
+		insert into userAgentInfor (
+			Gameid, NickName, qunName, RoomStatus, Players, BuilDate
+		) values (
+			#{gameId}, #{nickName}, #{groupName}, #{roomStatus}, #{playerNum}, getdate()
+		)
+	</insert>
+
+	<update id="update" parameterType="com.bamenyouxi.invite_code_mode.model.sqlserver.account.GroupRoom">
+		update userAgentInfor
+		<set>
+			<if test="roomStatus != null">
+				RoomStatus = #{roomStatus}
+			</if>
+
+			<choose>
+				<when test="playerNumInt == 1">
+					Players = Players + 1,
+				</when>
+				<when test="playerNumInt == -1">
+					Players = Players - 1,
+				</when>
+				<otherwise>
+					<if test="playerNum != null">
+						Players = #{playerNum},
+					</if>
+				</otherwise>
+			</choose>
+		</set>
+		<where>
+			<choose>
+				<when test="id != null">
+					and AgentRoom = #{id}
+				</when>
+				<otherwise>
+					and AgentRoom = 0
+				</otherwise>
+			</choose>
+		</where>
+	</update>
+
+	<delete id="delete" parameterType="com.bamenyouxi.invite_code_mode.model.sqlserver.account.GroupRoom">
+		delete userAgentInfor
+		<where>
+			<choose>
+				<when test="id != null">
+					and AgentRoom = #{id}
+				</when>
+				<otherwise>
+					and AgentRoom = 0
+				</otherwise>
+			</choose>
+		</where>
+	</delete>
+</mapper>

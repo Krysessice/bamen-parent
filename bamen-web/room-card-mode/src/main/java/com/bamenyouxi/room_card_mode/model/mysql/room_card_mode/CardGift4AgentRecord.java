@@ -15,4 +15,7 @@ public final class CardGift4AgentRecord extends AbstractCardGiftRecordEntity {
 	public Long getPresentee() {
 		return presentee;
 	}
+
+
+
 }
