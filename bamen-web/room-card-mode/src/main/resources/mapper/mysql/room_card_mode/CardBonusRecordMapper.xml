@@ -17,5 +17,70 @@
 		<result property="firBonus" column="F_FIR_BONUS" />
 		<result property="secSuperAgentId" column="F_SEC_SUPER_AGENT_ID" />
 		<result property="secBonus" column="F_SEC_BONUS" />
+		<result property="account" column="F_ACCOUNT"/>
+		<result property="nickName" column="F_NICK_NAME"/>
 	</resultMap>
+
+
+	<select id="get" resultMap="resultMap">
+		SELECT
+		a.F_ID,
+		a.F_ACCOUNT,
+		a.F_NICK_NAME,
+		b.F_FIR_SUPER_AGENT_ID,
+		b.F_FIR_BONUS,
+		b.F_SEC_SUPER_AGENT_ID,
+		b.F_SEC_BONUS,
+		b.F_CREATE_TIME
+		FROM
+		t_sys_agent a
+		INNER JOIN t_card_bonus_record b ON a.F_ID = b.F_SYS_AGENT_ID
+	</select>
+
+
+	<insert id="saves" parameterType="com.bamenyouxi.room_card_mode.model.mysql.room_card_mode.CardBonusRecord" useGeneratedKeys="true" keyProperty="id">
+		INSERT  INTO  t_card_bonus_record(
+		<if test="sysAgentId !=null">
+			F_SYS_AGENT_ID,
+		</if>
+		<if test="payOrderId !=null">
+			F_PAY_ORDER_ID,
+		</if>
+		<if test="firSuperAgentId !=null">
+			F_FIR_SUPER_AGENT_ID,
+		</if>
+		<if test="firBonus !=null ">
+			F_FIR_BONUS,
+		</if>
+		<if test="secSuperAgentId !=null">
+			F_SEC_SUPER_AGENT_ID,
+		</if>
+		<if test="secBonus !=null">
+			F_SEC_BONUS
+		</if>
+		)
+		VALUES(
+		<if test="sysAgentId !=null">
+			#{sysAgentId},
+		</if>
+		<if test="payOrderId !=null">
+			#{payOrderId},
+		</if>
+		<if test="firSuperAgentId !=null">
+			#{firSuperAgentId},
+		</if>
+		<if test="firBonus !=null ">
+			#{firBonus},
+		</if>
+		<if test="secSuperAgentId !=null">
+			#{secSuperAgentId},
+		</if>
+		<if test="secBonus !=null">
+			#{secBonus}
+		</if>
+		)
+	</insert>
+
+
+
 </mapper>

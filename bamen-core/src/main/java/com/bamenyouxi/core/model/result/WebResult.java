@@ -18,6 +18,7 @@ public final class WebResult<T> extends AbstractResult<T> {
 		return of(SysConstant.SysFlagConstant.ENABLE, TipMsgConstant.OPERATION_SUCCESS, content);
 	}
 
+
 	public static <T> WebResult of(int status, String msg, T content) {
 		try {
 			return new WebResult<>(status, msg, content);

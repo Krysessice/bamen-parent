@@ -22,4 +22,8 @@ public final class TipMsgConstant {
 	public static final String RUN_EXCEPTION = "run异常，程序启动失败";
 	public static final String GROUP_NAME_EXIST = "群房间已存在";
 	public static final String PLAYER_IN_GROUP_UPPER_LIMIT = "玩家加群房间达到上限";
+	public static final String SYS_AGENT = "代理号不存在";
+	public static final String SYS_NOTAGENT = "赠送代理不存在";
+	public static final String SYS_ACCOUNT = "已经有该代理";
+	public static final String SYS_MAXACCOUNT = "你是管理员哦";
 }

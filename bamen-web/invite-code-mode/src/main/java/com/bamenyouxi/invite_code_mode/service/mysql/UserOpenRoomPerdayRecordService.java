@@ -39,7 +39,7 @@ public class UserOpenRoomPerdayRecordService extends AbstractCrudService<UserOpe
 	public PageInfo<UserOpenRoomPerdayRecord> sumPerday(int page, int size, Map<String, Object> params) {
 		super.listBefore(params);
 		PageHelper.startPage(page, size, FieldConstant.SortConstant.CREATE_TIME_DESC);
-		params.put(FieldConstant.CommonFieldConstant.groupBy.name(), FieldConstant.GroupConstant.CREATE_DATE);
+		params.put(FieldConstant.CommonFieldConstant.groupBy.name(), FieldConstant.GroupConstant.CREATE_DATES);
 		List<UserOpenRoomPerdayRecord> list = this.userOpenRoomPerdayRecordMapper.sum(params);
 		if (list.isEmpty() || list.get(0) == null)
 			return new PageInfo<>();

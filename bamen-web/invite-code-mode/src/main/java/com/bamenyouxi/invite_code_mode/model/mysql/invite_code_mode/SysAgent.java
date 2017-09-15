@@ -159,6 +159,7 @@ public final class SysAgent extends AbstractUserInfoEntity {
         this.createTime = builder.createTime;
         this._gameId = builder._gameId;
         this._superAgentGameId = builder._superAgentGameId;
+        this.lastLoginTime=builder.lastLoginTime;
 
         this.recruitNumInt = builder.recruitNumInt;
     }
@@ -185,12 +186,17 @@ public final class SysAgent extends AbstractUserInfoEntity {
         private Integer recruitNum;
         private Boolean showAnnounce;
         private Boolean sysFlag;
+        private Timestamp lastLoginTime;
 
         private Timestamp createTime;
         private Integer _gameId;
 
         private Integer _superAgentGameId;
         private int recruitNumInt;
+
+        public Timestamp getLastLoginTime() {
+            return lastLoginTime;
+        }
 
         public Builder id(Long val) {
             id = val;

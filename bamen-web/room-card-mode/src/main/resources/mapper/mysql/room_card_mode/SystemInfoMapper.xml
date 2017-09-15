@@ -12,6 +12,8 @@
         <result property="modifyTime" column="F_MODIFY_TIME" />
         <result property="gameName" column="F_GAME_NAME" />
         <result property="title" column="F_TITLE" />
+        <result property="ratelv1" column="F_RATE_LV1"/>
+        <result property="ratelv2" column="F_RATE_LV2"/>
     </resultMap>
 
     <select id="get" resultMap="resultMap">
