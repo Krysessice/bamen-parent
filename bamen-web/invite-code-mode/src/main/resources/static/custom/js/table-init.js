@@ -421,7 +421,7 @@ document.write("<script language=javascript src='/custom/js/bootstrap-table.js'>
                         },
                          {
                             field: 'createTime',
-                            title: '开房日期',
+                            title: '统计日期',
                             formatter: 'yy-MM-dd'
                         }
                     ]
@@ -541,8 +541,7 @@ document.write("<script language=javascript src='/custom/js/bootstrap-table.js'>
                     {
                         title: '操作',
                         content: '<button type="button" class="btn btn-default btn-sm" role="button" data-toggle="modal" data-target="#groupRoomMemberModel">详细</button>' +
-                                    '&nbsp;<button type="button" class="btn btn-danger btn-sm" onclick="delGroupRoom(this)">删除</button>'+
-                                     '&nbsp;<button type="button" class="btn btn btn-inverse" onclick="queryState(this)">状态</button>'
+                                    '&nbsp;<button type="button" class="btn btn-danger btn-sm" onclick="delGroupRoom(this)">删除</button>'
                     }
                 ]
             },

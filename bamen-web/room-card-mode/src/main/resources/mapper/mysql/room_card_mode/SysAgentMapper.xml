@@ -47,4 +47,122 @@
             </if>
         )
     </insert>
+    
+    
+    <insert id="saveOpenAgency" parameterType="com.bamenyouxi.room_card_mode.model.mysql.room_card_mode.SysAgent" useGeneratedKeys="true" keyProperty="id">
+        insert ignore into t_sys_agent
+        (
+        F_ACCOUNT, F_NICK_NAME, F_PASSWORD, F_SECRET_KEY
+        <if test="superAgentId != null">
+            , F_SUPER_AGENT_ID
+        </if>
+        ) values (
+        <if test="account !=null">
+            #{account},
+        </if>
+        <if test="nickName !=null">
+            #{nickName},
+        </if>
+        #{password}, #{secretKey}
+        <if test="superAgentId != null">
+            , #{superAgentId}
+        </if>
+        )
+    </insert>
+
+    <select id="getId" resultMap="resultMap">
+        select F_ID,F_ACCOUNT,F_NICK_NAME from t_sys_agent
+        <where>
+            F_ID=#{id}
+        </where>
+    </select>
+
+    <select id="getAll" resultMap="resultMap">
+        select F_ID,F_ACCOUNT,F_NICK_NAME from t_sys_agent
+        <where>
+            F_ACCOUNT=#{account}
+        </where>
+    </select>
+
+    <select id="getAccount" resultMap="resultMap">
+        SELECT
+        F_ID,
+        F_ACCOUNT,
+        F_NICK_NAME,
+        F_SYS_FLAG
+        FROM
+        t_sys_agent
+        <where>
+            F_ACCOUNT = #{account}
+        </where>
+    </select>
+
+    <!--冻结代理的修改-->
+    <update id="update" parameterType="com.bamenyouxi.room_card_mode.model.mysql.room_card_mode.SysAgent">
+        update t_sys_agent
+        <set>
+                <if test="account !=null">
+                    F_ACCOUNT=#{account},
+                </if>
+                <if test="nickName !=null">
+                    F_NICK_NAME=#{nickName},
+                </if>
+                <if test="password !=null">
+                    F_PASSWORD=#{password},
+                </if>
+                <if test="secretKey != null">
+                    F_SECRET_KEY = #{secretKey},
+                </if>
+                <if test="sysFlag !=null">
+                    F_SYS_FLAG=#{sysFlag}
+                </if>
+                <if test="superAgentId !=null">
+                    F_SUPER_AGENT_ID=#{superAgentId},
+                </if>
+            </set>
+            <where>
+                <if test="account !=null">
+                    F_ACCOUNT=#{account}
+                </if>
+            </where>
+    </update>
+
+    <!--重置密码的修改-->
+    <update id="updates" parameterType="com.bamenyouxi.room_card_mode.model.mysql.room_card_mode.SysAgent">
+        update t_sys_agent
+        <set>
+            <if test="account !=null">
+                F_ACCOUNT=#{account},
+            </if>
+            <if test="password !=null">
+                F_PASSWORD=#{password},
+            </if>
+            <if test="secretKey != null">
+                F_SECRET_KEY = #{secretKey},
+            </if>
+        </set>
+        <where>
+            <if test="account !=null">
+                F_ACCOUNT=#{account}
+            </if>
+        </where>
+    </update>
+
+    <select id="getOne" resultMap="resultMap">
+        select a.F_ID,a.F_SUPER_AGENT_ID from t_sys_agent a LEFT JOIN t_sys_agent b on a.F_ID=b.F_ID
+        <where>
+
+                    a.F_ID=#{id}
+
+        </where>
+    </select>
+
+    <select id="getTwo" resultMap="resultMap">
+        select a.F_ID,a.F_SUPER_AGENT_ID from t_sys_agent a LEFT JOIN t_sys_agent b on a.F_ID=b.F_ID
+        <where>
+                    a.F_ID=#{id}
+        </where>
+    </select>
+
+
 </mapper>

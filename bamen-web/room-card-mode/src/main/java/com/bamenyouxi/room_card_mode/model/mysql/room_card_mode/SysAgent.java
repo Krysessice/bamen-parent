@@ -22,8 +22,10 @@ public final class SysAgent extends BaseEntity {
     private Date firstChargeTime;
     private Timestamp lastLoginTime;
 
+
     private String superAccount;    // 上级代理号
     private String superNickName;   // 上级代理昵称
+
 
     private SysAgent() {}
 
@@ -71,13 +73,21 @@ public final class SysAgent extends BaseEntity {
         this.account = builder.account;
         this.nickName = builder.nickName;
         this.superAgentId = builder.superAgentId;
+        this.sysFlag=builder.sysFlag;
+        this.secretKey=builder.secretKey;
+        this.password=builder.password;
+        this.id=builder.id;
     }
 
     public static class Builder {
 
+        private Long id;
         private String account;
         private String nickName;
         private Long superAgentId;
+        private boolean sysFlag;
+        private String secretKey;
+        private  String password;
 
         public Builder account(String val) {
             account = val;
@@ -94,6 +104,26 @@ public final class SysAgent extends BaseEntity {
             return this;
         }
 
+        public Builder sysFlag(boolean val) {
+            sysFlag = val;
+            return this;
+        }
+
+        public Builder secretKey(String val) {
+            secretKey = val;
+            return this;
+        }
+
+        public Builder password(String val) {
+            password = val;
+            return this;
+        }
+
+        public Builder id(Long val) {
+            id = val;
+            return this;
+        }
+
         public static void defaultPwdInject(SysAgent sysAgent) {
             String secretKey = UUIDUtil.genUUID();
             String password = new Md5PasswordEncoder().encodePassword(AuthConstant.SysAgentConstant.DEFAULT_PWD, secretKey);
@@ -104,5 +134,7 @@ public final class SysAgent extends BaseEntity {
         public SysAgent build() {
             return new SysAgent(this);
         }
+
+
     }
 }

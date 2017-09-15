@@ -18,6 +18,12 @@ document.write("<script language=javascript src='/custom/js/bootstrap-table.js'>
             case 'authorize':
                 $element.bootstrapTable(this.paramsMap.authorize);
                 break;
+            case 'queryPayOrder':
+                 $element.bootstrapTable(this.paramsMap.queryPayOrder);
+                 break;
+            case 'queryRebate':
+                 $element.bootstrapTable(this.paramsMap.queryRebate);
+                 break;
             }
         },
 
@@ -53,7 +59,85 @@ document.write("<script language=javascript src='/custom/js/bootstrap-table.js'>
                         content: '<button type="button" class="btn btn-primary btn-sm" onclick="commonJs.authorize(this)">授权</button>'
                     }
                 ]
-            }
+            },
+            queryPayOrder: {
+                            url: '/admin/queryPayOrder',
+                            queryParams: {},
+                            columns: [
+                                {
+                                    field: 'id',
+                                    title: 'id',
+                                    hidden: true
+                                },
+                                {
+                                    field: 'account',
+                                    title: '被充值者'
+                                  },
+                                {
+                                    field: 'nickName',
+                                    title: '充值者',
+                                },
+
+                                {
+                                    field: 'payPrice',
+                                    title: '充值金额'
+                                },
+                                {
+                                    field: 'cardNum',
+                                    title: '购卡数量',
+                                },
+                                {
+                                    field: 'createTime',
+                                    title: '购卡时间',
+                                    formatter: 'yy-MM-dd HH:mm'
+                                },
+
+                            ]
+                        },
+                         queryRebate: {
+                            url: '/admin/queryRebate',
+                            queryParams: {},
+                            columns: [
+                             {
+                                field: 'id',
+                                title: 'id',
+                                hidden: true
+                            },
+                            {
+                                field: 'account',
+                                title: '被充值者'
+                              },
+                            {
+                                field: 'nickName',
+                                title: '充值者',
+                            },
+
+                            {
+                                field: 'firSuperAgentId',
+                                title: '上级代理ID'
+                            },
+                            {
+                                field: 'firBonus',
+                                title: '上级代理返利',
+                            },
+                             {
+                                field: 'secSuperAgentId',
+                                title: '上上级代理ID'
+                            },
+                            {
+                                field: 'secBonus',
+                                title: '上上级代理返利',
+                            },
+                            {
+                                field: 'createTime',
+                                title: '购卡时间',
+                                formatter: 'yy-MM-dd HH:mm'
+                            },
+
+                        ]
+                    }
+
+
 
         }
     }

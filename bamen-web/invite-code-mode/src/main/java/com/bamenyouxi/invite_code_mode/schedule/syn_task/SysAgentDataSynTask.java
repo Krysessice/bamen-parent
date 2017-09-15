@@ -18,6 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.sql.Timestamp;
 import java.time.Instant;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
@@ -28,6 +29,7 @@ import java.util.List;
 @Component
 @Order(SysConstant.CommandLineOrder.SYS_AGENT_DATA_SYN_TASK)
 class SysAgentDataSynTask extends AbstractDataSynTask<AccountsInfo, SysAgent> {
+
 	private static Timestamp createTime;
 
 	@Autowired

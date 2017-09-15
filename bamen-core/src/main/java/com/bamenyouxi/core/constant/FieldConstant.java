@@ -11,7 +11,7 @@ public final class FieldConstant {
      */
     public enum DBFieldConstant {
         F_ID, F_USER_ID, F_GAME_ID, F_SUPER_AGENT_GAME_ID, F_IS_AUTHORIZED, F_SYS_FLAG, F_CREATE_TIME,
-        F_RESOURCE_ID, F_RESOURCE_NAME,
+        F_RESOURCE_ID, F_RESOURCE_NAME, F_SYS_AGENT_ID,
         F_ACCOUNT,
         UserID, GameID,
         Gameid, qunName, Userid, AgentRoomid
@@ -46,7 +46,6 @@ public final class FieldConstant {
     public static class SortConstant {
         public static final String CREATE_TIME_ASC = "F_CREATE_TIME asc";
         public static final String CREATE_TIME_DESC = "F_CREATE_TIME desc";
-        public static final String CREATE_DATE_DESC = "convert(F_CREATE_TIME, date) desc";
         public static final String MODIFY_TIME_DESC = "F_MODIFY_TIME desc";
         public static final String TRANS_MEMBER_TIME_DESC = "F_TRANS_MEMBER_TIME desc";
         public static final String END_DATE_DESC = "F_END_DATE desc";
@@ -60,7 +59,9 @@ public final class FieldConstant {
      * 分组常量
      */
     public static class GroupConstant {
-        public static final String CREATE_DATE = "convert(F_CREATE_TIME, date)";
+        public static final String CREATE_DATES = "F_CREATE_TIME,F_GAME_TYPE_ID";
+        public static final String CREATE_DATE= "convert(F_CREATE_TIME, date)";
     }
+
 
 }

@@ -18,6 +18,11 @@ public final class AccountsInfo extends BaseEntity {
 	private Integer playingGame;    //上级代理gameId
 	private Timestamp registerDate;
 	private Timestamp superAgentTime;
+	private Timestamp lastlogonDate;
+
+	public Timestamp getLastlogonDate() {
+		return lastlogonDate;
+	}
 
 	private Long insureScore;
 
