@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bamenyouxi.room_card_mode.mapper.sqlserver.account.AccountsInfoMapper">
+	<resultMap id="resultMap" type="com.bamenyouxi.room_card_mode.model.sqlserver.account.AccountsInfo">
+		<result property="userId" column="UserID" />
+		<result property="gameId" column="GameID" />
+		<result property="accounts" column="Accounts" />
+		<result property="nickName" column="NickName" />
+		<result property="agentLevel" column="AgentLevel" />
+		<result property="playingGame" column="PlayingGame" />
+		<result property="registerDate" column="RegisterDate" />
+		<result property="superAgentTime" column="SuperAgentTime" />
+
+		<result property="insureScore" column="InsureScore" />
+	</resultMap>
+
+
+	<select id="getUser" resultMap="resultMap">
+		select UserID,GameID from QPAccountsDB.dbo.AccountsInfo where gameId=#{gameId}
+	</select>
+
+
+</mapper>

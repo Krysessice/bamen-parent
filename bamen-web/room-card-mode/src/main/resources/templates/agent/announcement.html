@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="layout/head :: common_head(_, _)">
+
+</head>
+<body th:replace="layout/body :: common_body(~{::div#container}, ~{::#selfJs})">
+
+	<div id="container" class="container">
+		<div class="page-header"></div>
+
+		<div class="well"></div>
+	</div>
+
+	<th:block id="selfJs">
+
+		<script type="text/javascript">
+			$('div.well').load('/agent/file/default/ #announcement');
+		</script>
+
+	</th:block>
+
+</body>
+</html>

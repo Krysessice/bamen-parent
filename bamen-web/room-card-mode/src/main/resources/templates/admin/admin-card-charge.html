@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="layout/head :: common_head(_, _)">
+
+</head>
+<body th:replace="layout/body :: common_body(~{::div#container}, ~{::#selfJs})">
+
+<div id="container" class="container">
+
+    <div class="page-header"></div>
+
+    <div class="well">
+        <p>
+            出售<span class="text-primary">房卡</span>。
+        </p>
+    </div>
+
+    <hr/>
+
+    <form id="OpenAgency" class="form-horizontal" onsubmit="return false;" >
+
+        <div class="form-group">
+            <label for="Account" class="col-xs-4 control-label">代理账号</label>
+            <div class="col-xs-4">
+                <input type="number" class="form-control" id="Account" name="account"  placeholder="请输入手机号"
+                       pattern="^(0|86|17951)?(13[0-9]|15[012356789]|17[0678]|18[0-9]|14[57])[0-9]{8}$" required minlength="1" maxlength="11" />
+            </div>
+            <button type="button" class="btn btn-default" id="invitedCodeBtn">查询</button>
+        </div>
+
+        <div class="form-group">
+            <label for="payPrice" class="col-xs-4 control-label">充值金额</label>
+            <div class="col-xs-4">
+                <input type="number" class="form-control" id="payPrice" name="payPrice"  placeholder="请输入充值金额" min="1" max="99999"  required />
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="cardNum" class="col-xs-4 control-label" >充卡数量</label>
+            <div class="col-xs-4">
+                <input type="number" class="form-control" id="cardNum" name="cardNum"  required placeholder="请输入充卡数量" min="1" max="99999" />
+            </div>
+
+        </div>
+
+        <div class="form-group">
+            <label for="cardGift" class="col-xs-4 control-label" >赠送房卡</label>
+            <div class="col-xs-4">
+                <input type="number" class="form-control" id="cardGift" name="cardGift"  required placeholder="请输入数量" min="1" max="99999" />
+            </div>
+
+        </div>
+
+        <div class="col-xs-3" >
+            <button type="reset" class="btn btn-warning">重 置</button>
+        </div>
+
+        <div class="col-xs-3">
+            <button type="submit" class="btn btn-primary" id="save">充 值</button>
+        </div>
+
+    </form>
+
+</div>
+
+
+        <th:block id="selfJs">
+
+            <script type="text/javascript">
+
+                var commonJs=new CommonJs();
+
+                $('button#invitedCodeBtn').on('click',function(){
+                       commonJs.getAccount($('input[name="account"]').val(), function(data) {
+                            if(data==null){
+                                return alert(data)
+                            }
+                            return alert('代理号: ' + data.account + ' 昵称 : ' + data.nickName);
+                       })
+                })
+
+            $('#OpenAgency').submit(function(){
+                    $.ajax({
+                         type:'post',
+                         url:'/order/payOrder',
+                         dataType:'Json',
+                         contentType:"application/json",
+                         data:JSON.stringify($(this).serializeObject()),
+                         success:function(data){
+                            if(data.status){
+                                alert("充值成功");
+                                 window.location.reload();
+                            }else{
+                                alert(data.msg);
+                            }
+                         }
+
+                    })
+
+            })
+
+
+
+
+            </script>
+
+
+
+        </th:block>
+
+</body>
+
+</html>
