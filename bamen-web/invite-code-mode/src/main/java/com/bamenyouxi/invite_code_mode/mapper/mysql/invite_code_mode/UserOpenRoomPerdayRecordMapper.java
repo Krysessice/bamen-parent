@@ -1,7 +1,7 @@
 package com.bamenyouxi.invite_code_mode.mapper.mysql.invite_code_mode;
 
 import com.bamenyouxi.core.impl.mapper.CrudMapper;
-import com.bamenyouxi.invite_code_mode.model.mysql.invite_code_mode.SysAgent;
+
 import com.bamenyouxi.invite_code_mode.model.mysql.invite_code_mode.UserOpenRoomPerdayRecord;
 import org.apache.ibatis.annotations.Mapper;
 
@@ -15,5 +15,7 @@ import java.util.Map;
 @Mapper
 public interface UserOpenRoomPerdayRecordMapper extends CrudMapper<UserOpenRoomPerdayRecord, Long> {
 
+
+    List<UserOpenRoomPerdayRecord> getGameType(Map<String,Object> params);
 
 }

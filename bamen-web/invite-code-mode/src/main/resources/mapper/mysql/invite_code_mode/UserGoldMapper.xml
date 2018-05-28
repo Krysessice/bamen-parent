@@ -1,0 +1,444 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bamenyouxi.invite_code_mode.mapper.mysql.invite_code_mode.UserGoldMapper">
+    <resultMap id="resultMap" type="com.bamenyouxi.invite_code_mode.model.mysql.invite_code_mode.UserGold">
+        <id property="id" column="F_ID" />
+        <result property="kindid" column="F_Kindid" />
+        <result property="gold" column="F_Gold" />
+        <result property="createTime" column="F_CREATE_TIME" />
+        <result property="modifier" column="F_MODIFIER" />
+        <result property="modifyTime" column="F_MODIFY_TIME" />
+
+        <result property="costId" column="F_CostID" />
+        <result property="gameleve" column="F_Gameleve" />
+        <result property="userId" column="F_USER_ID" />
+        <result property="gameId" column="F_GAME_ID" />
+        <result property="systemcost" column="F_SystemCost" />
+        <result property="gameType" column="F_GameType" />
+        <result property="nickName" column="F_NICK_NAME" />
+
+    </resultMap>
+
+
+
+    <select id="queryGoldMyself" resultMap="resultMap">
+        SELECT
+        IFNULL(sum(F_SystemCost), 0) as F_SystemCost
+        FROM
+        t_sys_agent a
+        INNER JOIN t_user_gold b USING (F_GAME_ID)
+        <where>
+            (
+            <choose>
+                <when test="gameId != null">
+                    (
+                    F_GAME_ID = #{gameId}
+                    AND F_IS_AUTHORIZED IS TRUE
+                    )
+                    OR (
+                    F_SUPER_AGENT_GAME_ID = #{gameId}
+                    AND F_IS_AUTHORIZED IS FALSE
+                    )
+                </when>
+                <otherwise>
+                    F_IS_AUTHORIZED IS TRUE
+                    OR (
+                    F_SUPER_AGENT_GAME_ID IS NOT NULL
+                    AND F_IS_AUTHORIZED IS FALSE
+                    )
+                </otherwise>
+            </choose>
+            )
+            <if test="startDate != null">
+                and convert(b.F_CREATE_TIME, DATE) &gt;= convert(#{startDate}, DATE)
+            </if>
+            <if test="endDate != null">
+                and convert(b.F_CREATE_TIME, DATE) &lt;= convert(#{endDate}, DATE)
+            </if>
+        </where>
+    </select>
+
+
+    <select id="get" resultMap="resultMap">
+        select
+        a.*, b.F_NICK_NAME
+        from
+        t_user_gold a
+        left join
+        t_sys_agent b
+        USING (F_GAME_ID)
+        <where>
+            <foreach collection="params" index="key" item="value">
+                <if test="value != null">
+                    <choose>
+                        <when test="key == 'startDate'">
+                            and convert(a.F_CREATE_TIME, DATE) &gt;= convert(#{value}, DATE)
+                        </when>
+                        <when test="key == 'endDate'">
+                            and convert(a.F_CREATE_TIME, DATE) &lt;= convert(#{value}, DATE)
+                        </when>
+                        <when test="key == 'teamNo'">
+
+                        </when>
+                        <when test="key == 'superAgentGameId'">
+                            <if test="params.teamNo == 't1'">
+                                and F_GAME_ID in (
+                                select F_GAME_ID from t_sys_agent where F_SUPER_AGENT_GAME_ID = #{value}
+                                and F_IS_AUTHORIZED is false
+
+                                union
+
+                                select #{value}
+                                )
+                            </if>
+                            <if test="params.teamNo == 't2'">
+                                and F_GAME_ID in (
+                                select F_GAME_ID from t_sys_agent where F_SUPER_AGENT_GAME_ID = #{value}
+                                and F_IS_AUTHORIZED is true
+
+                                union
+
+                                select F_GAME_ID from t_sys_agent where F_SUPER_AGENT_GAME_ID in (
+                                select F_GAME_ID from t_sys_agent
+                                where F_SUPER_AGENT_GAME_ID = #{value}
+                                AND F_IS_AUTHORIZED IS TRUE
+                                ) and F_IS_AUTHORIZED is false
+                                )
+                            </if>
+                            <if test="params.teamNo == 't3'">
+                                and F_GAME_ID in (
+                                select F_GAME_ID from t_sys_agent where F_SUPER_AGENT_GAME_ID in (
+                                select F_GAME_ID from t_sys_agent where F_SUPER_AGENT_GAME_ID = #{value}
+                                and F_IS_AUTHORIZED is true
+                                )
+                                and F_IS_AUTHORIZED is true
+
+                                union
+
+                                select F_GAME_ID from t_sys_agent where F_SUPER_AGENT_GAME_ID in (
+                                select F_GAME_ID from t_sys_agent
+                                where F_SUPER_AGENT_GAME_ID in (
+                                select F_GAME_ID from t_sys_agent
+                                where F_SUPER_AGENT_GAME_ID = #{value}
+                                and F_IS_AUTHORIZED is true
+                                )
+                                AND F_IS_AUTHORIZED IS TRUE
+                                ) AND F_IS_AUTHORIZED IS false
+                                )
+                            </if>
+                        </when>
+                        <otherwise>
+                            and a.${key} = #{value}
+                        </otherwise>
+                    </choose>
+                </if>
+            </foreach>
+        </where>
+    </select>
+
+    <select id="gets" resultMap="resultMap">
+        select
+        <choose>
+            <when test="params.groupBy == null">
+                *
+            </when>
+            <otherwise>
+                F_USER_ID, F_GAME_ID,
+                sum(F_SystemCost /100) as F_SystemCost,
+                convert(F_CREATE_TIME, date) F_CREATE_TIME
+            </otherwise>
+        </choose>
+        from t_user_gold
+        <where>
+            <foreach collection="params" index="key" item="value">
+                <if test="value != null">
+                    <choose>
+                        <when test="key == 'startDate'">
+                            and convert(F_CREATE_TIME, DATE) &gt;= convert(#{value}, DATE)
+                        </when>
+                        <when test="key == 'endDate'">
+                            and convert(F_CREATE_TIME, DATE) &lt;= convert(#{value}, DATE)
+                        </when>
+                        <when test="key == 'teamNo'">
+
+                        </when>
+                        <when test="key == 'groupBy'">
+
+                        </when>
+                        <when test="key == 'superAgentGameId'">
+                            <if test="params.teamNo == 't1'">
+                                and F_GAME_ID in (
+                                select F_GAME_ID from t_sys_agent where F_SUPER_AGENT_GAME_ID = #{value}
+                                and F_IS_AUTHORIZED is false
+
+                                union
+
+                                select #{value}
+                                )
+                            </if>
+                            <if test="params.teamNo == 't2'">
+                                and F_GAME_ID in (
+                                select F_GAME_ID from t_sys_agent where F_SUPER_AGENT_GAME_ID = #{value}
+                                and F_IS_AUTHORIZED is true
+
+                                union
+
+                                select F_GAME_ID from t_sys_agent where F_SUPER_AGENT_GAME_ID in (
+                                select F_GAME_ID from t_sys_agent
+                                where F_SUPER_AGENT_GAME_ID = #{value}
+                                AND F_IS_AUTHORIZED IS TRUE
+                                ) and F_IS_AUTHORIZED is false
+                                )
+                            </if>
+                            <if test="params.teamNo == 't3'">
+                                and F_GAME_ID in (
+                                select F_GAME_ID from t_sys_agent where F_SUPER_AGENT_GAME_ID in (
+                                select F_GAME_ID from t_sys_agent where F_SUPER_AGENT_GAME_ID = #{value}
+                                and F_IS_AUTHORIZED is true
+                                )
+                                and F_IS_AUTHORIZED is true
+
+                                union
+
+                                select F_GAME_ID from t_sys_agent where F_SUPER_AGENT_GAME_ID in (
+                                select F_GAME_ID from t_sys_agent
+                                where F_SUPER_AGENT_GAME_ID in (
+                                select F_GAME_ID from t_sys_agent
+                                where F_SUPER_AGENT_GAME_ID = #{value}
+                                and F_IS_AUTHORIZED is true
+                                )
+                                AND F_IS_AUTHORIZED IS TRUE
+                                ) AND F_IS_AUTHORIZED IS false
+                                )
+                            </if>
+                        </when>
+                        <otherwise>
+                            and ${key} = #{value}
+                        </otherwise>
+                    </choose>
+                </if>
+            </foreach>
+        </where>
+        <if test="params.groupBy != null">
+            group by ${params.groupBy}
+        </if>
+    </select>
+
+
+
+    <update id="update" parameterType="com.bamenyouxi.invite_code_mode.model.mysql.invite_code_mode.UserGold">
+        update t_user_gold
+        <set>
+            <if test="gameId != null">
+                F_GAME_ID = #{gameId},
+            </if>
+        </set>
+        <where>
+            <choose>
+                <when test="id != null">
+                    and F_ID = #{id}
+                </when>
+                <when test="_gameId != null">
+                    and F_GAME_ID = #{_gameId}
+                </when>
+                <when test="gameId != null">
+                    and F_GAME_ID = #{gameId}
+                </when>
+                <otherwise>
+                    and F_ID = 0
+                </otherwise>
+            </choose>
+        </where>
+    </update>
+
+    <insert id="save" parameterType="com.bamenyouxi.invite_code_mode.model.mysql.invite_code_mode.UserGold">
+        insert ignore into t_user_gold
+        (
+            F_CostID,F_USER_ID, F_GAME_ID,F_Kindid,  F_Gold, F_Gameleve, F_SystemCost, F_GameType,F_CREATE_TIME
+        ) values(
+            #{costId},#{userId}, #{gameId}, #{kindid}, #{gold}, #{gameleve}, #{systemcost},#{gameType}, #{createTime}
+        )
+    </insert>
+
+    <insert id="saveMul" parameterType="com.bamenyouxi.invite_code_mode.model.mysql.invite_code_mode.UserGold">
+        insert ignore into t_user_gold(
+            F_CostID,F_GAME_ID,F_USER_ID,F_Kindid,  F_Gold, F_Gameleve, F_SystemCost, F_GameType,F_CREATE_TIME
+        ) values
+        <foreach item="item" collection="list" separator=",">
+            (
+                #{item.costId},#{item.gameId}, #{item.userId}, #{item.kindid}, #{item.gold},
+                #{item.gameleve}, #{item.systemcost}, #{item.gameType},#{item.createTime}
+            )
+        </foreach>
+    </insert>
+
+
+    <sql id="select_t1">
+        SELECT
+        't1' as teamNo,
+        '直属会员' as teamName,
+        IFNULL(sum(F_SystemCost /100), 0) as systemcost,
+        IFNULL(sum(F_SystemCost) /100 * #{params.t1}, 0) as commission
+        FROM
+        t_sys_agent a
+        INNER JOIN ${tableName} b USING (F_GAME_ID)
+        <where>
+            (
+            <choose>
+                <when test="params.superAgentGameId != null">
+                    (
+                    F_GAME_ID = #{params.superAgentGameId}
+                    AND F_IS_AUTHORIZED IS TRUE
+                    )
+                    OR (
+                    F_SUPER_AGENT_GAME_ID = #{params.superAgentGameId}
+                    AND F_IS_AUTHORIZED IS FALSE
+                    )
+                </when>
+                <otherwise>
+                    F_IS_AUTHORIZED IS TRUE
+                    OR (
+                    F_SUPER_AGENT_GAME_ID IS NOT NULL
+                    AND F_IS_AUTHORIZED IS FALSE
+                    )
+                </otherwise>
+            </choose>
+            )
+            <if test="params.startDate != null">
+                and convert(b.F_CREATE_TIME, DATE) &gt;= convert(#{params.startDate}, DATE)
+            </if>
+            <if test="params.endDate != null">
+                and convert(b.F_CREATE_TIME, DATE) &lt;= convert(#{params.endDate}, DATE)
+            </if>
+        </where>
+    </sql>
+
+    <sql id="select_t2">
+        SELECT
+        't2' as teamNo,
+        '二级团队' as teamName,
+        IFNULL(sum(F_SystemCost /100), 0) as systemcost,
+        IFNULL(sum(F_SystemCost) /100 * #{params.t2}, 0) as commission
+        FROM
+        t_sys_agent a
+        INNER JOIN ${tableName} b USING (F_GAME_ID)
+        <where>
+            (
+            <choose>
+                <when test="params.superAgentGameId != null">
+                    (
+                    F_SUPER_AGENT_GAME_ID = #{params.superAgentGameId}
+                    AND F_IS_AUTHORIZED IS TRUE
+                    )
+                    or
+                    (
+                    F_SUPER_AGENT_GAME_ID in (
+                    select F_GAME_ID from t_sys_agent
+                    where F_SUPER_AGENT_GAME_ID = #{params.superAgentGameId}
+                    AND F_IS_AUTHORIZED IS TRUE
+                    ) and F_IS_AUTHORIZED is false
+                    )
+                </when>
+                <otherwise>
+                    (
+                    F_SUPER_AGENT_GAME_ID IS NOT NULL
+                    AND F_IS_AUTHORIZED IS TRUE
+                    )
+                    or
+                    (
+                    F_SUPER_AGENT_GAME_ID in (
+                    select F_GAME_ID from t_sys_agent
+                    where F_SUPER_AGENT_GAME_ID IS NOT NULL
+                    AND F_IS_AUTHORIZED IS TRUE
+                    ) and F_IS_AUTHORIZED is false
+                    )
+                </otherwise>
+            </choose>
+            )
+            <if test="params.startDate != null">
+                and convert(b.F_CREATE_TIME, DATE) &gt;= convert(#{params.startDate}, DATE)
+            </if>
+            <if test="params.endDate != null">
+                and convert(b.F_CREATE_TIME, DATE) &lt;= convert(#{params.endDate}, DATE)
+            </if>
+        </where>
+    </sql>
+
+    <sql id="select_t3">
+        SELECT
+        't3' as teamNo,
+        '三级团队' as teamName,
+        IFNULL(sum(F_SystemCost /100), 0) as systemcost,
+        IFNULL(sum(F_SystemCost) /100 * #{params.t3}, 0) as commission
+        FROM
+        t_sys_agent a
+        INNER JOIN ${tableName} b USING (F_GAME_ID)
+        <where>
+            (
+            (
+            F_SUPER_AGENT_GAME_ID in (
+            select
+            F_GAME_ID from t_sys_agent
+            where
+            <choose>
+                <when test="params.superAgentGameId != null">
+                    F_SUPER_AGENT_GAME_ID = #{params.superAgentGameId}
+                </when>
+                <otherwise>
+                    F_SUPER_AGENT_GAME_ID IS NOT NULL
+                </otherwise>
+            </choose>
+            and
+            F_IS_AUTHORIZED is true
+            )
+            AND F_IS_AUTHORIZED IS TRUE
+            )
+            or
+            (
+            F_SUPER_AGENT_GAME_ID in (
+            select F_GAME_ID from t_sys_agent
+            where F_SUPER_AGENT_GAME_ID in (
+            select
+            F_GAME_ID from t_sys_agent
+            where
+            <choose>
+                <when test="params.superAgentGameId != null">
+                    F_SUPER_AGENT_GAME_ID = #{params.superAgentGameId}
+                </when>
+                <otherwise>
+                    F_SUPER_AGENT_GAME_ID IS NOT NULL
+                </otherwise>
+            </choose>
+            and
+            F_IS_AUTHORIZED is true
+            )
+            AND F_IS_AUTHORIZED IS TRUE
+            ) AND F_IS_AUTHORIZED IS false
+            )
+            )
+            <if test="params.startDate != null">
+                and convert(b.F_CREATE_TIME, DATE) &gt;= convert(#{params.startDate}, DATE)
+            </if>
+            <if test="params.endDate != null">
+                and convert(b.F_CREATE_TIME, DATE) &lt;= convert(#{params.endDate}, DATE)
+            </if>
+        </where>
+    </sql>
+
+    <!-- 团队金币消耗实时统计 -->
+    <select id="sumActual" resultType="com.bamenyouxi.invite_code_mode.model.mysql.invite_code_mode.UserGold">
+        <include refid="select_t1"><property name="tableName" value="t_user_gold" /></include>
+
+        union
+
+        <include refid="select_t2"><property name="tableName" value="t_user_gold" /></include>
+
+        union
+
+        <include refid="select_t3"><property name="tableName" value="t_user_gold" /></include>
+    </select>
+
+
+</mapper>

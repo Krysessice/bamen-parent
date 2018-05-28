@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="layout/head :: common_head(_, ~{::link})">
+	<link rel="stylesheet" type="text/css" media="all"
+	      href="../static/bootstrap/css/bootstrap-datetimepicker.min.css" th:href="@{/bootstrap/css/bootstrap-datetimepicker.min.css}" />
+</head>
+<body th:replace="layout/body :: common_body(~{::div#container}, ~{::#selfJs})">
+
+	<div id="container" class="container">
+
+		<th:block th:replace="~{layout/common :: page-header('清理金币统计')}" />
+
+		<th:block th:replace="~{layout/common :: start-end-date-input}" />
+
+		<th:block th:replace="~{layout/common :: table-paginator('table')}" />
+
+	</div>
+
+	<th:block id="selfJs">
+
+		<th:block th:replace="~{layout/common :: pageJs}" />
+		<th:block th:replace="~{layout/common :: dateTimeJs}" />
+
+		<script type="text/javascript">
+		    var commonJs = new CommonJs();
+
+		    commonJs.datetimeInit(function() {
+		        $("#table").tableInit('querycleangold');
+		    });
+		</script>
+
+	</th:block>
+
+</body>
+</html>

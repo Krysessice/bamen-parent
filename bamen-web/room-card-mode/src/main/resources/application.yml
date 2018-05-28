@@ -28,5 +28,6 @@ spring:
         password: Joke2016
         driver-class-name: com.microsoft.sqlserver.jdbc.SQLServerDriver
 
-#server:
-#  port: 8081
+server:
+  port: 8084
+

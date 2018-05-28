@@ -105,8 +105,11 @@
 
                     if (field == null)
                         return $tr += "<td name='" + column.field + "'>" + '<font color="grey"><i>未填写</i></font>' + "</td>";
-                    if ((typeof field == 'string') && field.match(reg))
+                    if ((typeof field == 'string') && field.match(reg)){
                         field = column.formatter ? new Date(field).format(column.formatter) : field;
+                    }else if(typeof column.formatter == 'function'){
+                        return $tr += "<td name='" + column.field + "'>" + column.formatter(field) + "</td>";
+                    }
 
                     if (column.hidden)
                         $tr += "<td style='display: none;' name='" + column.field + "'>" + field + "</td>";

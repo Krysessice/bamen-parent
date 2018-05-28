@@ -24,22 +24,29 @@
 			</div>
 			<div class="row">
 				<div class="col-xs-4">上级代理号</div>
-				<div class="col-xs-8">[[*{superAccount}]]</div>
+				<div class="col-xs-8">[[*{superAgentId}]]</div>
 			</div>
-			<div class="row">
-				<div class="col-xs-4">上 级 昵 称</div>
-				<div class="col-xs-8">[[*{superNickName}]]</div>
-			</div>
+			<!--<div class="row">-->
+				<!--<div class="col-xs-4">上 级 昵 称</div>-->
+				<!--<div class="col-xs-8">[[*{superNickName}]]</div>-->
+			<!--</div>-->
 		</div>
 
 		<div class="list-group">
-			<th:block th:replace="~{layout/common :: list-group-item('/agent/index.html', 'glyphicon-euro', '代理商')}" />
+			<th:block th:replace="~{layout/common :: list-group-item('/agent/message.html', 'glyphicon-euro', '代理商')}" />
 			<th:block th:replace="~{layout/common :: list-group-item('/admin/agent-register.html', 'glyphicon-plus', '开通代理')}" />
 			<th:block th:replace="~{layout/common :: list-group-item('/admin/admin-card-charge.html', 'glyphicon glyphicon-chevron-down', '给代理充卡')}" />
-			<th:block th:replace="~{layout/common :: list-group-item('/admin/order-all.html', 'glyphicon glyphicon-star-empty', '查看所有代理的购卡记录')}" />
-			<th:block th:replace="~{layout/common :: list-group-item('/admin/agent-rebate.html', 'glyphicon glyphicon-star', '查看所有代理的返利记录')}" />
 			<th:block th:replace="~{layout/common :: list-group-item('/admin/admin-card-gift.html', 'glyphicon glyphicon-leaf', '给代理赠卡')}" />
 			<th:block th:replace="~{layout/common :: list-group-item('/admin/admin-card-player.html', 'glyphicon glyphicon-chevron-up', '给玩家赠卡')}" />
+			<th:block th:replace="~{layout/common :: list-group-item('/admin/query-agentlist.html', 'glyphicon glyphicon-pencil', '授权合伙人')}" />
+			<th:block th:replace="~{layout/common :: list-group-item('/admin/query-partner.html', 'glyphicon glyphicon-heart', '已授权合伙人')}" />
+			<th:block th:replace="~{layout/common :: list-group-item('/admin/look_agent.html', 'glyphicon glyphicon-minus', 'VIP授权')}" />
+			<th:block th:replace="~{layout/common :: list-group-item('/admin/query-all.html', 'glyphicon glyphicon-search', '所有代理')}" />
+			<th:block th:replace="~{layout/common :: list-group-item('/admin/give_agent.html', 'glyphicon glyphicon-ice-lolly', '授权玩家权限')}" />
+			<th:block th:replace="~{layout/common :: list-group-item('/admin/query-cardforList.html', 'glyphicon glyphicon-star', '代理购卡记录')}" />
+			<th:block th:replace="~{layout/common :: list-group-item('/admin/query-payforList.html', 'glyphicon glyphicon-tree-deciduous', '代理赠卡记录')}" />
+			<th:block th:replace="~{layout/common :: list-group-item('/admin/query-card-sum.html', 'glyphicon glyphicon-option-horizontal', '总购卡')}" />
+			<th:block th:replace="~{layout/common :: list-group-item('/admin/agent-rebate.html', 'glyphicon glyphicon-ice-lolly', '代理返卡记录')}" />
 			<th:block th:replace="~{layout/common :: list-group-item('/admin/operation.html', 'glyphicon-off', '操作')}" />
 		</div>
 

@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bamenyouxi.invite_code_mode.mapper.sqlserver.account.AgentPartnerMapper">
+	<resultMap id="resultMap" type="com.bamenyouxi.invite_code_mode.model.sqlserver.account.AgentPartner">
+		<result property="gameId" column="GameID" />
+		<result property="partnerGameid" column="PartnerGameid" />
+		<result property="qunid" column="Qunid" />
+	</resultMap>
+
+	<select id="get" resultMap="resultMap">
+		select * from AgentPartner
+		<where>
+			<foreach collection="params" index="key" item="value">
+				<if test="value != null">
+					and ${key} = #{value}
+				</if>
+			</foreach>
+		</where>
+	</select>
+
+	<select id="queryPartnerAgent" resultMap="resultMap">
+		SELECT b.qunName,a.PartnerGameid,a.Qunid FROM QPAccountsDB.dbo.AgentPartner a LEFT JOIN QPAccountsDB.dbo.userAgentInfor b ON a.Qunid = b.AgentRoom WHERE a.PartnerGameid = #{gameId}
+	</select>
+
+	<insert id="saves" parameterType="com.bamenyouxi.invite_code_mode.model.sqlserver.account.AgentPartner">
+		insert into AgentPartner (
+				PartnerGameid, Qunid
+			) values (
+				#{partnerGameid}, #{qunid}
+			)
+	</insert>
+
+	<delete id="deletePartnerGameid" parameterType="com.bamenyouxi.invite_code_mode.model.sqlserver.account.AgentPartner">
+		DELETE AgentPartner where PartnerGameid=#{partnerGameid}
+	</delete>
+
+
+</mapper>

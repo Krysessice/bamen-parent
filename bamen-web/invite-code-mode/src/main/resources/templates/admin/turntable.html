@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="layout/head :: common_head(_, _)">
+
+</head>
+<body th:replace="layout/body :: common_body(~{::div#container}, ~{::#selfJs})">
+
+	<div id="container" class="container">
+
+		<th:block th:replace="~{layout/common :: page-header('转盘控制')}" />
+
+		<label class="radio-inline">
+			<input type="radio" name="radio-A" value="false" checked /> 日常转盘
+		</label>
+		<label class="radio-inline">
+			<input type="radio" name="radio-A" value="true" /> 积分转盘
+		</label>
+
+		<hr />
+
+		<th:block th:replace="~{layout/common :: table-paginator('table')}" />
+
+		<th:block th:replace="model/DailyModel :: DailyModel" />
+		<th:block th:replace="model/IntegralModel :: IntegralModel" />
+
+	</div>
+
+	<th:block id="selfJs">
+
+		<th:block th:replace="~{layout/common :: pageJs}" />
+
+
+		<th:block th:replace="~{model/IntegralModel :: IntegralModelJs}" />
+		<th:block th:replace="~{model/DailyModel :: DailyModelJs}" />
+
+
+		<script type="text/javascript">
+
+			$("#table").tableInit('getDaily', $('input[name="radio-A"]:checked').val());
+
+			$('input[name="radio-A"]').on('change', function() {
+				$("#table").tableInit('getDaily', $(this).val());
+			})
+
+
+
+			$('#DailyModel').on('show.bs.modal', function (event) {
+				var modal = $(this);
+				var button = $(event.relatedTarget);
+				var element = button.parents('tr');
+				var turnawardno = element.find('td[name="turnawardno"]').text();
+
+					$(function(){
+					 $.ajax({
+						type : 'get',
+						url : '/turntableType/getTurntableAwardType/',
+						dataType : 'json',
+						success : function(data) {
+							var select = $("#slpk");
+							select.html("<option>请选择奖品名称</option>");
+							var datas=data.content.list;
+							for (var i = 0; i < datas.length; i++) {
+								select.append("<option value='"+data.content.list[i].turnAwardType +"'>"
+										+ data.content.list[i].turnAwardInstruction + "</option>");
+							}
+						}
+					});
+
+					$.ajax({
+							type: 'get',
+							url: '/Daily/getProbability/'+turnawardno+'/',
+							dataType: 'json',
+							success: function(result) {
+								 var sumGl=result.sums;
+								 var n=result.n;
+								 $("#sums").html('目前所有概率值已达到：<font style="color:#c30">' + sumGl + '%</font>');
+								 $("#n").html('目前剩余概率：<font style="color:#c30">' + n + '%</font>');
+							}
+						});
+				})
+
+
+				var turnawardtype=0;
+
+				$("#slpk").change(function(){
+					turnawardtype=$('#slpk').val();
+					console.log(turnawardtype);
+				})
+
+				$('#updateDailyForm').submit(function() {
+					var turnawardamount=$('input#turnawardamount').val();
+					var turnawardprobability=$('input#turnawardprobability').val();
+						$.ajax({
+							type: 'put',
+							url: '/Daily/UpdateTurnAwardProbability/'+ turnawardtype + '/'+ turnawardamount+ '/'+turnawardprobability +'/'+turnawardno  + '/ ',
+							dataType: 'json',
+							success: function(data) {
+								if (data.status){
+								  	location.reload();
+									alert('操作成功');
+								}
+								else{
+									return alert(data.msg);
+								}
+							}
+						});
+ 				 })
+			})
+
+			$('#DailyModel').on('hidden.bs.modal', function (event) {
+				<!--$('#DailyModel').removeData('bs.modal');-->
+				<!--alert(i);-->
+				location.reload();
+			});
+
+
+			$('#IntegralModel').on('show.bs.modal', function (event) {
+				var modal = $(this);
+				var button = $(event.relatedTarget);
+				var element = button.parents('tr');
+				var turnawardno = element.find('td[name="turnawardno"]').text();
+
+				$('#updateIntegralForm').submit(function() {
+					var turnawardamounts=$('input#turnawardamounts').val();
+					console.log(turnawardamounts);
+					var turnawardgoodamcout=$('input#turnawardgoodamcout').val();
+					console.log(turnawardgoodamcout);
+						$.ajax({
+							type: 'put',
+							url: '/Integral/updateIntegral/'+ turnawardamounts + '/'+ turnawardgoodamcout+ '/'+turnawardno+'/',
+							dataType: 'json',
+							success: function(data) {
+								if (data.status){
+								  	location.reload();
+									alert('操作成功');
+								}
+								else{
+									return alert(data.msg);
+								}
+							}
+						});
+
+ 				 })
+			})
+
+			$('#IntegralModel').on('hidden.bs.modal', function (event) {
+				<!--var i=$(this).removeData('bs.modal');-->
+				<!--alert(i);-->
+				location.reload();
+			});
+
+		</script>
+
+	</th:block>
+
+</body>
+</html>

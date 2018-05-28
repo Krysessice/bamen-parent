@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bamenyouxi.invite_code_mode.mapper.sqlserver.record.RoomParnterDataMapper">
+	<resultMap id="resultMap" type="com.bamenyouxi.invite_code_mode.model.sqlserver.record.RoomParnterData">
+		<result property="roomid" column="Roomid" />
+		<result property="gameid" column="Gameid" />
+		<result property="qunid" column="Qunid" />
+		<result property="parnterid" column="Parnterid" />
+		<result property="nickName" column="NickName" />
+		<result property="score" column="Score" />
+		<result property="createTime" column="Collecttime" />
+	</resultMap>
+
+
+	<select id="queryPartnerMessage" resultMap="resultMap">
+		SELECT
+		b.Gameid AS Gameid,
+		a.NickName as nickName,
+		count(Parnterid) as id,
+		sum(Score) as Score
+		FROM
+		QPAccountsDB.dbo.AccountsInfo a
+		RIGHT JOIN QPRecordDb.dbo.Room_Parnter_data b ON a.GameID = b.Gameid
+		WHERE Qunid=#{qunid} and b.Parnterid=#{parnterid}
+		<if test="startDate != null">
+			and convert(varchar(10), collecttime, 120) &gt;= convert(varchar(10), #{startDate}, 120)
+		</if>
+		<if test="endDate != null">
+			and convert(varchar(10), collecttime, 120) &lt;= convert(varchar(10), #{endDate}, 120)
+		</if>
+		GROUP BY b.Gameid,nickName
+	</select>
+
+	<select id="queryAgentRoom" resultMap="resultMap">
+		SELECT
+		Parnterid,
+		a.NickName as nickName,
+		COUNT(Parnterid)as id
+		FROM
+		QPAccountsDB.dbo.AccountsInfo a
+		RIGHT JOIN QPRecordDb.dbo.Room_Parnter_data b ON a.GameID = b.Parnterid
+		WHERE Qunid=#{qunid}
+		<if test="startDate != null">
+			and convert(varchar(10), collecttime, 120) &gt;= convert(varchar(10), #{startDate}, 120)
+		</if>
+		<if test="endDate != null">
+			and convert(varchar(10), collecttime, 120) &lt;= convert(varchar(10), #{endDate}, 120)
+		</if>
+		GROUP BY b.Parnterid,nickName
+	</select>
+
+	<select id="querySumInnings" resultMap="resultMap">
+		select count(Parnterid)as Parnterid from QPRecordDb.dbo.Room_Parnter_data WHERE Qunid=#{qunid} and Parnterid=#{parnterid}
+		<if test="startDate != null">
+			and convert(varchar(10), collecttime, 120) &gt;= convert(varchar(10), #{startDate}, 120)
+		</if>
+		<if test="endDate != null">
+			and convert(varchar(10), collecttime, 120) &lt;= convert(varchar(10), #{endDate}, 120)
+		</if>
+	</select>
+
+</mapper>

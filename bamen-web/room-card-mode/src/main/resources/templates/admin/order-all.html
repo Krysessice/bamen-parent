@@ -1,13 +1,16 @@
 <!DOCTYPE html>
 <html lang="zh-CN" xmlns:th="http://www.thymeleaf.org">
-<head th:replace="layout/head :: common_head(_, _)">
-
+<head th:replace="layout/head :: common_head(_, ~{::link})">
+    <link rel="stylesheet" type="text/css" media="all"
+          href="../static/bootstrap/css/bootstrap-datetimepicker.min.css" th:href="@{/bootstrap/css/bootstrap-datetimepicker.min.css}" />
 </head>
 <body th:replace="layout/body :: common_body(~{::div#container}, ~{::#selfJs})">
 
 <div id="container" class="container">
 
-    <th:block th:replace="~{layout/common :: page-header('所有代理的购卡记录')}"/>
+    <th:block th:replace="~{layout/common :: page-header('代理购卡记录')}"/>
+
+    <th:block th:replace="~{layout/common :: start-end-date-input}" />
 
     <th:block th:replace="~{layout/common :: table-paginator('table')}"/>
 
@@ -16,10 +19,19 @@
 <th:block id="selfJs">
 
     <th:block th:replace="~{layout/common :: pageJs}"/>
+    <th:block th:replace="~{layout/common :: dateTimeJs}" />
 
-    <script type="text/javascript">
-			var commonJs = new CommonJs();
-			$("#table").tableInit('queryPayOrder');
+    <script type="text/javascript" th:inline="javascript">
+		var commonJs = new CommonJs();
+
+	     commonJs.datetimeInit(function() {
+			var F_endDate = new Date(new Date().valueOf() - 24 * 60 * 60 * 1000).format('yyyy-MM-dd');
+			$('#startDate').datetimepicker('setEndDate', F_endDate);
+			$('#endDate').datetimepicker('setEndDate', F_endDate);
+	        $('#endDate').val(F_endDate);
+
+	        $("#table").tableInit('queryPayOrder');
+	    });
 		</script>
 
 </th:block>

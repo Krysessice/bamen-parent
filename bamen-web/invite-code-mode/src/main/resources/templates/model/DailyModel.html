@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org">
+<body>
+<div class="modal fade bs-example-modal-sm" id="DailyModel" tabindex="-1" role="dialog"
+	 aria-labelledby="Daily" aria-describedby="日常任务编辑" th:fragment="DailyModel">
+
+	<div class="modal-dialog" role="document" aria-hidden="true">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+				<h4 class="modal-title" id="updateDaily">日常任务编辑</h4>
+			</div>
+
+			<form id="updateDailyForm" onsubmit="return false;">
+				<div class="modal-body">
+
+					<div class="form-group">
+						<label  class="control-label">奖品名称</label>
+						<select id="slpk" class="form-control selectpicker" >
+						</select>
+					</div>
+					<div class="form-group">
+						<label for="turnawardamount" class="control-label">奖品金额</label>
+						<input type="text" class="form-control" id="turnawardamount" name="turnawardamount" placeholder="请输入奖品金额" required="required"/>
+					</div>
+					<div class="form-group">
+						<label for="turnawardprobability" class="control-label">奖品概率</label>
+						<input type="text" class="form-control" id="turnawardprobability" name="turnawardprobability" placeholder="请输入奖品概率" required="required"/>
+					</div>
+					<div class="form-group">
+						<font id="sums"></font>&nbsp;&nbsp;&nbsp;
+						<font id="n"></font>
+					</div>
+
+				</div>
+
+				<div class="modal-footer">
+					<button type="button" class="btn btn-default" data-dismiss="modal" id="closeed">关闭</button>
+					<button type="submit" class="btn btn-primary" id="sb">保存</button>
+				</div>
+			</form>
+		</div>
+	</div>
+
+</div>
+
+<th:block th:fragment="DailyModelJs">
+
+	<script type="text/javascript">
+
+
+
+
+
+	</script>
+
+</th:block>
+</body>
+</html>

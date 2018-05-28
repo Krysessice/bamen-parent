@@ -15,11 +15,13 @@
 	<modules>
 		<module>invite-code-mode</module>
 		<module>room-card-mode</module>
+		<module>cow-nn-mode</module>
 	</modules>
 
 	<properties>
-		<invite-code-mode.version>1.2.6</invite-code-mode.version>
-		<room-card-mode.version>1.1.2</room-card-mode.version>
+		<invite-code-mode.version>2.3.5</invite-code-mode.version>
+		<room-card-mode.version>1.4.9</room-card-mode.version>
+		<cow-nn-mode.version>1.4.8</cow-nn-mode.version>
 	</properties>
 
 	<dependencies>
@@ -27,6 +29,12 @@
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-web</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>net.sourceforge.nekohtml</groupId>
+			<artifactId>nekohtml</artifactId>
+			<version>1.9.21</version>
 		</dependency>
 
 		<!--mysql jdbc-->

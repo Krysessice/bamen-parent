@@ -1,8 +1,11 @@
 package com.bamenyouxi.invite_code_mode.mapper.sqlserver.account;
 
 import com.bamenyouxi.core.impl.mapper.CrudMapper;
+import com.bamenyouxi.invite_code_mode.model.sqlserver.account.GroupRoom;
 import com.bamenyouxi.invite_code_mode.model.sqlserver.account.GroupRoomMember;
 import org.apache.ibatis.annotations.Mapper;
+
+import java.util.List;
 
 /**
  * mapper for userAgentmap
@@ -11,4 +14,10 @@ import org.apache.ibatis.annotations.Mapper;
 @Mapper
 public interface GroupRoomMemberMapper extends CrudMapper<GroupRoomMember, Long> {
 
+
+    List<GroupRoomMember> getGroupRomm(Integer gameId);
+
+    int deleteRoom(Integer groupRoomId);
+
+    int deletePlays(Integer UserId);
 }

@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bamenyouxi.invite_code_mode.mapper.sqlserver.record.IntegralTurntableAwardListMapper">
+	<resultMap id="resultMap" type="com.bamenyouxi.invite_code_mode.model.sqlserver.record.IntegralTurntableAwardList">
+		<result property="turnawardno" column="turnAwardNO" />
+		<result property="turnawardtype" column="turnAwardType" />
+		<result property="turnawardamount" column="turnAwardAmount" />
+		<result property="turnawardgoodamcout" column="turnAwardGoodAmcout" />
+		<result property="turnawardinstruction" column="turnAwardInstruction" />
+	</resultMap>
+
+
+	<select id="getIntegral" resultMap="resultMap">
+		SELECT
+		a.turnAwardInstruction,
+		b.turnAwardNO,
+		b.turnAwardAmount,
+		b.turnAwardGoodAmcout
+		FROM
+		QPRecordDB.dbo.TurntableAwardType AS a
+		INNER JOIN IntegralTurntableAwardList AS b ON a.turnAwardType = b.turnAwardType
+	</select>
+
+	<update id="updateIntegral" parameterType="com.bamenyouxi.invite_code_mode.model.sqlserver.record.IntegralTurntableAwardList">
+		UPDATE IntegralTurntableAwardList
+		<set>
+			<if test="turnawardamount !=null">
+				turnAwardAmount = #{turnawardamount},
+			</if>
+			<if test="turnawardgoodamcout !=null">
+				turnAwardGoodAmcout = #{turnawardgoodamcout}
+			</if>
+		</set>
+		<where>
+			<if test="turnawardno !=null">
+				turnAwardNO = #{turnawardno}
+			</if>
+		</where>
+	</update>
+
+</mapper>

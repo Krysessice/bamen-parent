@@ -5,6 +5,7 @@ import com.bamenyouxi.core.impl.mapper.CrudMapper;
 import com.bamenyouxi.core.impl.service.AbstractCrudService;
 import com.bamenyouxi.invite_code_mode.mapper.mysql.invite_code_mode.SysAgentMapper;
 import com.bamenyouxi.invite_code_mode.mapper.mysql.invite_code_mode.UserOpenRoomPerdayRecordMapper;
+import com.bamenyouxi.invite_code_mode.model.mysql.invite_code_mode.OpenRoomPerhourRecord;
 import com.bamenyouxi.invite_code_mode.model.mysql.invite_code_mode.SysAgent;
 import com.bamenyouxi.invite_code_mode.model.mysql.invite_code_mode.UserOpenRoomPerdayRecord;
 import com.github.pagehelper.PageHelper;
@@ -46,6 +47,15 @@ public class UserOpenRoomPerdayRecordService extends AbstractCrudService<UserOpe
 		return new PageInfo<>(list);
 	}
 
+	public PageInfo<UserOpenRoomPerdayRecord> getGameType(int page, int size, Map<String,Object> params) {
+		super.listBefore(params);
+		PageHelper.startPage(page, size, FieldConstant.SortConstant.CREATE_TIME_DESC);
+		params.put(FieldConstant.CommonFieldConstant.groupBy.name(), FieldConstant.GroupConstant.CREATE_DATED);
+		List<UserOpenRoomPerdayRecord> list = userOpenRoomPerdayRecordMapper.getGameType(params);
+		if (list.isEmpty() || list.get(0) == null)
+			return new PageInfo<>();
+		return new PageInfo<>(list);
+	}
 
 
 }

@@ -14,11 +14,11 @@ public final class CardBonusRecord extends BaseEntity {
 
 	private String account;
 	private String nickName;
-	private Long sysAgentId;
+	private String sysAgentId;
 	private Long payOrderId;
-	private Long firSuperAgentId;   //上级代理主键id
+	private String firSuperAgentId;   //上级代理主键id
 	private Integer firBonus;
-	private Long secSuperAgentId;   //上上级代理主键id
+	private String secSuperAgentId;   //上上级代理主键id
 	private Integer secBonus;
 
 	public String getAccount() {
@@ -31,7 +31,7 @@ public final class CardBonusRecord extends BaseEntity {
 
 	public CardBonusRecord() {}
 
-	public Long getSysAgentId() {
+	public String getSysAgentId() {
 		return sysAgentId;
 	}
 
@@ -39,15 +39,23 @@ public final class CardBonusRecord extends BaseEntity {
 		return payOrderId;
 	}
 
-	public Long getFirSuperAgentId() {
-		return firSuperAgentId;
+	public void setFirSuperAgentId(String firSuperAgentId) {
+		this.firSuperAgentId = firSuperAgentId;
+	}
+
+	public void setSecSuperAgentId(String secSuperAgentId) {
+		this.secSuperAgentId = secSuperAgentId;
 	}
 
 	public Integer getFirBonus() {
 		return firBonus;
 	}
 
-	public Long getSecSuperAgentId() {
+	public String getFirSuperAgentId() {
+		return firSuperAgentId;
+	}
+
+	public String getSecSuperAgentId() {
 		return secSuperAgentId;
 	}
 
@@ -55,7 +63,7 @@ public final class CardBonusRecord extends BaseEntity {
 		return secBonus;
 	}
 
-	public void setSysAgentId(Long sysAgentId) {
+	public void setSysAgentId(String sysAgentId) {
 		this.sysAgentId = sysAgentId;
 	}
 
@@ -63,17 +71,12 @@ public final class CardBonusRecord extends BaseEntity {
 		this.payOrderId = payOrderId;
 	}
 
-	public void setFirSuperAgentId(Long firSuperAgentId) {
-		this.firSuperAgentId = firSuperAgentId;
-	}
 
 	public void setFirBonus(Integer firBonus) {
 		this.firBonus = firBonus;
 	}
 
-	public void setSecSuperAgentId(Long secSuperAgentId) {
-		this.secSuperAgentId = secSuperAgentId;
-	}
+
 
 	public void setSecBonus(Integer secBonus) {
 		this.secBonus = secBonus;
@@ -91,14 +94,14 @@ public final class CardBonusRecord extends BaseEntity {
 
 	public static class Builder {
 
-		private Long sysAgentId;
+		private String sysAgentId;
 		private Long payOrderId;
-		private Long firSuperAgentId;   //上级代理主键id
+		private String firSuperAgentId;   //上级代理主键id
 		private Integer firBonus;
-		private Long secSuperAgentId;   //上上级代理主键id
+		private String secSuperAgentId;   //上上级代理主键id
 		private Integer secBonus;
 
-		public CardBonusRecord.Builder sysAgentId(Long val) {
+		public CardBonusRecord.Builder sysAgentId(String val) {
 			sysAgentId = val;
 			return this;
 		}
@@ -108,7 +111,7 @@ public final class CardBonusRecord extends BaseEntity {
 			return this;
 		}
 
-		public CardBonusRecord.Builder firSuperAgentId(Long val) {
+		public CardBonusRecord.Builder firSuperAgentId(String val) {
 			firSuperAgentId = val;
 			return this;
 		}
@@ -118,7 +121,7 @@ public final class CardBonusRecord extends BaseEntity {
 			return this;
 		}
 
-		public CardBonusRecord.Builder secSuperAgentId(Long val) {
+		public CardBonusRecord.Builder secSuperAgentId(String val) {
 			secSuperAgentId = val;
 			return this;
 		}

@@ -19,6 +19,15 @@ public interface PayOrderMapper extends CrudMapper<PayOrder, Long> {
 
     int save(PayOrder payOrder);
 
+    List<PayOrder> queryPayCard(String params);
 
+    List<PayOrder> getAgentSum(Map<String,Object> params);
 
+    List<PayOrder> getsums(Map<String,Object> params);
+
+    List<PayOrder> getAgent(Map<String,Object> params);
+
+    List<PayOrder>  getSumCard(String account);
+
+    List<PayOrder> queryCardforList(Map<String,Object> params);
 }

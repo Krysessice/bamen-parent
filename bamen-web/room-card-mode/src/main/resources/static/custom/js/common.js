@@ -43,6 +43,115 @@ CommonJs.prototype.getByAccount=function(account,fn){
          });
 }
 
+CommonJs.prototype.datetimeInit = function(fn) {
+    $('.form_date').datetimepicker({
+        language: 'zh-CN',
+        format: 'yyyy-mm-dd',
+        autoclose: true,
+        minView: 2,
+        todayBtn: 'linked',
+        todayHighlight: true,
+        endDate: new Date()
+    }).on('changeDate', function(ev) {
+        if (typeof intercept === 'undefined' || !intercept)
+            $("#table").bootstrapTable('reloadGrid', {
+                queryParams: {
+                    startDate: $('#startDate').val(),
+                    endDate: $('#endDate').val()
+                }
+            });
+    });
+
+    var now = new Date();
+    $('#endDate').val(now.format('yyyy-MM-dd'));
+    now.setDate(now.getDate() - 7);
+    $('#startDate').val(now.format('yyyy-MM-dd'));
+
+    (fn && typeof fn === 'function') && fn();
+}
+
+
+
+ CommonJs.prototype.authorizeGiveAgent = function(e) {
+     var id = $(e).parents('tr').find('td[name="id"]').text();
+     var gameId = $(e).parents('tr').find('td[name="gameId"]').text();
+     if (window.confirm('确定为 ' + gameId + '取消授权吗?')) {
+         $.ajax({
+             type: 'put',
+             url: '/account/authorizeGiveAgent/' + gameId + '/',
+             dataType: 'json',
+             success: function(data) {
+                 if (data.status){
+                     alert('取消成功');
+                 }
+                 else
+                     return alert(data.msg);
+                 $(e).parents('table').bootstrapTable('reloadGrid');
+             }
+         });
+     }
+ }
+
+ CommonJs.prototype.authorizeLookCard = function(e) {
+     var id = $(e).parents('tr').find('td[name="id"]').text();
+     var gameId = $(e).parents('tr').find('td[name="gameId"]').text();
+     if (window.confirm('确定为 ' + gameId + '取消授权吗?')) {
+         $.ajax({
+             type: 'put',
+             url: '/account/updateAgentLookCard/' + gameId + '/',
+             dataType: 'json',
+             success: function(data) {
+                 if (data.status){
+                     alert('取消成功');
+                 }
+                 else
+                     return alert(data.msg);
+                 $(e).parents('table').bootstrapTable('reloadGrid');
+             }
+         });
+     }
+ }
+
+
+CommonJs.prototype.authorize = function(e) {
+     var id = $(e).parents('tr').find('td[name="id"]').text();
+     var account = $(e).parents('tr').find('td[name="account"]').text();
+     if (window.confirm('确定为 ' + account + ' 授权吗?')) {
+         $.ajax({
+             type: 'put',
+             url: '/agent/authorize/' + account + '/',
+             dataType: 'json',
+             success: function(data) {
+                 if (data.status){
+                     alert('授权成功');
+                 }
+                 else
+                     return alert(data.msg);
+                 $(e).parents('table').bootstrapTable('reloadGrid');
+             }
+         });
+     }
+ }
+
+ CommonJs.prototype.authorizes = function(e) {
+     var id = $(e).parents('tr').find('td[name="id"]').text();
+     var account = $(e).parents('tr').find('td[name="account"]').text();
+     if (window.confirm('确定为 ' + account + ' 授权吗?')) {
+         $.ajax({
+             type: 'put',
+             url: '/agent/authorizes/' + account + '/',
+             dataType: 'json',
+             success: function(data) {
+                 if (data.status){
+                     alert('取消成功');
+                 }
+                 else
+                     return alert(data.msg);
+                 $(e).parents('table').bootstrapTable('reloadGrid');
+             }
+         });
+     }
+ }
 
 CommonJs.prototype.SuperAgentId=function(SuperAgentId,fn){
             $.ajax({

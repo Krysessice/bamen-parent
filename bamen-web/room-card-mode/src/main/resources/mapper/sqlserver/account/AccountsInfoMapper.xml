@@ -21,5 +21,49 @@
 		select UserID,GameID from QPAccountsDB.dbo.AccountsInfo where gameId=#{gameId}
 	</select>
 
+	<select id="queryGiveAgent" resultMap="resultMap">
+		SELECT UserID,GameID,NickName,RegisterDate,LoveLiness FROM QPAccountsDB.dbo.AccountsInfo where LoveLiness=1
+	</select>
+	
+	<update id="authorizeGiveAgent" parameterType="com.bamenyouxi.room_card_mode.model.sqlserver.account.AccountsInfo">
+		update QPAccountsDB.dbo.AccountsInfo set LoveLiness=0 where GameID=#{gameId}
+	</update>
+
+
+	<select id="giveAgent" resultMap="resultMap">
+		SELECT GameID,NickName,LoveLiness FROM QPAccountsDB.dbo.AccountsInfo where GameID=#{gameId}
+	</select>
+
+	<update id="updateGiveAgent" parameterType="com.bamenyouxi.room_card_mode.model.sqlserver.account.AccountsInfo">
+		update QPAccountsDB.dbo.AccountsInfo set LoveLiness=1 where GameID=#{gameId}
+	</update>
+
+	<update id="updateAgentLookCard" parameterType="com.bamenyouxi.room_card_mode.model.sqlserver.account.AccountsInfo">
+		UPDATE QPAccountsDB.dbo.AccountsInfo set CustomID=0 where GameID=#{gameId}
+	</update>
+
+	<select id="lookCard" resultMap="resultMap">
+		select UserID,GameID,NickName,CustomID from QPAccountsDB.dbo.AccountsInfo
+		<where>
+			and GameID = #{gameId}
+		</where>
+	</select>
+
+	<update id="updateLook" parameterType="com.bamenyouxi.room_card_mode.model.sqlserver.account.AccountsInfo">
+		UPDATE QPAccountsDB.dbo.AccountsInfo set CustomID=1
+		<where>
+			and GameID = #{gameId}
+		</where>
+	</update>
+
+	<select id="queryLook" resultMap="resultMap">
+		select UserID,GameID,NickName,CustomID,RegisterDate from QPAccountsDB.dbo.AccountsInfo where CustomID=1
+	</select>
+
+
 
 </mapper>
+
+
+
+

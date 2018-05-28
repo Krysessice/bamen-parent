@@ -14,6 +14,7 @@
 
 	<th:block th:replace="~{layout/common :: table-paginator('table')}" />
 
+	<th:block th:replace="model/payTimeModel :: payTimeModel" />
 </div>
 
 <th:block id="selfJs">
@@ -32,6 +33,21 @@
 
 	        $("#table").tableInit('cardCostPerday');
 	    });
+
+	    $('#payTimeModel').on('show.bs.modal', function (event) {
+	    	  var F_endDate = new Date(new Date().valueOf() - 24 * 60 * 60 * 1000).format('yyyy-MM-dd');
+			  $('#startDate').datetimepicker('setEndDate', F_endDate);
+			  $('#endDate').datetimepicker('setEndDate', F_endDate);
+	          $('#endDate').val(F_endDate);
+				var modal = $(this);
+				var button = $(event.relatedTarget);
+				var element = button.parents('tr');
+				var gameTypeId = element.find('td[name="gameTypeId"]').text();
+				var createTime = element.find('td[name="createTime"]').text();
+
+				modal.find('.modal-title').text(gameTypeId + ' 开房明细');
+				$('#model-table').tableInit('queryGameType', gameTypeId,createTime);
+			})
 	</script>
 
 </th:block>

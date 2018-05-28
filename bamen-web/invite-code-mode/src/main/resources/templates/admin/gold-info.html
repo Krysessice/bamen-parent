@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="layout/head :: common_head(_, _)">
+
+</head>
+<body th:replace="layout/body :: common_body(~{::div#container}, ~{::#selfJs})">
+
+	<div id="container" class="container">
+
+		<div class="page-header"></div>
+
+		<div class="well">
+			<p>
+				可修改金币常量，修改后<span class="text-primary">即时生效</span>。
+			</p>
+		</div>
+
+		<hr />
+
+		<div class="form-group">
+			<label for="t1_commission">直属团队提成</label>
+			<div class="row">
+				<div class="col-xs-1"></div>
+				<div class="col-xs-5" id="one">
+					<input type="number" class="form-control" id="t1_commission" name="selected"></input>
+				</div>
+			</div>
+		</div>
+
+		<div class="form-group">
+			<label for="t2_commission">二级团队提成</label>
+			<div class="row">
+				<div class="col-xs-1"></div>
+				<div class="col-xs-5" id="two">
+					<input type="number" class="form-control" id="t2_commission" name="selected"></input>
+				</div>
+			</div>
+		</div>
+
+		<div class="form-group">
+			<label for="t3_commission">三级团队提成</label>
+			<div class="row">
+				<div class="col-xs-1"></div>
+				<div class="col-xs-5" id="three">
+					<input type="number" class="form-control" id="t3_commission" name="selected"></input>
+				</div>
+			</div>
+		</div>
+
+		<div class="col-xs-3">
+			<button type="reset" class="btn btn-warning">重 置</button>
+		</div>
+		<div class="col-xs-3">
+			<button  class="btn btn-primary" onclick="updateInfo();">保 存</button>
+		</div>
+
+	</div>
+
+	<th:block id="selfJs">
+
+		<script type="text/javascript">
+
+			$(function(){
+				 $.ajax({
+						type: 'get',
+						url: '/admin/getGoldInfo/',
+						dataType: 'json',
+						success: function(result) {
+							if (result){
+								$("#one").html('<input type="text" class="form-control" value="'+result.t1_commission+'" id="t1_commission"  name="t1_commission" />');
+								$("#two").html('<input type="text" class="form-control" value="'+result.t2_commission+'" id="t2_commission"  name="t1_commission" />');
+								$("#three").html('<input type="text" class="form-control" value="'+result.t3_commission+'" id="t3_commission"  name="t1_commission" />');
+							}
+			                else{
+			                	alert(data.msg);
+			                }
+						}
+
+					});
+			})
+
+			  function updateInfo(){
+				var t1_commission=$('input#t1_commission').val();
+				var t2_commission=$('input#t2_commission').val();
+				var t3_commission=$('input#t3_commission').val();
+				if (window.confirm('确定修改金币信息吗？')) {
+			        $.ajax({
+						type: 'put',
+						url: '/admin/goldInfo/'+t1_commission+'/'+t2_commission+'/'+t3_commission+'/',
+						dataType: 'json',
+						success: function(data) {
+							if (data.status)
+			                    alert('操作成功');
+			                else
+			                    alert(data.msg);
+						}
+					});
+		        }
+			}
+		</script>
+
+	</th:block>
+
+</body>
+</html>

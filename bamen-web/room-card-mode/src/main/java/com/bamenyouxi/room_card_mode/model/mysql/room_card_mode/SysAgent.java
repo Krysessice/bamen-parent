@@ -3,8 +3,10 @@ package com.bamenyouxi.room_card_mode.model.mysql.room_card_mode;
 import com.bamenyouxi.core.constant.AuthConstant;
 import com.bamenyouxi.core.impl.model.mysql.BaseEntity;
 import com.bamenyouxi.core.util.UUIDUtil;
+import com.bamenyouxi.room_card_mode.util.UserDetailsUtil;
 import org.springframework.security.authentication.encoding.Md5PasswordEncoder;
 
+import java.math.BigDecimal;
 import java.sql.Timestamp;
 import java.util.Date;
 
@@ -12,22 +14,49 @@ import java.util.Date;
  * model for t_sys_agent
  * Created by hc on 2017/7/9.
  */
-public final class SysAgent extends BaseEntity {
+public class SysAgent extends BaseEntity {
 
     private String account;
     private String nickName;
     private String password;
     private String secretKey;
-    private Long superAgentId;
+    private String superAgentId;
+    private Integer  partner;
     private Date firstChargeTime;
     private Timestamp lastLoginTime;
+    private BigDecimal payPrice;
+    private Integer cardNum;
+    private Integer cardGift;
 
+    public void setPayPrice(BigDecimal payPrice) {
+        this.payPrice = payPrice;
+    }
+
+    public BigDecimal getPayPrice() {
+        return payPrice;
+
+    }
+
+    public Integer getCardGift() {
+        return cardGift;
+    }
+
+    public Integer getCardNum() {
+        return cardNum;
+    }
 
     private String superAccount;    // 上级代理号
     private String superNickName;   // 上级代理昵称
 
+    public void setSuperAgentId(String superAgentId) {
+        this.superAgentId = superAgentId;
+    }
 
-    private SysAgent() {}
+    public Integer getPartner() {
+        return partner;
+    }
+
+    public SysAgent() {}
 
     public void emptySecretKey() {
         this.secretKey = null;
@@ -49,7 +78,7 @@ public final class SysAgent extends BaseEntity {
         return secretKey;
     }
 
-    public Long getSuperAgentId() {
+    public String getSuperAgentId() {
         return superAgentId;
     }
 
@@ -69,7 +98,7 @@ public final class SysAgent extends BaseEntity {
         return superNickName;
     }
 
-    private SysAgent(Builder builder) {
+    public SysAgent(Builder builder) {
         this.account = builder.account;
         this.nickName = builder.nickName;
         this.superAgentId = builder.superAgentId;
@@ -77,17 +106,20 @@ public final class SysAgent extends BaseEntity {
         this.secretKey=builder.secretKey;
         this.password=builder.password;
         this.id=builder.id;
+        this.partner=builder.partner;
     }
+
 
     public static class Builder {
 
         private Long id;
         private String account;
         private String nickName;
-        private Long superAgentId;
+        private String superAgentId;
         private boolean sysFlag;
         private String secretKey;
         private  String password;
+        private Integer  partner;
 
         public Builder account(String val) {
             account = val;
@@ -99,7 +131,7 @@ public final class SysAgent extends BaseEntity {
             return this;
         }
 
-        public Builder superAgentId(Long val) {
+        public Builder superAgentId(String val) {
             superAgentId = val;
             return this;
         }
@@ -124,12 +156,18 @@ public final class SysAgent extends BaseEntity {
             return this;
         }
 
+        public Builder partner(Integer val) {
+            partner = val;
+            return this;
+        }
+
         public static void defaultPwdInject(SysAgent sysAgent) {
             String secretKey = UUIDUtil.genUUID();
             String password = new Md5PasswordEncoder().encodePassword(AuthConstant.SysAgentConstant.DEFAULT_PWD, secretKey);
             sysAgent.secretKey = secretKey;
             sysAgent.password = password;
         }
+
 
         public SysAgent build() {
             return new SysAgent(this);

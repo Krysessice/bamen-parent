@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="layout/head :: common_head(_, ~{::link})">
+	<link rel="stylesheet" type="text/css" media="all"
+	      href="../static/bootstrap/css/bootstrap-datetimepicker.min.css" th:href="@{/bootstrap/css/bootstrap-datetimepicker.min.css}" />
+</head>
+<body th:replace="layout/body :: common_body(~{::div#container}, ~{::#selfJs})">
+
+	<div id="container" class="container">
+
+		<th:block th:replace="~{layout/common :: page-header('团队金币消耗实时统计')}" />
+
+		<th:block th:replace="~{layout/common :: start-end-date-input}" />
+
+		<th:block th:replace="~{layout/common :: table-paginator('table')}" />
+
+		<th:block th:replace="model/userGoldModel :: userGoldModel" />
+
+	</div>
+
+	<th:block id="selfJs">
+
+		<th:block th:replace="~{layout/common :: pageJs}" />
+		<th:block th:replace="~{layout/common :: dateTimeJs}" />
+
+		<script type="text/javascript">
+			var commonJs = new CommonJs();
+
+		    commonJs.datetimeInit(function() {
+		        $("#table").tableInit('UserTeamGoldlist');
+		    });
+
+		    $('#userGoldModel').on('show.bs.modal', function (event) {
+				var modal = $(this);
+				var button = $(event.relatedTarget);
+				var element = button.parents('tr');
+				var teamNo = element.find('td[name="teamNo"]').text();
+				var teamName = element.find('td[name=""]').text();
+
+				modal.find('.modal-title').text(teamName + ' 金币消耗明细');
+				$('#model-table').tableInit('userGold', teamNo);
+			})
+		</script>
+
+	</th:block>
+
+</body>
+</html>

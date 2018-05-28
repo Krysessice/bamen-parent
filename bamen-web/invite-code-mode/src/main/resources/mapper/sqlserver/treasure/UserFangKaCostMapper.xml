@@ -13,7 +13,7 @@
 	<select id="findOpenRoomPerhourRecord" resultType="com.bamenyouxi.invite_code_mode.model.mysql.invite_code_mode.OpenRoomPerhourRecord">
 		SELECT
 			KindID gameTypeId,
-			CONVERT(VARCHAR(13), CostTime, 120) + ':00:00' createTime, SUM(FangKa) cardCost, COUNT(0) openRoomNum
+			CONVERT(VARCHAR(13), CostTime, 120) + ':00:00' createTime, SUM(FangKa) cardCost, COUNT(0) openRoomNum ,GameType gameType
 		FROM
 			QPTreasureDB.dbo.UserFangKaCost
 		<where>
@@ -25,12 +25,12 @@
 			</if>
 		</where>
 		GROUP BY
-			KindID, CONVERT(VARCHAR(13), CostTime, 120)
+			KindID,GameType, CONVERT(VARCHAR(13), CostTime, 120)
 	</select>
 
 	<select id="findUserOpenRoomPerdayRecord" resultType="com.bamenyouxi.invite_code_mode.model.mysql.invite_code_mode.UserOpenRoomPerdayRecord">
 		SELECT
-			a.UserID userId, GameID gameId, Accounts accounts, KindID gameTypeId,
+			a.UserID userId, GameID gameId, Accounts accounts, KindID gameTypeId,GameType gameType,
 			CONVERT(VARCHAR(10), CostTime, 120) + ' 00:00:00' createTime, SUM(FangKa) cardCost, COUNT(0) openRoomNum
 		FROM
 			QPTreasureDB.dbo.UserFangKaCost a
@@ -46,6 +46,6 @@
 			</if>
 		</where>
 		GROUP BY
-			a.UserID, GameID, Accounts, KindID, CONVERT(VARCHAR(10), CostTime, 120)
+			a.UserID, GameID, Accounts, KindID,GameType, CONVERT(VARCHAR(10), CostTime, 120)
 	</select>
 </mapper>

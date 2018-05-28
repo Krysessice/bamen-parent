@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org">
+<body>
+<div class="modal fade bs-example-modal-sm" id="IntegralModel" tabindex="-1" role="dialog"
+	 aria-labelledby="Integral" aria-describedby="积分任务编辑" th:fragment="IntegralModel">
+
+	<div class="modal-dialog" role="document" aria-hidden="true">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+				<h4 class="modal-title" id="updateIntegral">积分任务编辑</h4>
+			</div>
+
+			<form id="updateIntegralForm" onsubmit="return false;">
+				<div class="modal-body">
+
+					<div class="form-group">
+						<label for="turnawardamounts" class="control-label">奖品积分</label>
+						<input type="text" class="form-control" id="turnawardamounts" name="turnawardamounts" placeholder="请输入奖品积分" required="required"/>
+					</div>
+					<div class="form-group">
+						<label for="turnawardgoodamcout" class="control-label">积分个数</label>
+						<input type="text" class="form-control" id="turnawardgoodamcout" name="turnawardgoodamcout" placeholder="请输入积分个数" required="required"/>
+					</div>
+
+				</div>
+
+				<div class="modal-footer">
+					<button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+					<button type="submit" class="btn btn-primary">保存</button>
+				</div>
+			</form>
+		</div>
+	</div>
+
+</div>
+
+<th:block th:fragment="IntegralModelJs">
+
+	<script type="text/javascript">
+
+	</script>
+
+</th:block>
+</body>
+</html>

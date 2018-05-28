@@ -29,6 +29,10 @@
 		</where>
 	</select>
 
+	<select id="gets" resultMap="resultMap">
+		select * from t_sys_gold_clear_record
+	</select>
+
 	<insert id="save" parameterType="com.bamenyouxi.invite_code_mode.model.mysql.invite_code_mode.SysAgentClearRecord">
 		insert into t_sys_agent_clear_record
 		(

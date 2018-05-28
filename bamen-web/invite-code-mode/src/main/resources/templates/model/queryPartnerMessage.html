@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org">
+<body>
+	<div class="modal fade bs-example-modal-sm" id="queryPartnerMessage" tabindex="-1" role="dialog"
+	     aria-labelledby="payTime" aria-describedby="充值明细" th:fragment="queryPartnerMessage">
+
+		<div class="modal-dialog" role="document" aria-hidden="true">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+					<h4 class="modal-title" id="queryPartner">下级代理</h4>
+				</div>
+
+				<div class="modal-body">
+					<font id="sums">总局数：</font>
+					<hr/>
+
+					<th:block th:replace="~{layout/common :: table-paginator('model-table')}" />
+
+				</div>
+
+				<div class="modal-footer">
+					<button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+				</div>
+			</div>
+		</div>
+
+	</div>
+
+	<th:block th:fragment="queryPartnerMessageJs">
+
+		<script type="text/javascript">
+			var commonJs = new CommonJs();
+
+			$('#queryPartnerMessage').on('show.bs.modal', function (event) {
+
+                    var modal = $(this);
+					var button = $(event.relatedTarget);
+					var element = button.parents('tr');
+					var qunid = element.find('td[name="id"]').text();
+
+					modal.find('.modal-title').text($('#startDate').val() + " 至 " + $('#endDate').val() + ' ' );
+					$('#model-table').tableInit('queryPartnerMessage',qunid);
+
+
+                $(function(){
+	            //document加载完触发
+	            queryMoneyAjax();
+	            //日期Vlaue更改触发
+                $("#monitorTime").on('change',function(){
+                    queryMoneyAjax();
+                });
+
+            })
+
+        function queryMoneyAjax(){
+            $.ajax({
+                    type: 'get',
+                    url:'/user/querySumPartnerAgent/',
+                    dataType:'Json',
+                    async : false,
+                    data:{
+                    	qunid:qunid,
+                        startDate: $('#startDate').val(),
+                        endDate: $('#endDate').val()
+                    },
+                    success:function(result){
+                          console.log(JSON.stringify(result));
+                          var sum=result.n;
+                          if(sum<0){
+                            $("#sums").html('总局数：<font>' + 0 + '</font>');
+                          }else if(sum==null){
+                             $("#sums").html('总局数：<font>' + 0 + '</font>');
+                          }
+                          else{
+                            $("#sums").html('总局数：<font>' + sum + '</font>');
+                          }
+
+                   		 }
+           			 });
+        		}
+			})
+
+
+
+		</script>
+
+	</th:block>
+
+</body>
+</html>

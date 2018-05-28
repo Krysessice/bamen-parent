@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org">
+<html lang="zh-CN" xmlns:th="dfhttp://www.thymeleaf.org">
 <head th:replace="layout/head :: common_head(_, _)">
 
 </head>
@@ -20,6 +20,7 @@
 
 	<div class="table-responsive">
 		<th:block th:replace="~{layout/common :: table-paginator('table')}" />
+
 	</div>
 
 	<th:block th:replace="model/groupRoomMemberModel :: groupRoomMemberModel" />
@@ -35,6 +36,10 @@
 		var commonJs = new CommonJs();
 	    $("#table").tableInit('groupRoom');
 
+	    $('#getGroupMemberModel').on('show.bs.modal', function (event) {
+			$('#model-table').tableInit('groupRoomMembers');
+		})
+
 	    $('span#groupName').on('click', function() {
 	        var groupName = $('input[name="groupName"]').val();
 	        if (groupName.length < 2 || groupName.length > 10)
@@ -42,7 +47,7 @@
 
 	        $.ajax({
 				type: 'post',
-				url: '/groupRoom/',
+				url: '/groupRoom/saveParams/',
 				dataType: 'json',
 				contentType: "application/json",
 				data: JSON.stringify({
@@ -58,15 +63,13 @@
 
 	    function delGroupRoom(e) {
 	        var $e = $(e);
-	        if (window.confirm("确定要删除'" + $e.parents('tr').find('td[name="groupName"]').text() + "'房间吗？")) {
+			var id=$e.parents('tr').find('td[name="id"]').text();
+	        if (window.confirm("确定要删除'" + $e.parents('tr').find('td[name="groupName"]').text() + "'这房间吗？, 删除后将永远无法看到该群信息，请谨慎！")) {
 		        $.ajax({
 					type: 'delete',
-					url: '/groupRoom/',
+					url: '/groupRoom/deleteRoom/ '+ id + '/ ',
 					dataType: 'json',
 					contentType:"application/json",
-					data: JSON.stringify({
-						id : $e.parents('tr').find('td[name="id"]').text()
-					}),
 					success: function(data) {
 			            if (data.status)
 			                $('#table').bootstrapTable('reloadGrid');

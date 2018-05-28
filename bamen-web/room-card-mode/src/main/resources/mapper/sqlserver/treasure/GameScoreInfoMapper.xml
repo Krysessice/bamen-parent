@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+		PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+		"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bamenyouxi.room_card_mode.mapper.sqlserver.treasure.GameScoreInfoMapper">
+	<resultMap id="resultMap" type="com.bamenyouxi.room_card_mode.model.sqlserver.treasure.GameScoreInfo">
+		<id property="userId" column="UserID" />
+		<result property="insureScore" column="InsureScore" />
+	</resultMap>
+
+	<!--<update id="updateCardNum" parameterType="com.bamenyouxi.room_card_mode.model.sqlserver.treasure.GameScoreInfo">-->
+		<!--UPDATE QPTreasureDB.dbo.GameScoreInfo-->
+		<!--<set>-->
+			<!--<if test="insureScore!=null">-->
+				<!--InsureScore = #{InsureScore}-->
+			<!--</if>-->
+		<!--</set>-->
+		<!--<where>-->
+			<!--<if test="userId !=null">-->
+				<!--UserID = #{userId}-->
+			<!--</if>-->
+		<!--</where>-->
+	<!--</update>-->
+
+	<select id="get" resultMap="resultMap">
+		select UserID, InsureScore from GameScoreInfo
+		<where>
+			<foreach collection="params" index="key" item="value">
+				<if test="value != null">
+					<choose>
+						<when test="key == 'gameId'">
+							and UserID = (SELECT UserID FROM QPAccountsDB.dbo.AccountsInfo WHERE GameID = #{value})
+						</when>
+						<otherwise>
+							and ${key} = #{value}
+						</otherwise>
+					</choose>
+				</if>
+			</foreach>
+		</where>
+	</select>
+
+	<update id="updateCardNum" parameterType="com.bamenyouxi.room_card_mode.model.sqlserver.treasure.GameScoreInfo">
+		update GameScoreInfo set InsureScore = InsureScore + #{insureScore}
+		<where>
+			<choose>
+				<when test="gameId != null">
+					and UserID = (SELECT UserID FROM QPAccountsDB.dbo.AccountsInfo WHERE GameID = #{gameId})
+				</when>
+				<when test="userId != null">
+					and UserID = #{userId}
+				</when>
+				<otherwise>
+					and UserID = 0
+				</otherwise>
+			</choose>
+		</where>
+	</update>
+
+
+</mapper>

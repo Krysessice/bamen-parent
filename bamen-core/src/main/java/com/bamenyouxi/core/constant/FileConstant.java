@@ -16,4 +16,5 @@ public final class FileConstant {
 
 		public static final String CLEAR_EXCEL_PARENT = BASE_EXCEL_PARENT + "clear/";
 	}
+
 }

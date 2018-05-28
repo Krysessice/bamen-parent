@@ -15,9 +15,71 @@
 		<result property="presentee" column="F_PRESENTEE" />
 		<result property="cardNum" column="F_CARD_NUM" />
 		<result property="giftReason" column="F_GIFT_REASON" />
+		<result property="account" column="F_ACCOUNT"/>
+		<result property="nickName" column="F_NICK_NAME"/>
 	</resultMap>
 
-	<insert id="save" parameterType="com.bamenyouxi.room_card_mode.model.mysql.room_card_mode.CardGift4AgentRecord" useGeneratedKeys="true" keyProperty="id">
+			<select id="queryGiftAgent" resultMap="resultMap">
+				SELECT
+				b.F_ID,
+				a.F_ACCOUNT,
+				b.F_PRESENTEE,
+				a.F_NICK_NAME,
+				b.F_CARD_NUM,
+				b.F_GIFT_REASON,
+				b.F_CREATE_TIME
+				FROM
+				t_sys_agent a
+				LEFT JOIN t_card_gift_for_agent_record b ON a.F_ACCOUNT = b.F_PRESENTER
+				WHERE
+				a.F_ACCOUNT = #{account}
+			</select>
+
+			<select id="querypayforList" resultMap="resultMap">
+				select F_ID,F_PRESENTER,F_PRESENTEE,F_CARD_NUM,F_GIFT_REASON,F_CREATE_TIME from t_card_gift_for_agent_record
+				<where>
+					<if test="startDate != null">
+						and convert(F_CREATE_TIME, DATE) &gt;= convert(#{startDate}, DATE)
+					</if>
+					<if test="endDate != null">
+						and convert(F_CREATE_TIME, DATE) &lt;= convert(#{endDate}, DATE)
+					</if>
+				</where>
+			</select>
+
+	      <insert id="save" parameterType="com.bamenyouxi.room_card_mode.model.mysql.room_card_mode.CardGift4AgentRecord" useGeneratedKeys="true" keyProperty="id">
+			INSERT INTO t_card_gift_for_agent_record (
+			<if test="presenter !=null">
+				F_PRESENTER,
+			</if>
+			<if test="presentee !=null">
+				F_PRESENTEE,
+			</if>
+			<if test="cardNum !=null">
+				F_CARD_NUM,
+			</if>
+			<if test="giftReason !=null">
+				F_GIFT_REASON
+			</if>
+			)
+			VALUES(
+			<if test="presenter !=null">
+				#{presenter},
+			</if>
+			<if test="presentee !=null">
+				#{presentee},
+			</if>
+			<if test="cardNum !=null">
+				#{cardNum},
+			</if>
+			<if test="giftReason !=null">
+				#{giftReason}
+			</if>
+			)
+		</insert>
+
+
+	<insert id="saves" parameterType="com.bamenyouxi.room_card_mode.model.mysql.room_card_mode.CardGift4AgentRecord" useGeneratedKeys="true" keyProperty="id">
 		INSERT INTO t_card_gift_for_agent_record (
 		<if test="presenter !=null">
 			F_PRESENTER,
@@ -47,5 +109,13 @@
 		</if>
 		)
 	</insert>
+
+	<select id="queryNumOne" resultMap="resultMap">
+		select ifnull(sum(F_CARD_NUM), 0)as F_CARD_NUM  from t_card_gift_for_agent_record
+		<where>
+			F_PRESENTER=#{presenter}
+		</where>
+	</select>
+
 
 </mapper>

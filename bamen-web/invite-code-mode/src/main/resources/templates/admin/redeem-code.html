@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="layout/head :: common_head(_, ~{::link})">
+    <link rel="stylesheet" type="text/css" media="all"
+          href="../static/bootstrap/css/bootstrap-datetimepicker.min.css" th:href="@{/bootstrap/css/bootstrap-datetimepicker.min.css}" />
+</head>
+<body th:replace="layout/body :: common_body(~{::div#container}, ~{::#selfJs})">
+
+<div id="container" class="container">
+
+
+    <th:block th:replace="~{layout/common :: page-header('兑换码')}" />
+
+    <div class="input-group col-xs-10">
+        <input type="text" class="form-control" id="cards" name="cards" placeholder="请输入兑换码" aria-describedby="card" />
+        <span class="input-group-addon" id="cardSelect">查询</span>
+    </div>
+
+    <hr/>
+
+    <div id="monitorTime" class="btn btn-primary hidden">
+        <th:block th:replace="~{layout/common :: start-end-date-input}"  />
+    </div>
+
+    <th:block th:replace="~{layout/common :: table-paginator('table')}"/>
+
+    <th:block th:replace="model/pastNoModel :: pastNoModel" />
+
+
+
+                <div class="form-group">
+
+                    <label >数量</label>
+                        <div class="row">
+                            <div class="col-xs-1"></div>
+                            <div class="col-xs-3">
+                                <input type="number" class="form-control col-xs-3" id="code" name="code" placeholder="数量"  required="required"  />
+                            </div>
+                            <div class="col-xs-3">
+                                <input type="number" class="form-control col-xs-3" id="card" name="card" placeholder="房卡"  required="required"  />
+                            </div>
+                            <div class="col-xs-3">
+                                <button type="button" id="mess" class="btn btn-danger" data-toggle="modal" data-target="#pastNoModel" >使 用(过  期) 列 表</button>
+                            </div>
+                        </div>
+                     </div>
+
+
+                     <label for="datetimepicker">日期</label>
+                        <div class="row">
+                            <div class="col-xs-1"></div>
+                            <div class="col-xs-4">
+                                <input name="startTm" id="datetimepicker" type='text' class="form-control input-sm" readonly="readonly" placeholder="日期"/>
+                            </div>
+                            <div class="form-group">
+                                <button type="button" class="btn btn-primary" id="generate">生  成</button>
+
+                            </div>
+
+                        </div>
+                    </div>
+
+
+
+        </div>
+
+
+
+</div>
+
+<th:block id="selfJs">
+
+    <th:block th:replace="~{layout/common :: pageJs}"/>
+    <th:block th:replace="~{layout/common :: dateTimeJs}" />
+
+    <script type="text/javascript">
+			var commonJs = new CommonJs();
+
+            $('#pastNoModel').on('show.bs.modal', function (event) {
+                 $('#model-table').tableInit('pastNoModel');
+		     })
+
+		     commonJs.datetimeInit(function() {
+                    $("#table").tableInit('queryAllList');
+              });
+
+
+            $('span#cardSelect').on('click',function(){
+             var card=$('input#cards').val();
+
+             if(card==""){
+                     commonJs.datetimeInit(function() {
+                        $("#table").tableInit('queryAllList');
+                     });
+              }
+
+            $("#table").html("");
+
+			$("#table").tableInit('queryAllList',card);
+
+          });
+
+
+            $('#datetimepicker').datetimepicker({
+                 format: 'yyyy-mm-dd hh:mm:ss',
+                 weekStart: 1,
+                 autoclose: true,
+                 todayHighlight: 1,
+                 minView: "month",
+                 language: 'zh-CN'
+            });
+
+            $('button#generate').on('click', function() {
+                var code=$("#code").val();
+                var card=$("#card").val();
+                var endtime=$("#datetimepicker").val();
+              if (window.confirm('您确定要生成 '+ code + '条数据吗？')) {
+                $.ajax({
+                       type: 'post',
+                        url:'/redeem/add/'+ code +'/'+card +'/'+endtime ,
+                        dataType:'Json',
+                        success:function(data){
+                             if (data.status){
+                                 alert(data.msg);
+                                 $('#table').bootstrapTable('reloadGrid');
+                             }
+                             else
+                                 return alert(data.msg);
+                        }
+                   })
+                }
+        })
+	</script>
+
+</th:block>
+
+
+</body>
+
+
+</html>

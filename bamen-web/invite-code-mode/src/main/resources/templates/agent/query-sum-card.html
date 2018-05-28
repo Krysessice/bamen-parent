@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="layout/head :: common_head(_, ~{::link})">
+    <link rel="stylesheet" type="text/css" media="all"
+          href="../static/bootstrap/css/bootstrap-datetimepicker.min.css" th:href="@{/bootstrap/css/bootstrap-datetimepicker.min.css}" />
+</head>
+<body th:replace="layout/body :: common_body(~{::div#container}, ~{::#selfJs})">
+
+<div id="container" class="container">
+
+    <th:block th:replace="~{layout/common :: page-header('代理商团队结算统计')}"/>
+
+    <font id="sums">总充值：</font>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+    <font id="MySelfSum">自己团队总充值：</font>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+    <font id="LastSum">自己团队总金额：</font>
+    <hr/>
+
+    <div id="monitorTime">
+        <th:block th:replace="~{layout/common :: start-end-date-input}"  />
+    </div>
+
+
+    <th:block th:replace="~{layout/common :: table-paginator('table')}"/>
+
+    <th:block th:replace="~{layout/common :: table-paginator('table')}" />
+
+    <th:block th:replace="model/payTimeModel :: payTimeModel" />
+
+</div>
+
+<th:block id="selfJs">
+
+    <th:block th:replace="~{layout/common :: pageJs}"/>
+    <th:block th:replace="~{layout/common :: dateTimeJs}" />
+
+    <script type="text/javascript" th:inline="javascript">
+		var commonJs = new CommonJs();
+
+	      commonJs.datetimeInit(function() {
+			var F_endDate = new Date(new Date().valueOf() - 24 * 60 * 60 * 1000).format('yyyy-MM-dd');
+			$('#startDate').datetimepicker('setEndDate', F_endDate);
+			$('#endDate').datetimepicker('setEndDate', F_endDate);
+	        $('#endDate').val(F_endDate);
+
+	        $("#table").tableInit('querySumCard');
+	    });
+
+	         $(function(){
+	            //document加载完触发
+	            queryMoneyAjax();
+	            //日期Vlaue更改触发
+                $("#monitorTime").on('change',function(){
+                    queryMoneyAjax();
+                });
+
+            })
+
+        function queryMoneyAjax(){
+            $.ajax({
+                    type: 'get',
+                    url:'/agent/queryTimeSumMoney/',
+                    dataType:'Json',
+                    async : false,
+                    data:{
+                        startDate: $('#startDate').val(),
+                        endDate: $('#endDate').val()
+                    },
+                    success:function(result){
+                          console.log(JSON.stringify(result));
+                          var sum=result.sumBig;
+                          var MySelfSum=result.sums;
+                          var LastSum=result.lastSum;
+                          if(sum<0){
+                            $("#sums").html('总金额：<font>' + 0 + '</font>');
+                          }else if(sum==null){
+                             $("#sums").html('总金额：<font>' + 0 + '</font>');
+                          }
+                          else{
+                              $("#sums").html('总金额：<font>' + sum + '</font>');
+                              $("#MySelfSum").html('自己团队总充值：<font>' + MySelfSum + '</font>');
+                              $("#LastSum").html('自己团队总金额：<font>' + LastSum + '</font>');
+                          }
+
+                    }
+            });
+        }
+
+
+
+		</script>
+
+</th:block>
+
+
+</body>
+
+
+</html>

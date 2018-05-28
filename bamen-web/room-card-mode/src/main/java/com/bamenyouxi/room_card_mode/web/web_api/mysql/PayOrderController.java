@@ -54,7 +54,6 @@ public class PayOrderController extends AbstractCrudController<PayOrder,Long>{
         return payOrderService;
     }
 
-
     /**
      * 出售房卡
      */
@@ -63,35 +62,57 @@ public class PayOrderController extends AbstractCrudController<PayOrder,Long>{
         List<SysAgent> list=sysAgentMapper.getAll(payOrder.getAccount());
         if(list!=null&&!list.isEmpty()) {
             payOrder.setOrderNo(new CreateOrderNumber().createOrder());
-            payOrder.setSysAgentId(list.get(0).getId());
+            payOrder.setSysAgentId(list.get(0).getAccount());
             int i=payOrderMapper.save(payOrder);
 
-                    List<SysAgent> list2=sysAgentMapper.getOne(payOrder.getSysAgentId().toString());//上级
+                    List<SysAgent> list2=sysAgentMapper.getOne(payOrder.getAccount().toString());//上级
                     if(list2.get(0).getSuperAgentId()==null){
-                        return WebResult.of( 0, TipMsgConstant.OPERATION_SUCCESS,null);
+                        return WebResult.of(list2.get(0));
                     }else{
                         List<SysAgent> list3=sysAgentMapper.getTwo(list2.get(0).getSuperAgentId().toString());//上上级
+                        if(list3.get(0).getSuperAgentId()==null){
+                            List<SystemInfo> list4=systemInfoMapper.get(new HashMap<String, Object>(){{
+                                put(FieldConstant.DBFieldConstant.F_ID.name(),get(0));
+                            }});
 
-                        List<SystemInfo> list4=systemInfoMapper.get(new HashMap<String, Object>(){{
-                            put(FieldConstant.DBFieldConstant.F_ID.name(),get(0));
-                        }});
-
-                        Integer one=0;
-                        if(list2.get(0).getSuperAgentId()!=null||list3.get(0).getSuperAgentId()!=null){
-                            one= (int) ( payOrder.getCardNum()* list4.get(0).getRatelv1().doubleValue());
-                        }
-                        Integer two=0;
-                        if(list3.get(0).getSuperAgentId()!=null){
-                            two=(int)(payOrder.getCardNum()* list4.get(0).getRatelv2().doubleValue());
-                        }
-                        if(list2!=null&&!list2.isEmpty()) {
-                            if(list3!=null&&!list3.isEmpty()){
-                                int x=cardBonusRecordMapper.saves(new CardBonusRecord.Builder().sysAgentId(list2.get(0).getId()).
-                                        payOrderId(payOrder.getId()).firSuperAgentId(list2.get(0).getSuperAgentId()).firBonus(one)
-                                        .secSuperAgentId(list3.get(0).getSuperAgentId()).secBonus(two).build());
+                            Integer one=0;
+                            if(list2.get(0).getSuperAgentId()!=null||list3.get(0).getSuperAgentId()!=null){
+                                one= (int) ( payOrder.getCardNum()* list4.get(0).getRatelv1().doubleValue());
                             }
+                            Integer two=0;
+                            if(list3.get(0).getSuperAgentId()!=null){
+                                two=(int)(payOrder.getCardNum()* list4.get(0).getRatelv2().doubleValue());
+                            }
+                            if(list2!=null&&!list2.isEmpty()) {
+                                if(list3!=null&&!list3.isEmpty()){
+                                    int x=cardBonusRecordMapper.save2(new CardBonusRecord.Builder().sysAgentId(list2.get(0).getAccount()).
+                                            payOrderId(payOrder.getId()).firSuperAgentId(list2.get(0).getSuperAgentId().toString()).firBonus(one)
+                                            .build());
+                                }
+                            }
+                            return WebResult.of(list.get(0));
+                        }else{
+                            List<SystemInfo> list4=systemInfoMapper.get(new HashMap<String, Object>(){{
+                                put(FieldConstant.DBFieldConstant.F_ID.name(),get(0));
+                            }});
+
+                            Integer one=0;
+                            if(list2.get(0).getSuperAgentId()!=null||list3.get(0).getSuperAgentId()!=null){
+                                one= (int) ( payOrder.getCardNum()* list4.get(0).getRatelv1().doubleValue());
+                            }
+                            Integer two=0;
+                            if(list3.get(0).getSuperAgentId()!=null){
+                                two=(int)(payOrder.getCardNum()* list4.get(0).getRatelv2().doubleValue());
+                            }
+                            if(list2!=null&&!list2.isEmpty()) {
+                                if(list3!=null&&!list3.isEmpty()){
+                                    int x=cardBonusRecordMapper.saves(new CardBonusRecord.Builder().sysAgentId(list2.get(0).getAccount()).
+                                            payOrderId(payOrder.getId()).firSuperAgentId(list2.get(0).getSuperAgentId().toString()).firBonus(one)
+                                            .secSuperAgentId(list3.get(0).getSuperAgentId().toString()).secBonus(two).build());
+                                }
+                            }
+                            return WebResult.of(list.get(0));
                         }
-                        return WebResult.of(list.get(0));
 
                     }
             }

@@ -22,5 +22,7 @@ public interface CrudMapper<T, ID extends Serializable> extends BaseMapper<T, ID
 
     int update(T t);
 
+    int updated(T t);
+
     int delete(T t);
 }

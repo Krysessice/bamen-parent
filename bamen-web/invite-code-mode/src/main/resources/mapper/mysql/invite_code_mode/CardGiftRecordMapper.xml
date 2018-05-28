@@ -14,6 +14,8 @@
 		<result property="presenter" column="F_PRESENTER" />
 		<result property="presentee" column="F_PRESENTEE" />
 		<result property="cardNum" column="F_CARD_NUM" />
+		<result property="cardPrice" column="F_CARD_PRICE" />
+		<result property="selected" column="F_SELECTED" />
 		<result property="giftReason" column="F_GIFT_REASON" />
 	</resultMap>
 
@@ -28,17 +30,98 @@
 		</where>
 	</select>
 
+	<select id="queryPrice" resultMap="resultMap">
+		select sum(F_CARD_PRICE)as F_CARD_PRICE  from t_card_gift_record
+		<where>
+			<if test="startDate != null">
+				and convert(F_CREATE_TIME, DATE) &gt;= convert(#{startDate},DATE)
+			</if>
+			<if test="endDate != null">
+				and convert(F_CREATE_TIME, DATE) &lt;= convert(#{endDate}, DATE)
+			</if>
+			<if test="selected != null and selected!='' ">
+				and F_SELECTED = #{selected}
+			</if>
+		</where>
+	</select>
+
+
+	<select id="selectedName" resultMap="resultMap">
+		select * from t_card_gift_record
+		<where>
+			<if test="startDate != null">
+				and convert(F_CREATE_TIME, DATE) &gt;= convert(#{startDate},DATE)
+			</if>
+			<if test="endDate != null">
+				and convert(F_CREATE_TIME, DATE) &lt;= convert(#{endDate}, DATE)
+			</if>
+			<if test="selected != null  and selected!='' ">
+				and F_SELECTED = #{selected}
+			</if>
+		</where>
+	</select>
+
+	<select id="queryPriceSum" resultMap="resultMap">
+		select sum(F_CARD_PRICE)as F_CARD_PRICE  from t_card_gift_record
+	</select>
+
+
+	<select id="queryAgent" resultMap="resultMap">
+		select * from t_card_gift_record
+		<where>
+			F_SELECTED = #{selected}
+			<if test="startDate != null">
+				and convert(F_CREATE_TIME, DATE) &gt;= convert(#{startDate},DATE)
+			</if>
+			<if test="endDate != null">
+				and convert(F_CREATE_TIME, DATE) &lt;= convert(#{endDate}, DATE)
+			</if>
+		</where>
+	</select>
+
+
 	<insert id="save" parameterType="com.bamenyouxi.invite_code_mode.model.mysql.invite_code_mode.CardGiftRecord">
 		insert into t_card_gift_record (
 			F_PRESENTER, F_PRESENTEE, F_CARD_NUM
+			<if test="cardPrice != null">
+				, F_CARD_PRICE
+			</if>
+			<if test="selected != null">
+				, F_SELECTED
+			</if>
 			<if test="giftReason != null">
 				, F_GIFT_REASON
 			</if>
 		) values (
-			#{presenter}, #{presentee}, #{cardNum}
+			#{presenter}, #{presentee},#{cardNum}
+			<if test="cardPrice != null">
+				,  #{cardPrice}
+			</if>
+			<if test="selected != null">
+				, #{selected}
+			</if>
 			<if test="giftReason != null">
 				, #{giftReason}
 			</if>
 		)
 	</insert>
+
+
+	<select id="queryAgentOne" resultMap="resultMap">
+		select sum(F_CARD_PRICE)as F_CARD_PRICE from t_card_gift_record where F_SELECTED=#{selected}
+	</select>
+
+	<select id="queryAgentOneTime" resultMap="resultMap">
+		select sum(F_CARD_PRICE)as F_CARD_PRICE from t_card_gift_record
+		<where>
+			F_SELECTED = #{selected}
+			<if test="startDate != null">
+				and convert(F_CREATE_TIME, DATE) &gt;= convert(#{startDate},DATE)
+			</if>
+			<if test="endDate != null">
+				and convert(F_CREATE_TIME, DATE) &lt;= convert(#{endDate}, DATE)
+			</if>
+		</where>
+	</select>
+
 </mapper>

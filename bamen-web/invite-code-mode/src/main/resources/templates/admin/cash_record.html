@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="layout/head :: common_head(_, ~{::link})">
+    <link rel="stylesheet" type="text/css" media="all"
+          href="../static/bootstrap/css/bootstrap-datetimepicker.min.css" th:href="@{/bootstrap/css/bootstrap-datetimepicker.min.css}" />
+</head>
+<body th:replace="layout/body :: common_body(~{::div#container}, ~{::#selfJs})">
+
+<div id="container" class="container">
+
+    <th:block th:replace="~{layout/common :: page-header('兑现记录')}"/>
+
+    <th:block th:replace="~{layout/common :: start-end-date-input}" />
+
+    <th:block th:replace="~{layout/common :: table-paginator('table')}" />
+
+    <label for="gameId">玩家游戏id</label>
+        <div class="row">
+            <div class="col-xs-1"></div>
+            <div class="col-xs-4">
+                <input type="number" class="form-control col-xs-4" id="gameId" name="gameId" min="10001" max="99999" />
+            </div>
+            <div class="col-xs-4">
+                <button type="button" class="btn btn-primary" id="selectEnd" >查　询</button>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<th:block id="selfJs">
+
+    <th:block th:replace="~{layout/common :: pageJs}"/>
+    <th:block th:replace="~{layout/common :: dateTimeJs}" />
+
+    <script type="text/javascript" th:inline="javascript">
+		var commonJs = new CommonJs();
+
+            commonJs.datetimeInit(function() {
+	            $("#table").tableInit('cashRecord');
+	        });
+
+	       $('button#selectEnd').on('click',function(){
+            var gameId=$('input#gameId').val();
+
+            if(gameId==""){
+				   commonJs.datetimeInit(function() {
+	                    $("#table").tableInit('cashRecord');
+	                 });
+              }
+
+            $("#table").html("");
+
+
+			$("#table").tableInit('cashRecord',gameId);
+
+          });
+
+
+		</script>
+
+</th:block>
+
+
+</body>
+
+
+</html>

@@ -3,7 +3,6 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.bamenyouxi.invite_code_mode.mapper.mysql.invite_code_mode.PayOrderMapper">
-    <cache />
     <resultMap id="resultMap" type="com.bamenyouxi.invite_code_mode.model.mysql.invite_code_mode.PayOrder">
         <id property="id" column="F_ID" />
         <result property="sysFlag" column="F_SYS_FLAG" />
@@ -22,13 +21,52 @@
         <result property="nickName" column="F_NICK_NAME" />
     </resultMap>
 
+
+    <select id="queryMyself" resultMap="resultMap">
+        SELECT
+        IFNULL(sum(F_PAY_PRICE), 0) as F_PAY_PRICE
+        FROM
+        t_sys_agent a
+        INNER JOIN t_pay_order b USING (F_GAME_ID)
+        <where>
+            (
+            <choose>
+                <when test="gameId != null">
+                    (
+                    F_GAME_ID = #{gameId}
+                    AND F_IS_AUTHORIZED IS TRUE
+                    )
+                    OR (
+                    F_SUPER_AGENT_GAME_ID = #{gameId}
+                    AND F_IS_AUTHORIZED IS FALSE
+                    )
+                </when>
+                <otherwise>
+                    F_IS_AUTHORIZED IS TRUE
+                    OR (
+                    F_SUPER_AGENT_GAME_ID IS NOT NULL
+                    AND F_IS_AUTHORIZED IS FALSE
+                    )
+                </otherwise>
+            </choose>
+            )
+            <if test="startDate != null">
+                and convert(b.F_CREATE_TIME, DATE) &gt;= convert(#{startDate}, DATE)
+            </if>
+            <if test="endDate != null">
+                and convert(b.F_CREATE_TIME, DATE) &lt;= convert(#{endDate}, DATE)
+            </if>
+        </where>
+    </select>
+
+
     <select id="get" resultMap="resultMap">
         select
-            a.*, b.F_NICK_NAME
+        a.*, b.F_NICK_NAME
         from
-            t_pay_order a
+        t_pay_order a
         left join
-            t_sys_agent b
+        t_sys_agent b
         USING (F_GAME_ID)
         <where>
             <foreach collection="params" index="key" item="value">
@@ -46,47 +84,47 @@
                         <when test="key == 'superAgentGameId'">
                             <if test="params.teamNo == 't1'">
                                 and F_GAME_ID in (
-                                    select F_GAME_ID from t_sys_agent where F_SUPER_AGENT_GAME_ID = #{value}
-                                    and F_IS_AUTHORIZED is false
+                                select F_GAME_ID from t_sys_agent where F_SUPER_AGENT_GAME_ID = #{value}
+                                and F_IS_AUTHORIZED is false
 
-                                    union
+                                union
 
-                                    select #{value}
+                                select #{value}
                                 )
                             </if>
                             <if test="params.teamNo == 't2'">
                                 and F_GAME_ID in (
-                                    select F_GAME_ID from t_sys_agent where F_SUPER_AGENT_GAME_ID = #{value}
-                                    and F_IS_AUTHORIZED is true
+                                select F_GAME_ID from t_sys_agent where F_SUPER_AGENT_GAME_ID = #{value}
+                                and F_IS_AUTHORIZED is true
 
-                                    union
+                                union
 
-                                    select F_GAME_ID from t_sys_agent where F_SUPER_AGENT_GAME_ID in (
-                                        select F_GAME_ID from t_sys_agent
-                                        where F_SUPER_AGENT_GAME_ID = #{value}
-                                        AND F_IS_AUTHORIZED IS TRUE
-                                    ) and F_IS_AUTHORIZED is false
+                                select F_GAME_ID from t_sys_agent where F_SUPER_AGENT_GAME_ID in (
+                                select F_GAME_ID from t_sys_agent
+                                where F_SUPER_AGENT_GAME_ID = #{value}
+                                AND F_IS_AUTHORIZED IS TRUE
+                                ) and F_IS_AUTHORIZED is false
                                 )
                             </if>
                             <if test="params.teamNo == 't3'">
                                 and F_GAME_ID in (
-                                    select F_GAME_ID from t_sys_agent where F_SUPER_AGENT_GAME_ID in (
-                                        select F_GAME_ID from t_sys_agent where F_SUPER_AGENT_GAME_ID = #{value}
-                                        and F_IS_AUTHORIZED is true
-                                    )
-                                    and F_IS_AUTHORIZED is true
+                                select F_GAME_ID from t_sys_agent where F_SUPER_AGENT_GAME_ID in (
+                                select F_GAME_ID from t_sys_agent where F_SUPER_AGENT_GAME_ID = #{value}
+                                and F_IS_AUTHORIZED is true
+                                )
+                                and F_IS_AUTHORIZED is true
 
-                                    union
+                                union
 
-                                    select F_GAME_ID from t_sys_agent where F_SUPER_AGENT_GAME_ID in (
-                                        select F_GAME_ID from t_sys_agent
-                                        where F_SUPER_AGENT_GAME_ID in (
-                                            select F_GAME_ID from t_sys_agent
-                                            where F_SUPER_AGENT_GAME_ID = #{value}
-                                            and F_IS_AUTHORIZED is true
-                                        )
-                                        AND F_IS_AUTHORIZED IS TRUE
-                                    ) AND F_IS_AUTHORIZED IS false
+                                select F_GAME_ID from t_sys_agent where F_SUPER_AGENT_GAME_ID in (
+                                select F_GAME_ID from t_sys_agent
+                                where F_SUPER_AGENT_GAME_ID in (
+                                select F_GAME_ID from t_sys_agent
+                                where F_SUPER_AGENT_GAME_ID = #{value}
+                                and F_IS_AUTHORIZED is true
+                                )
+                                AND F_IS_AUTHORIZED IS TRUE
+                                ) AND F_IS_AUTHORIZED IS false
                                 )
                             </if>
                         </when>

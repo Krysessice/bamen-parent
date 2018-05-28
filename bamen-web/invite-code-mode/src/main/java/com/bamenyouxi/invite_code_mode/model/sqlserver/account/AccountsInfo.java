@@ -1,7 +1,10 @@
 package com.bamenyouxi.invite_code_mode.model.sqlserver.account;
 
+import com.bamenyouxi.core.constant.SysConstant;
 import com.bamenyouxi.core.impl.model.sqlserver.BaseEntity;
+import com.fasterxml.jackson.annotation.JsonFormat;
 
+import java.sql.Time;
 import java.sql.Timestamp;
 
 /**
@@ -14,19 +17,26 @@ public final class AccountsInfo extends BaseEntity {
 	private Integer gameId;
 	private String accounts;
 	private String nickName;
+	private Integer customID;
 	private Integer agentLevel;     //代理级别，这里表示为是否为代理的标识
 	private Integer playingGame;    //上级代理gameId
+	@JsonFormat(locale = SysConstant.JsonFormat.DEFAULT_LOCAL, timezone = SysConstant.JsonFormat.DEFAULT_TIMEZONE, pattern = SysConstant.JsonFormat.DEFAULT_PATTERN)
 	private Timestamp registerDate;
 	private Timestamp superAgentTime;
-	private Timestamp lastlogonDate;
+	//@JsonFormat(locale = SysConstant.JsonFormat.DEFAULT_LOCAL, timezone = SysConstant.JsonFormat.DEFAULT_TIMEZONE, pattern = SysConstant.JsonFormat.DEFAULT_PATTERN)
+	private String lastlogonDate;
 
-	public Timestamp getLastlogonDate() {
+	public String getLastlogonDate() {
 		return lastlogonDate;
 	}
 
 	private Long insureScore;
 
 	private Integer _playingGame;
+
+	public Integer getCustomID() {
+		return customID;
+	}
 
 	private AccountsInfo() {}
 

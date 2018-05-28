@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bamenyouxi.invite_code_mode.mapper.sqlserver.record.RedeemCodeMapper">
+	<resultMap id="resultMap" type="com.bamenyouxi.invite_code_mode.model.sqlserver.record.RedeemCode">
+		<result property="code" column="Code" />
+		<result property="card" column="Card" />
+		<result property="createtime" column="CreateTime" />
+		<result property="usetime" column="UseTime" />
+		<result property="endtime" column="EndTime" />
+	</resultMap>
+
+	<select id="queryExistence" resultMap="resultMap">
+		select Code,Card from Redeem_Code
+		<where>
+			Code=#{code}
+		</where>
+	</select>
+
+	<insert id="saves" parameterType="com.bamenyouxi.invite_code_mode.model.sqlserver.record.RedeemCode">
+			INSERT INTO Redeem_Code(Code,Card,CreateTime,EndTime)
+				VALUES(
+				#{code}, #{card},getdate(),#{endtime}
+			)
+	</insert>
+
+	<select id="queryAllList" resultMap="resultMap">
+		SELECT
+		*
+		FROM
+		QPRecordDBLink.QPRecordDB.dbo.Redeem_Code
+		WHERE
+		id NOT IN (
+		select top (0 * (10))id
+		FROM
+		QPRecordDBLink.QPRecordDB.dbo.Redeem_Code
+		)
+		<if test="endDate != null">
+			and convert(varchar(10), EndTime, 120) &gt;= convert(varchar(10), #{endDate}, 120)
+		</if>
+		AND UseTime IS NULL
+		<if test="card != null  and card!='' ">
+			AND Code=#{card}
+		</if>
+		ORDER BY CreateTime DESC
+	</select>
+
+	<select id="queryPastNoAllList" resultMap="resultMap">
+		SELECT
+		*
+		FROM
+		QPRecordDBLink.QPRecordDB.dbo.Redeem_Code
+		WHERE
+		id NOT IN (
+		select top (0 * (10))id
+		FROM
+		QPRecordDBLink.QPRecordDB.dbo.Redeem_Code
+		)
+		<if test="endDate != null">
+			and convert(varchar(10), EndTime, 120) &lt;=convert(varchar(10), #{endDate}, 120)
+		</if>
+		AND UseTime IS NOT NULL
+		ORDER BY CreateTime DESC
+	</select>
+
+</mapper>

@@ -6,10 +6,12 @@
 	<resultMap id="resultMap" type="com.bamenyouxi.invite_code_mode.model.sqlserver.treasure.GameScoreInfo">
 		<id property="userId" column="UserID" />
 		<result property="insureScore" column="InsureScore" />
+		<result property="score" column="Score" />
+		<result property="gameId" column="GameID" />
 	</resultMap>
 
 	<select id="get" resultMap="resultMap">
-		select UserID, InsureScore from GameScoreInfo
+		select UserID,Score,InsureScore from GameScoreInfo
 		<where>
 			<foreach collection="params" index="key" item="value">
 				<if test="value != null">
@@ -27,7 +29,24 @@
 	</select>
 
 	<update id="updateCardNum" parameterType="com.bamenyouxi.invite_code_mode.model.sqlserver.treasure.GameScoreInfo">
-		update GameScoreInfo set InsureScore = InsureScore + #{insureScore}
+	update GameScoreInfo set InsureScore = InsureScore + #{insureScore}
+	<where>
+		<choose>
+			<when test="gameId != null">
+				and UserID = (SELECT UserID FROM QPAccountsDB.dbo.AccountsInfo WHERE GameID = #{gameId})
+			</when>
+			<when test="userId != null">
+				and UserID = #{userId}
+			</when>
+			<otherwise>
+				and UserID = 0
+			</otherwise>
+		</choose>
+	</where>
+	</update>
+
+	<update id="updateGoldNum" parameterType="com.bamenyouxi.invite_code_mode.model.sqlserver.treasure.GameScoreInfo">
+		update GameScoreInfo set Score = Score + #{score}
 		<where>
 			<choose>
 				<when test="gameId != null">
@@ -42,4 +61,56 @@
 			</choose>
 		</where>
 	</update>
+
+
+
+	<select id="queryUserGoldScore" resultMap="resultMap">
+		SELECT
+		b.UserID,
+		a.GameId,
+		b.Score
+		FROM
+		QPAccountsDB.dbo.AccountsInfo AS a
+		INNER JOIN QPTreasureDB.dbo.GameScoreInfo AS b ON a.UseriD = b.UserID
+		<where>
+			<if test="gameId != null  and gameId!='' ">
+				and a.GameId=#{gameId}
+			</if>
+		</where>
+	</select>
+
+	<select id="queryUserGold" resultMap="resultMap">
+		SELECT
+		b.UserID,
+		a.GameId,
+		b.Score
+		FROM
+		QPAccountsDB.dbo.AccountsInfo AS a
+		INNER JOIN QPTreasureDB.dbo.GameScoreInfo AS b ON a.UseriD = b.UserID
+		<where>
+				and a.GameId=#{gameId}
+		</where>
+
+	</select>
+
+
+
+	<update id="updateUserGoldSocre" parameterType="com.bamenyouxi.invite_code_mode.model.sqlserver.treasure.GameScoreInfo">
+		update QPTreasureDB.dbo.GameScoreInfo
+		set
+			Score=Score-#{score}
+		<where>
+			UserID=#{userId}
+		</where>
+	</update>
+
+	<update id="addUserGoldSocre" parameterType="com.bamenyouxi.invite_code_mode.model.sqlserver.treasure.GameScoreInfo">
+		update QPTreasureDB.dbo.GameScoreInfo
+		set
+		Score=Score+#{score}
+		<where>
+			UserID=#{userId}
+		</where>
+	</update>
+
 </mapper>

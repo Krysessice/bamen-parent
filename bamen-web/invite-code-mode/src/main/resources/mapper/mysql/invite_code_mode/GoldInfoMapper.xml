@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bamenyouxi.invite_code_mode.mapper.mysql.invite_code_mode.GoldInfoMapper">
+    <resultMap id="resultMap" type="com.bamenyouxi.invite_code_mode.model.mysql.invite_code_mode.GoldInfo">
+        <id property="id" column="F_ID" />
+        <result property="sysFlag" column="F_SYS_FLAG" />
+        <result property="createTime" column="F_CREATE_TIME" />
+        <result property="modifier" column="F_MODIFIER" />
+        <result property="modifyTime" column="F_MODIFY_TIME" />
+
+        <result property="t1_commission" column="F_T1_COMMISSION" />
+        <result property="t2_commission" column="F_T2_COMMISSION" />
+        <result property="t3_commission" column="F_T3_COMMISSION" />
+
+    </resultMap>
+
+    <select id="get" resultMap="resultMap">
+        select * from t_gold_info
+        <where>
+            <foreach collection="params" index="key" item="value">
+                <if test="value != null">
+                    and ${key} = #{value}
+                </if>
+            </foreach>
+        </where>
+    </select>
+
+    <select id="queryInfo" resultMap="resultMap">
+        select * from t_gold_info where F_SYS_FLAG=1;
+    </select>
+
+    <insert id="save" parameterType="com.bamenyouxi.invite_code_mode.model.mysql.invite_code_mode.GoldInfo" useGeneratedKeys="true" keyProperty="id">
+        insert ignore into t_gold_info
+        (
+            F_T1_COMMISSION, F_T2_COMMISSION, F_T3_COMMISSION
+        ) values(
+            #{t1_commission}, #{t2_commission}, #{t3_commission}
+        )
+    </insert>
+
+    <update id="update" parameterType="com.bamenyouxi.invite_code_mode.model.mysql.invite_code_mode.GoldInfo">
+        update t_gold_info
+        <set>
+            <if test="sysFlag != null">
+                F_SYS_FLAG = #{sysFlag},
+            </if>
+        </set>
+        <where>
+            <choose>
+                <when test="id != null">
+                    and F_ID = #{id}
+                </when>
+                <when test="_sysFlag != null">
+                    and F_SYS_FLAG = #{_sysFlag}
+                </when>
+                <otherwise>
+                    and F_ID = 0
+                </otherwise>
+            </choose>
+        </where>
+    </update>
+
+    <update id="updateInfo" parameterType="com.bamenyouxi.invite_code_mode.model.mysql.invite_code_mode.GoldInfo">
+        update t_gold_info
+        <set>
+            <if test="t1_commission != null">
+                F_T1_COMMISSION=#{t1_commission},
+            </if>
+            <if test="t2_commission != null">
+                F_T2_COMMISSION=#{t2_commission},
+            </if>
+            <if test="t1_commission != null">
+                F_T3_COMMISSION=#{t3_commission},
+            </if>
+
+                F_SYS_FLAG=1
+
+        </set>
+    </update>
+
+</mapper>

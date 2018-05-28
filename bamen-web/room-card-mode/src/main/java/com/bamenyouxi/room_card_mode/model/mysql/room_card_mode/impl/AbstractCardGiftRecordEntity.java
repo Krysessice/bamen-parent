@@ -12,6 +12,10 @@ public abstract class AbstractCardGiftRecordEntity extends BaseEntity {
 	private Integer cardNum;
 	private String giftReason;
 
+	public void setCardNum(Integer cardNum) {
+		this.cardNum = cardNum;
+	}
+
 	public void setPresenter(Long presenter) {
 		this.presenter = presenter;
 	}

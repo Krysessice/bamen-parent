@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="layout/head :: common_head(_, ~{::link})">
+	<link rel="stylesheet" type="text/css" media="all"
+	      href="../static/bootstrap/css/bootstrap-datetimepicker.min.css" th:href="@{/bootstrap/css/bootstrap-datetimepicker.min.css}" />
+</head>
+<body th:replace="layout/body :: common_body(~{::div#container}, ~{::#selfJs})">
+
+<div id="container" class="container">
+
+	<div class="page-header"></div>
+
+	<div class="page-header">
+		<h4>金币消耗结算</h4>
+	</div>
+
+	<th:block th:replace="~{layout/common :: start-end-date-input}" />
+
+	<div class="row">
+		<div class="col-xs-4">
+			<button class="btn btn-info" type="button" disabled>充值总额 <span id="totalPayPrice" class="badge"></span></button>
+		</div>
+		<div class="col-xs-4">
+			<button class="btn btn-info" type="button" disabled>结算总额 <span id="totalClearPrice" class="badge"></span></button>
+		</div>
+		<div class="col-xs-1"></div>
+		<div class="col-xs-2">
+			<button type="button" id="clear" class="btn btn-primary">结算</button>
+		</div>
+	</div>
+
+	<div class="page-header">
+		<h4>结算记录</h4>
+	</div>
+
+	<th:block th:replace="~{layout/common :: table-paginator('table')}" />
+
+</div>
+
+<th:block id="selfJs">
+
+	<th:block th:replace="~{layout/common :: pageJs}" />
+	<th:block th:replace="~{layout/common :: dateTimeJs}" />
+
+	<script type="text/javascript" th:inline="javascript">
+	    var commonJs = new CommonJs();
+		var latestClearDate = [[${systemInfo.latestClearDate}]];
+		var intercept = true;
+
+	    commonJs.datetimeInit(function() {
+	        var F_endDate = new Date(new Date().valueOf() - 24 * 60 * 60 * 1000).format('yyyy-MM-dd');
+			$('#startDate').datetimepicker('setEndDate', F_endDate);
+			$('#endDate').datetimepicker('setEndDate', F_endDate);
+	        $('#endDate').val(F_endDate);
+
+	        $('.form_date').datetimepicker().on('changeDate', function(ev) {
+	            getClear();
+	        });
+	        getClear();
+	    });
+
+	    $("#table").tableInit('GoldClearRecord');
+
+	    $('button#clear').click(function() {
+	        clear();
+	    })
+
+	    function getClear() {
+	        $.ajax({
+				type: 'get',
+				url: '/admin/clear/gold/record/',
+				dataType: 'json',
+				data: {
+					startDate : $('#startDate').val(),
+					endDate : $('#endDate').val()
+				},
+				success: function(data) {
+
+					if (!data.status)
+	                    return alert(data.msg);
+	                var result = data.content;
+	                $('span#totalPayPrice').text(result.systemCost);
+	                $('span#totalClearPrice').text(result.clearPrice);
+				}
+			});
+	    }
+
+	    function clear() {
+	        if (window.confirm('确认进行结算吗？')) {
+		        $.ajax({
+					type: 'post',
+					url: '/admin/clear/gold/record/',
+					dataType: 'json',
+					data: {
+						startDate : $('#startDate').val(),
+						endDate : $('#endDate').val()
+					},
+					success: function(data) {
+						if (data.status) {
+							alert("操作成功");
+							window.location.reload();
+						} else {
+							alert(data.msg);
+						}
+					}
+				});
+	        }
+	    }
+
+	    function downClearExcels(obj) {
+	        var startDate, endDate;
+
+			if (obj === 'undefined') {
+				startDate = $('#startDate').val();
+				endDate = $('#endDate').val();
+			} else {
+				var $tr = $(obj).parents('tr');
+				startDate = $tr.find('td[name="startDate"]').text();
+				endDate = $tr.find('td[name="endDate"]').text();
+			}
+
+			if(typeof(downClearExcels.iframe) == "undefined") {
+				var iframe = document.createElement("iframe");
+				downClearExcels.iframe = iframe;
+				document.body.appendChild(downClearExcels.iframe);
+			}
+			downClearExcels.iframe.src = '/admin/download/excel/gold/clear/' + startDate + '至' + endDate + '代理金币消耗结算报表';
+			downClearExcels.iframe.style.display = "none";
+	    }
+	</script>
+
+</th:block>
+
+</body>
+</html>

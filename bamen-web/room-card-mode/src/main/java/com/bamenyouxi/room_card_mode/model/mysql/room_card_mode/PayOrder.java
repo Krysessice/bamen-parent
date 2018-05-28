@@ -16,7 +16,7 @@ public final class PayOrder extends BaseEntity {
 	private String account;
 	private String nickName;
 	private String orderNo;
-	private Long sysAgentId;
+	private String sysAgentId;
 	private BigDecimal payPrice;
 	private Integer cardNum;
 	private Integer cardGift;
@@ -31,7 +31,11 @@ public final class PayOrder extends BaseEntity {
 		return nickName;
 	}
 
-	public void setSysAgentId(Long sysAgentId) {
+	public String getSysAgentId() {
+		return sysAgentId;
+	}
+
+	public void setSysAgentId(String sysAgentId) {
 		this.sysAgentId = sysAgentId;
 	}
 
@@ -43,9 +47,7 @@ public final class PayOrder extends BaseEntity {
 		return orderNo;
 	}
 
-	public Long getSysAgentId() {
-		return sysAgentId;
-	}
+
 
 	public BigDecimal getPayPrice() {
 		return payPrice;
@@ -70,7 +72,7 @@ public final class PayOrder extends BaseEntity {
 	public static class Builder {
 
 		private String orderNo;
-		private Long sysAgentId;
+		private String sysAgentId;
 		private BigDecimal payPrice;
 		private Integer cardNum;
 		private Integer cardGift;
@@ -80,7 +82,7 @@ public final class PayOrder extends BaseEntity {
 			return this;
 		}
 
-		public PayOrder.Builder sysAgentId(Long val) {
+		public PayOrder.Builder sysAgentId(String val) {
 			sysAgentId = val;
 			return this;
 		}

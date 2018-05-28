@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+		PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+		"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bamenyouxi.invite_code_mode.mapper.mysql.invite_code_mode.CleanGoldRecordMapper">
+	<resultMap id="resultMap" type="com.bamenyouxi.invite_code_mode.model.mysql.invite_code_mode.CleanGoldRecord">
+		<id property="id" column="F_ID" />
+		<result property="agentGameid" column="F_AGENT_GAMEID" />
+		<result property="playGameid" column="F_PLAY_GAMEID" />
+		<result property="createTime" column="F_CREATE_TIME" />
+
+		<result property="score" column="F_SOCRE" />
+	</resultMap>
+
+
+	<select id="getCleanGoldAll" resultMap="resultMap">
+		select * from t_clean_gold_record
+		<where>
+			<if test="agentGameid !=null">
+				F_AGENT_GAMEID=#{agentGameid}
+			</if>
+			<if test="startDate != null">
+				and convert(F_CREATE_TIME, DATE) &gt;= convert(#{startDate},DATE)
+			</if>
+			<if test="endDate != null">
+				and convert(F_CREATE_TIME, DATE) &lt;= convert(#{endDate}, DATE)
+			</if>
+		</where>
+	</select>
+
+
+	<insert id="saveScore">
+		INSERT ignore INTO t_clean_gold_record
+			(
+				F_AGENT_GAMEID, F_PLAY_GAMEID, F_SOCRE
+			)
+		VALUES
+			(
+				#{agentGameid}, #{playGameid}, #{score}
+			)
+
+	</insert>
+
+
+
+</mapper>

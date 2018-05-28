@@ -20,13 +20,33 @@ public final class GroupRoom extends BaseEntity {
 	private String groupName;
 	private Integer roomStatus;
 	private Integer playerNum;
+	private Integer qunStatus;
+	private Integer parnterid;
+	private Integer roomid;
 	@JsonFormat(locale = SysConstant.JsonFormat.DEFAULT_LOCAL, timezone = SysConstant.JsonFormat.DEFAULT_TIMEZONE, pattern = SysConstant.JsonFormat.DEFAULT_PATTERN)
 	private Timestamp createTime;
+	private Timestamp collecttime;
 	private Timestamp modifyTime;
 
 	private int playerNumInt = 0; //群房间成员人数，1自增，-1自减，0无操作，默认0
 
+	public Integer getParnterid() {
+		return parnterid;
+	}
+
+	public Integer getRoomid() {
+		return roomid;
+	}
+
+	public Timestamp getCollecttime() {
+		return collecttime;
+	}
+
 	private GroupRoom() {}
+
+	public void setGameId(Integer gameId) {
+		this.gameId = gameId;
+	}
 
 	public static GroupRoom of() {
 		return new GroupRoom();
@@ -66,6 +86,10 @@ public final class GroupRoom extends BaseEntity {
 
 	public int getPlayerNumInt() {
 		return playerNumInt;
+	}
+
+	public Integer getQunStatus() {
+		return qunStatus;
 	}
 
 	public GroupRoom id(Integer val) {

@@ -1,7 +1,8 @@
 <!DOCTYPE html>
 <html lang="zh-CN" xmlns:th="http://www.thymeleaf.org">
-<head th:replace="layout/head :: common_head(_, _)">
-
+<head th:replace="layout/head :: common_head(_, ~{::link})">
+	<link rel="stylesheet" type="text/css" media="all"
+		  href="../static/bootstrap/css/bootstrap-datetimepicker.min.css" th:href="@{/bootstrap/css/bootstrap-datetimepicker.min.css}" />
 </head>
 <body th:replace="layout/body :: common_body(~{::div#container}, ~{::#selfJs})">
 
@@ -11,6 +12,8 @@
 
 	<form id="cardGiftForm" onsubmit="return commonJs.cardGift();">
 		<div class="form-group">
+
+
 			<label for="presentee">玩家游戏id</label>
 			<div class="row">
 				<div class="col-xs-1"></div>
@@ -22,18 +25,46 @@
 				</div>
 			</div>
 		</div>
+
+
 		<div class="form-group">
 			<label for="cardNum">赠送房卡</label>
 			<div class="row">
 				<div class="col-xs-1"></div>
 				<div class="col-xs-5">
 					<div class="input-group">
-						<input type="number" class="form-control" id="cardNum" name="cardNum" min="-1024" max="1024" />
+						<input type="number" class="form-control" id="cardNum" name="cardNum"  />
 						<div class="input-group-addon">张</div>
 					</div>
 				</div>
 			</div>
 		</div>
+
+
+		<div class="form-group">
+			<label for="cardPrice">房卡金额</label>
+			<div class="row">
+				<div class="col-xs-1"></div>
+				<div class="col-xs-5">
+					<div class="input-group">
+						<input type="number" class="form-control" id="cardPrice" name="cardPrice"  />
+						<div class="input-group-addon">钱</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+
+		<div class="form-group">
+			<label for="selected">推荐人</label>
+			<div class="row">
+				<div class="col-xs-1"></div>
+				<div class="col-xs-5">
+					<input type="number" class="form-control" id="selected" name="selected"></input>
+				</div>
+			</div>
+		</div>
+
 		<div class="form-group">
 			<label for="giftReason">赠卡备注</label>
 			<div class="row">
@@ -43,6 +74,7 @@
 				</div>
 			</div>
 		</div>
+
 		<div class="form-group">
 			<button type="submit" class="btn btn-primary">赠　送</button>
 		</div>
@@ -50,6 +82,37 @@
 
 	<div class="page-header">
 		<h4>赠卡记录</h4>
+	</div>
+
+	<div id="monitorTime">
+		<th:block th:replace="~{layout/common :: start-end-date-input}"  />
+	</div>
+
+
+	<div class="form-group">
+		<label for="selectedNames">推荐人</label>
+		<div class="row">
+			<div class="col-xs-1"></div>
+			<div class="col-xs-4">
+				<input type="number" class="form-control col-xs-4" id="selectedNames" name="selectedNames" min="1" max="6" />
+			</div>
+			<div class="col-xs-4">
+				<button type="button" id="selecteds" class="btn btn-primary">查　询</button>
+			</div>
+		</div>
+	</div>
+
+	<div class="form-group">
+		<label for="selectedNames">业绩</label>
+		<div class="row">
+			<div class="col-xs-1"></div>
+			<div class="col-xs-4">
+				<span id="sums">日期间金额：</span>
+			</div>
+			<div class="col-xs-4">
+				<span id="price">总金额：</span>
+			</div>
+		</div>
 	</div>
 
 	<th:block th:replace="~{layout/common :: table-paginator('table')}" />
@@ -65,7 +128,28 @@
 	    var commonJs = new CommonJs();
 	    var presentee;
 
-	    $("#table").tableInit('cardGiftRecord');
+	    commonJs.datetimeInit(function() {
+	        $("#table").tableInit('cardGiftRecord');
+	    });
+
+        $('button#selecteds').on('click',function(){
+            var selected=$('input#selectedNames').val();
+
+            if(selected==""){
+           		 queryMoneyAjax();
+				   commonJs.datetimeInit(function() {
+						$("#table").tableInit('cardGiftRecord');
+					});
+              }
+
+            $("#table").html("");
+
+			queryMoneyAjax();
+
+			$("#table").tableInit('cardGiftRecord',selected);
+
+          });
+
 
 		var $this, $row;
 		$('input#presentee').on('keyup', function() {
@@ -86,6 +170,71 @@
 				'房卡: ' + data.insureScore
 			)
 		}
+
+
+		$(function(){
+	            //document加载完触发
+	            queryMoneyAjax();
+	            queryPriceSumAjax();
+	            //日期Vlaue更改触发
+                $("#monitorTime").on('change',function(){
+                    queryMoneyAjax();
+                });
+
+            })
+
+
+		  function queryMoneyAjax(){
+			 var selected=$('input#selectedNames').val();
+			 $.ajax({
+                    type: 'get',
+                    url:'/admin/queryPrice/',
+                    dataType:'Json',
+                    data:{
+                        startDate: $('#startDate').val(),
+                        endDate: $('#endDate').val(),
+                        selected:selected
+                    },
+                    success:function(result){
+                          console.log(JSON.stringify(result));
+                          var sum=result.sumBig;
+                          if(sum<0){
+                            $("#sums").html('日期间金额：<font>' + 0 + '</font>');
+                          }else if(sum==null){
+                             $("#sums").html('日期间金额：<font>' + 0 + '</font>');
+                          }
+                          else{
+                            $("#sums").html('日期间金额：<font>' + sum + '</font>');
+                          }
+
+                    }
+            });
+
+		}
+
+		 function queryPriceSumAjax(){
+			 $.ajax({
+                    type: 'get',
+                    url:'/admin/queryPriceSum/',
+                    dataType:'Json',
+                    success:function(result){
+                          console.log(JSON.stringify(result));
+                          var sum=result.sumBig;
+                          if(sum<0){
+                            $("#price").html('总金额：<font>' + 0 + '</font>');
+                          }else if(sum==null){
+                             $("#price").html('总金额：<font>' + 0 + '</font>');
+                          }
+                          else{
+                            $("#price").html('总金额：<font>' + sum + '</font>');
+                          }
+
+                    }
+            });
+
+		}
+
+
 	</script>
 
 </th:block>

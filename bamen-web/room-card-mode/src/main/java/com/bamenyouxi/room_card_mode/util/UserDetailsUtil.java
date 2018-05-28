@@ -4,7 +4,7 @@ import com.bamenyouxi.core.constant.AuthConstant;
 import com.bamenyouxi.core.constant.RedisConstant;
 import com.bamenyouxi.core.constant.TipMsgConstant;
 import com.bamenyouxi.room_card_mode.model.mysql.room_card_mode.SysAgent;
-import com.bamenyouxi.room_card_mode.model.spring.CustomUser;
+import com.bamenyouxi.room_card_mode.model.Spring.CustomUser;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.AuthorityUtils;

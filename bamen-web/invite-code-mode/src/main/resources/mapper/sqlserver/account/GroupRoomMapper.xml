@@ -10,8 +10,12 @@
 		<result property="groupName" column="qunName" />
 		<result property="roomStatus" column="RoomStatus" />
 		<result property="playerNum" column="Players" />
+		<result property="qunStatus" column="QunStatus" />
 		<result property="createTime" column="BuilDate" />
 		<result property="modifyTime" column="ChangTime" />
+		<result property="parnterid" column="Parnterid"/>
+		<result property="roomid" column="Roomid"/>
+		<result property="collecttime" column="Collecttime"/>
 	</resultMap>
 
 	<select id="get" resultMap="resultMap">
@@ -25,13 +29,28 @@
 		</where>
 	</select>
 
-	<insert id="save" parameterType="com.bamenyouxi.invite_code_mode.model.sqlserver.account.GroupRoom">
-		insert into userAgentInfor (
-			Gameid, NickName, qunName, RoomStatus, Players, BuilDate
-		) values (
-			#{gameId}, #{nickName}, #{groupName}, #{roomStatus}, #{playerNum}, getdate()
-		)
+	<select id="getRoom" resultMap="resultMap">
+		select isNULL(count(isNULL(Gameid,0)),0) as 'Gameid'  from QPAccountsDB.dbo.userAgentInfor where Gameid =  #{gameId}
+	</select>
+
+
+	<select id="queryCountRoom" resultType="com.bamenyouxi.invite_code_mode.model.mysql.invite_code_mode.SysAgent" resultMap="resultMap">
+		select * from QPAccountsDB.dbo.userAgentInfor where Gameid=#{gameId}
+	</select>
+
+
+	<select id="getStatus" resultMap="resultMap">
+		select QunStatus from userAgentInfor where AgentRoom=#{id}
+	</select>
+
+	<insert id="save" parameterType="com.bamenyouxi.invite_code_mode.model.sqlserver.account.GroupRoom" useGeneratedKeys="true" keyProperty="id">
+			insert into userAgentInfor (
+				Gameid, NickName, qunName, RoomStatus, Players, BuilDate
+			) values (
+				#{gameId}, #{nickName}, #{groupName}, #{roomStatus}, #{playerNum}, getdate()
+			)
 	</insert>
+
 
 	<update id="update" parameterType="com.bamenyouxi.invite_code_mode.model.sqlserver.account.GroupRoom">
 		update userAgentInfor
@@ -79,4 +98,6 @@
 			</choose>
 		</where>
 	</delete>
+
+
 </mapper>

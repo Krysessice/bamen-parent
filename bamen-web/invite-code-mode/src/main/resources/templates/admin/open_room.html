@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="layout/head :: common_head(_, ~{::link})">
+	<link rel="stylesheet" type="text/css" media="all"
+		  href="../static/bootstrap/css/bootstrap-datetimepicker.min.css" th:href="@{/bootstrap/css/bootstrap-datetimepicker.min.css}" />
+</head>
+<body th:replace="layout/body :: common_body(~{::div#container}, ~{::#selfJs})">
+
+<div id="container" class="container">
+
+	<th:block th:replace="~{layout/common :: page-header('清理群管理')}" />
+
+	<div class="form-group">
+		<button type="button" class="btn btn-default" id="setUp">清理群</button>
+	</div>
+
+	<th:block th:replace="~{layout/common :: page-header('进代理后台')}" />
+
+	<div class="input-group col-xs-10">
+		<input type="text" class="form-control" id="gameId" name="gameId" placeholder="请输代理ID" aria-describedby="gameId" />
+		<span class="input-group-addon" id="selected">查询</span>
+	</div>
+
+	<hr/>
+	<th:block th:replace="~{layout/common :: table-paginator('table')}" />
+
+
+
+</div>
+
+<th:block id="selfJs">
+
+	<th:block th:replace="~{layout/common :: pageJs}" />
+	<th:block th:replace="~{layout/common :: dateTimeJs}" />
+
+	<script type="text/javascript" th:inline="javascript">
+		var commonJs = new CommonJs();
+
+		 $('button#setUp').on('click',function(){
+	        $.ajax({
+				type: 'put',
+				url: '/AgentRoom/setUp/',
+				dataType: 'json',
+				success: function(data) {
+					if (data.status)
+					alert(data.msg);
+				}
+			});
+	    })
+
+
+	     $('span#selected').on('click',function(){
+            var gameId=$('input#gameId').val();
+            if(gameId==""){
+					$("#table").tableInit('getAccredit');
+              }
+
+            $("#table").html("");
+
+			$("#table").tableInit('getAccredit',gameId);
+
+          });
+
+	</script>
+
+</th:block>
+
+</body>
+</html>

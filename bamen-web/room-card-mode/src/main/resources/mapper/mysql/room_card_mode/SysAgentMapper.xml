@@ -3,7 +3,6 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.bamenyouxi.room_card_mode.mapper.mysql.room_card_mode.SysAgentMapper">
-    <cache />
     <resultMap id="resultMap" type="com.bamenyouxi.room_card_mode.model.mysql.room_card_mode.SysAgent">
         <id property="id" column="F_ID" />
         <result property="sysFlag" column="F_SYS_FLAG" />
@@ -17,9 +16,19 @@
         <result property="password" column="F_PASSWORD" />
         <result property="secretKey" column="F_SECRET_KEY" />
         <result property="superAgentId" column="F_SUPER_AGENT_ID" />
+        <result property="partner" column="F_PARTNER" />
         <result property="firstChargeTime" column="F_FIRST_CHARGE_TIME" />
         <result property="lastLoginTime" column="F_LAST_LOGIN_TIME" />
+        <result property="payPrice" column="F_PAY_PRICE" />
+        <result property="cardNum" column="F_CARD_NUM" />
+        <result property="cardGift" column="F_CARD_GIFT"/>
     </resultMap>
+
+
+    <resultMap id="sysAgentVoMap" type="com.bamenyouxi.room_card_mode.model.mysql.room_card_mode.SysAgentVo" extends="resultMap">
+        <result property="leve" column="LEVE"/>
+    </resultMap>
+
 
     <select id="get" resultMap="resultMap">
         select a.*, b.F_ACCOUNT superAccount, b.F_NICK_NAME superNickName from t_sys_agent a
@@ -31,6 +40,162 @@
                 </if>
             </foreach>
         </where>
+    </select>
+
+    <select id="query4list" resultMap="sysAgentVoMap">
+        SELECT
+        b.F_ID,
+        a.F_ACCOUNT,
+        a.F_NICK_NAME,
+        b.F_PAY_PRICE,
+        b.F_CARD_NUM,
+        a.F_SUPER_AGENT_ID,
+        b.F_CREATE_TIME
+        FROM
+        t_sys_agent a LEFT JOIN t_pay_order b on a.F_ACCOUNT=b.F_SYS_AGENT_ID
+        <where>
+                a.F_SUPER_AGENT_ID=#{account}
+            <if test="startDate != null">
+                and convert(b.F_CREATE_TIME, DATE) &gt;= convert(#{startDate},DATE)
+            </if>
+            <if test="endDate != null">
+                and convert(b.F_CREATE_TIME, DATE) &lt;= convert(#{endDate}, DATE)
+            </if>
+            <!--GROUP BY  a.F_ACCOUNT-->
+        </where>
+
+    </select>
+
+    <select id="querysubclass" resultMap="sysAgentVoMap">
+        SELECT
+        b.F_ID,
+        a.F_ACCOUNT,
+        a.F_NICK_NAME,
+        b.F_PAY_PRICE,
+        b.F_CARD_NUM,
+        a.F_SUPER_AGENT_ID,
+        b.F_CREATE_TIME
+        FROM
+        t_sys_agent a LEFT JOIN t_pay_order b on a.F_ACCOUNT=b.F_SYS_AGENT_ID
+        <where>
+                a.F_SUPER_AGENT_ID IN
+                <foreach collection="list"  item="item" open="(" separator="," close=")" >
+                    #{item}
+                </foreach>
+                <if test="startDate != null">
+                    and convert(b.F_CREATE_TIME, DATE) &gt;= convert(#{startDate},DATE)
+                </if>
+                <if test="endDate != null">
+                    and convert(b.F_CREATE_TIME, DATE) &lt;= convert(#{endDate}, DATE)
+                </if>
+                <!--GROUP BY a.F_ACCOUNT-->
+        </where>
+    </select>
+
+
+
+
+
+    <select id="queryAgentDown" resultMap="resultMap">
+        SELECT
+        a.F_ID,
+        a.F_ACCOUNT,
+        a.F_NICK_NAME,
+        sum(b.F_PAY_PRICE) AS F_PAY_PRICE,
+        sum(b.F_CARD_NUM) AS F_CARD_NUM,
+        sum(b.F_CARD_GIFT) as F_CARD_GIFT,
+        a.F_CREATE_TIME
+        FROM
+        t_sys_agent a
+        LEFT JOIN t_pay_order b ON a.F_ACCOUNT = b.F_SYS_AGENT_ID
+        WHERE
+        a.F_SUPER_AGENT_ID = #{account}
+        GROUP BY a.F_ACCOUNT;
+    </select>
+
+    <select id="queryAlls" resultMap="resultMap">
+        SELECT
+        F_ID,
+        F_ACCOUNT,
+        F_NICK_NAME,
+        F_SUPER_AGENT_ID,
+        F_CREATE_TIME
+        FROM
+        t_sys_agent
+    </select>
+
+
+    <select id="downAgent" resultMap="resultMap">
+    SELECT
+    a.F_ID,
+    a.F_ACCOUNT,
+    a.F_NICK_NAME,
+    sum(b.F_PAY_PRICE) AS F_PAY_PRICE,
+    sum(b.F_CARD_NUM) AS F_CARD_NUM,
+    sum(b.F_CARD_GIFT) as F_CARD_GIFT,
+    a.F_CREATE_TIME
+    FROM
+    t_sys_agent a
+    LEFT JOIN t_pay_order b ON a.F_ACCOUNT = b.F_SYS_AGENT_ID
+    WHERE
+    a.F_SUPER_AGENT_ID = #{account}
+
+    GROUP BY a.F_ACCOUNT;
+    </select>
+
+    <select id="downAgents" resultMap="resultMap">
+        SELECT
+        F_ID,
+        F_ACCOUNT,
+        F_NICK_NAME,
+        F_CREATE_TIME
+        FROM
+        t_sys_agent
+        WHERE
+        F_SUPER_AGENT_ID = #{account}
+    </select>
+
+    <select id="pages" resultMap="resultMap">
+        select F_PARTNER from t_sys_agent
+        <where>
+            F_ACCOUNT=#{account}
+        </where>
+    </select>
+
+    <select id="queryAgentList" resultMap="resultMap">
+        SELECT
+        F_ID,
+        F_ACCOUNT,
+        F_NICK_NAME,
+        F_SUPER_AGENT_ID,
+        F_PARTNER,
+        F_CREATE_TIME
+        FROM
+        t_sys_agent
+        WHERE
+        F_PARTNER = 0
+        AND F_SUPER_AGENT_ID = 18888888888
+        <if test="startDate != null">
+            and convert(F_CREATE_TIME, DATE) &gt;= convert(#{startDate},DATE)
+        </if>
+        <if test="endDate != null">
+            and convert(F_CREATE_TIME, DATE) &lt;= convert(#{endDate}, DATE)
+        </if>
+    </select>
+
+    <select id="queryPartner" resultMap="resultMap">
+        SELECT
+        F_ID,
+        F_ACCOUNT,
+        F_NICK_NAME,
+        F_SUPER_AGENT_ID,
+        F_PARTNER,
+        F_CREATE_TIME
+        FROM
+        t_sys_agent
+        WHERE
+        F_PARTNER = 1
+        AND F_SUPER_AGENT_ID = 18888888888
     </select>
 
     <insert id="save" parameterType="com.bamenyouxi.room_card_mode.model.mysql.room_card_mode.SysAgent" useGeneratedKeys="true" keyProperty="id">
@@ -47,8 +212,15 @@
             </if>
         )
     </insert>
-    
-    
+
+    <insert id="saveAll" parameterType="com.bamenyouxi.room_card_mode.model.mysql.room_card_mode.SysAgent" useGeneratedKeys="true" keyProperty="id">
+        insert ignore into t_sys_agent
+        (
+        F_ACCOUNT, F_NICK_NAME, F_PASSWORD, F_SECRET_KEY, F_SUPER_AGENT_ID
+        ) values (
+        #{account}, #{nickName}, #{password}, #{secretKey},#{superAgentId})
+    </insert>
+
     <insert id="saveOpenAgency" parameterType="com.bamenyouxi.room_card_mode.model.mysql.room_card_mode.SysAgent" useGeneratedKeys="true" keyProperty="id">
         insert ignore into t_sys_agent
         (
@@ -96,6 +268,52 @@
             F_ACCOUNT = #{account}
         </where>
     </select>
+
+    <update id="updateAgentId" parameterType="com.bamenyouxi.room_card_mode.model.mysql.room_card_mode.SysAgent">
+        UPDATE t_sys_agent SET F_PARTNER = 1
+        <where>
+                F_ACCOUNT = #{account}
+        </where>
+    </update>
+
+    <update id="updateAgentIds" parameterType="com.bamenyouxi.room_card_mode.model.mysql.room_card_mode.SysAgent">
+        UPDATE t_sys_agent SET F_PARTNER = 0
+        <where>
+            F_ACCOUNT = #{account}
+        </where>
+    </update>
+
+    <update id="updated" parameterType="com.bamenyouxi.room_card_mode.model.mysql.room_card_mode.SysAgent">
+        update t_sys_agent
+        <set>
+            <if test="account !=null">
+                F_ACCOUNT=#{account},
+            </if>
+            <if test="nickName !=null">
+                F_NICK_NAME=#{nickName},
+            </if>
+            <if test="password !=null">
+                F_PASSWORD=#{password},
+            </if>
+            <if test="secretKey != null">
+                F_SECRET_KEY = #{secretKey},
+            </if>
+            <if test="superAgentId !=null">
+                F_SUPER_AGENT_ID=#{superAgentId},
+            </if>
+        </set>
+        <where>
+            <choose>
+                <when test="superAgentId != null">
+                    and F_SUPER_AGENT_ID = #{superAgentId}
+                </when>
+                <when test="id != null">
+                    and F_ID = #{id}
+                </when>
+            </choose>
+        </where>
+    </update>
+
 
     <!--冻结代理的修改-->
     <update id="update" parameterType="com.bamenyouxi.room_card_mode.model.mysql.room_card_mode.SysAgent">
@@ -149,20 +367,44 @@
     </update>
 
     <select id="getOne" resultMap="resultMap">
-        select a.F_ID,a.F_SUPER_AGENT_ID from t_sys_agent a LEFT JOIN t_sys_agent b on a.F_ID=b.F_ID
+        select a.F_ID,a.F_ACCOUNT,a.F_SUPER_AGENT_ID from t_sys_agent a LEFT JOIN t_sys_agent b on a.F_ACCOUNT=b.F_SUPER_AGENT_ID
         <where>
-
-                    a.F_ID=#{id}
-
+            a.F_ACCOUNT=#{account}
         </where>
+        GROUP BY F_ACCOUNT;
     </select>
 
     <select id="getTwo" resultMap="resultMap">
-        select a.F_ID,a.F_SUPER_AGENT_ID from t_sys_agent a LEFT JOIN t_sys_agent b on a.F_ID=b.F_ID
+        select a.F_ID,a.F_ACCOUNT,a.F_SUPER_AGENT_ID from t_sys_agent a LEFT JOIN t_sys_agent b on a.F_ACCOUNT=b.F_SUPER_AGENT_ID
         <where>
-                    a.F_ID=#{id}
+            a.F_ACCOUNT=#{account}
         </where>
+        GROUP BY F_ACCOUNT;
     </select>
+
+
+    <!--查看剩余房卡-->
+    <select id="queryMun" resultMap="resultMap" parameterType="com.bamenyouxi.room_card_mode.model.mysql.room_card_mode.SysAgent">
+        <!--select TabsB.F_ID, SUM(IFNULL(c.F_CARD_NUM,0)+IFNULL(TabsB.sss,0))as F_CARD_NUM,TabsB.F_ACCOUNT ,TabsB.F_NICK_NAME from t_card_gift_for_agent_record as c RIGHT JOIN (-->
+        <!--SELECT TabsA.F_ID,SUM(IFNULL(TabsA.F_CARD_NUM,0)+IFNULL(TabsA.F_CARD_GIFT,0)) as sss,TabsA.F_ACCOUNT,TabsA.F_NICK_NAME from (-->
+        <!--select a.F_ID as afid,a.F_CARD_NUM,a.F_CARD_GIFT,a.F_ORDER_NO,b.F_ID,b.F_ACCOUNT,b.F_NICK_NAME from t_pay_order as a INNER JOIN t_sys_agent as b on-->
+        <!--b.F_ID=#{id}-->
+        <!--and a.F_SYS_AGENT_ID = b.F_ACCOUNT-->
+        <!--)as TabsA-->
+        <!--) as TabsB on c.F_PRESENTEE = TabsB.F_ACCOUNT;-->
+        select(
+        (
+        SELECT ifnull(sum(TabsA.F_CARD_NUM), 0)+ifnull(sum(TabsA.F_CARD_GIFT),0) as F_CARD_GIFT from (
+        select a.F_ID as afid,a.F_CARD_NUM,a.F_CARD_GIFT,a.F_ORDER_NO,b.F_ID,b.F_ACCOUNT,b.F_NICK_NAME from t_pay_order as a INNER JOIN t_sys_agent as b on
+        b.F_ACCOUNT=#{account} and a.F_SYS_AGENT_ID = b.F_ACCOUNT
+        )as TabsA
+        ) +
+        (
+        select ifnull(sum(F_CARD_NUM), 0)as F_CARD_NUM from t_card_gift_for_agent_record where F_PRESENTEE=#{account}
+        )
+        ) as F_CARD_NUM from dual
+    </select>
+
 
 
 </mapper>

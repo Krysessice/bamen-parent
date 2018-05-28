@@ -5,6 +5,7 @@ import com.bamenyouxi.invite_code_mode.mapper.mysql.invite_code_mode.SysAgentMap
 import com.bamenyouxi.invite_code_mode.model.mysql.invite_code_mode.SysAgent;
 import com.bamenyouxi.invite_code_mode.model.spring.CustomUser;
 import com.bamenyouxi.invite_code_mode.util.RedisUtil;
+import com.bamenyouxi.invite_code_mode.util.UserDetailsUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -16,8 +17,11 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.util.Assert;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.HashMap;
 import java.util.List;
@@ -66,6 +70,7 @@ abstract class AbstractCustomWebSecurityConfig extends WebSecurityConfigurerAdap
 					.userDetailsService(customUserDetailsService())
 					.authenticationSuccessHandler(customLoginHandle)
 					.tokenValiditySeconds(30 * 24 * 60 * 60);
+
 	}
 
 	@Bean
@@ -81,7 +86,6 @@ abstract class AbstractCustomWebSecurityConfig extends WebSecurityConfigurerAdap
 	UserDetailsService customUserDetailsService() {
 
 		return s -> {
-
 			List<SysAgent> list = sysAgentMapper.get(new HashMap<String, Object>(){{
 				put(FieldConstant.DBFieldConstant.F_GAME_ID.name(), s);
 				put(FieldConstant.DBFieldConstant.F_SYS_FLAG.name(), SysConstant.SysFlagConstant.ENABLE);

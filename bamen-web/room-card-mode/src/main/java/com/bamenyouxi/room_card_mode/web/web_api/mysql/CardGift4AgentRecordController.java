@@ -27,8 +27,6 @@ public class CardGift4AgentRecordController extends AbstractCrudController<CardG
     @Autowired
     private SysAgentMapper sysAgentMapper;
 
-
-
     @Override
     public AbstractCrudService<CardGift4AgentRecord, Long> getService() {
         return cardGift4AgentRecordService;
@@ -36,7 +34,7 @@ public class CardGift4AgentRecordController extends AbstractCrudController<CardG
 
 
     /**
-     * 赠送代理房卡
+     * 管理员赠送代理房卡
      */
     @PostMapping("/saveCardgift")
     public WebResult saveCardgift(@RequestBody CardGift4AgentRecord cardGift4AgentRecord){
@@ -48,5 +46,8 @@ public class CardGift4AgentRecordController extends AbstractCrudController<CardG
         }
         return WebResult.of( 0, TipMsgConstant.SYS_NOTAGENT,null);
     }
+
+
+
 
 }

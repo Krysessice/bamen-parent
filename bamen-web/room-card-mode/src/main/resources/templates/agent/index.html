@@ -3,7 +3,7 @@
 <head th:replace="layout/head :: common_head(_, _)">
 
 </head>
-<body th:replace="layout/body :: common_body(~{::div#container}, _)">
+<body th:replace="layout/body :: common_body(~{::div#container},~{::#selfJs})">
 
 <div id="container" class="container">
 
@@ -24,20 +24,57 @@
         </div>
         <div class="row">
             <div class="col-xs-4">上级代理号</div>
-            <div class="col-xs-8">[[*{superAccount}]]</div>
-        </div>
-        <div class="row">
-            <div class="col-xs-4">上 级 昵 称</div>
-            <div class="col-xs-8">[[*{superNickName}]]</div>
+            <div class="col-xs-8">[[*{superAgentId}]]</div>
         </div>
     </div>
 
     <div class="list-group">
-        <th:block th:replace="~{layout/common :: list-group-item('/agent/announcement.html', 'glyphicon-bullhorn', '代理商须知')}" />
+        <th:block th:replace="~{layout/common :: list-group-item('/agent/announcements.html', 'glyphicon-bullhorn', '代理商')}"/>
         <th:block th:replace="~{layout/common :: list-group-item('/agent/agent-register.html', 'glyphicon-plus', '开通代理')}" />
+        <th:block th:replace="~{layout/common :: list-group-item('/agent/agent-play-card.html', 'glyphicon glyphicon-user', '玩家赠卡')}"/>
+        <th:block th:replace="~{layout/common :: list-group-item('/agent/agent-card-gift.html', 'glyphicon glyphicon-leaf', '代理赠卡')}" />
+        <th:block th:replace="~{layout/common :: list-group-item('/agent/give_agent.html', 'glyphicon glyphicon-ice-lolly', '授权玩家权限')}" />
+        <th:block th:replace="~{layout/common :: list-group-item('/agent/agent-order-all.html', 'glyphicon glyphicon-star-empty', '购卡记录')}" />
+        <th:block th:replace="~{layout/common :: list-group-item('/agent/one-rebate-card.html', 'glyphicon glyphicon-star', '上级返卡记录')}" />
+        <th:block th:replace="~{layout/common :: list-group-item('/agent/two-rebate-card.html', 'glyphicon glyphicon-cloud', '上上级返卡记录')}" />
+        <th:block th:replace="~{layout/common :: list-group-item('/agent/query-pay-AgentCard.html', 'glyphicon glyphicon-star-empty', '下级代理')}" />
+        <th:block th:replace="~{layout/common :: list-group-item-for-model('#updatePwdModel', 'glyphicon-pencil', '密码修改')}" />
     </div>
-
+    <th:block th:replace="model/updatePwdModel :: updatePwdModel" />
 </div>
 
+    <th:block id="selfJs">
+
+        <th:block th:replace="~{model/updatePwdModel :: updatePwdModelJs}" />
+
+        <script type="text/javascript">
+
+        $(function(){
+              $.ajax({
+                type: 'get',
+                url:'/agent/pages/',
+                async: false,
+                dataType:'Json',
+                success:function(result){
+                console.log(JSON.stringify(result));
+                  var i=result.n;
+                    if(i=='1'){
+                        var htmlTh_Blocks2= $(".list-group").append('<a href="/agent/query-sum-card.html" class="list-group-item">'
+                        +'<span class="glyphicon glyphicon glyphicon-file"></span> 代理充值明细'
+                        +'<span style="float: right;">&gt;</span></a>');
+                    }else{
+
+                    }
+            }
+        });
+
+
+
+         })
+
+        </script>
+
+
+    </th:block>
 </body>
 </html>

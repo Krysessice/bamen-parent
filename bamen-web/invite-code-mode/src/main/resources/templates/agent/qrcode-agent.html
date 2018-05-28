@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org">
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<head th:replace="layout/head :: common_head(_, ~{::link})">
+	<link rel="stylesheet" type="text/css" media="all"
+	      href="../static/bootstrap/css/bootstrap-datetimepicker.min.css" th:href="@{/bootstrap/css/bootstrap-datetimepicker.min.css}" />
+</head>
+<body th:replace="layout/body :: common_body(~{::div#container}, ~{::#selfJs})" style="margin: 0;padding: 0;">
+
+	<div id="container" class="container">
+
+		<th:block th:replace="~{layout/common :: page-header('我的二维码')}" />
+
+		<th:block th:replace="~{layout/common :: table-paginator('table')}" />
+
+		<div style="position: absolute;">
+			<img src="/img/nn.jpg" style="width: 100%;"/>
+			<img src="/Qrcode/createQrcode" style="width: 35%;position: absolute;bottom: 10%;right: 5%;" />
+		</div>
+
+	</div>
+
+	<th:block id="selfJs">
+
+		<th:block th:replace="~{layout/common :: pageJs}" />
+		<th:block th:replace="~{layout/common :: dateTimeJs}" />
+
+	</th:block>
+
+</body>
+</html>

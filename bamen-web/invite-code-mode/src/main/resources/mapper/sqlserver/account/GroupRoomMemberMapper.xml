@@ -28,6 +28,7 @@
 		)
 	</insert>
 
+
 	<delete id="delete" parameterType="com.bamenyouxi.invite_code_mode.model.sqlserver.account.GroupRoomMember">
 		delete userAgentmap
 		where
@@ -35,4 +36,5 @@
 		and
 			Userid = #{userId}
 	</delete>
+
 </mapper>

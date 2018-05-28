@@ -3,7 +3,7 @@
 <head th:replace="layout/head :: common_head(_, _)">
 
 </head>
-<body th:replace="layout/body :: common_body(~{::div#container}, _)">
+<body th:replace="layout/body :: common_body(~{::div#container}, ~{::#selfJs})">
 
 	<div id="container" class="container">
 
@@ -26,26 +26,99 @@
 				<div class="col-xs-4">注 册 日 期</div>
 				<div class="col-xs-8">[[*{#dates.format(createTime, 'yyyy-MM-dd')}]]</div>
 			</div>
-			<div class="row">
-				<div class="col-xs-4">招 募 人 数</div>
-				<div class="col-xs-8">[[*{recruitNum}]]</div>
+			<!--<div class="row">-->
+				<!--<div class="col-xs-4">招 募 人 数</div>-->
+				<!--<div class="col-xs-8">[[*{recruitNum}]]</div>-->
+			<!--</div>-->
+		</div>
+
+		<div id="one">
+			<div class="list-group">
+				<th:block th:replace="~{layout/common :: list-group-item('/agent/index.html', 'glyphicon-euro', '代理商')}" />
+				<th:block th:replace="~{layout/common :: list-group-item('/admin/system-info.html', 'glyphicon-asterisk', '系统信息查询')}" />
+				<th:block th:replace="~{layout/common :: list-group-item('/admin/gold-info.html', 'glyphicon glyphicon-list-alt', '金币信息查询')}" />
+				<th:block th:replace="~{layout/common :: list-group-item('/admin/pay-gold.html', 'glyphicon glyphicon-italic', '金币充值')}" />
+				<th:block th:replace="~{layout/common :: list-group-item('/admin/sys-agent-info.html', 'glyphicon-user', '用户信息查询')}" />
+				<th:block th:replace="~{layout/common :: list-group-item('/admin/query-partner-gold.html', 'glyphicon glyphicon-text-height', '团队金币消耗统计')}" />
+				<th:block th:replace="~{layout/common :: list-group-item('/admin/clean_gold_record.html', 'glyphicon glyphicon-move', '清理金币统计')}" />
+				<th:block th:replace="~{layout/common :: list-group-item('/admin/card-cost-perday.html', 'glyphicon-credit-card', '每日房卡消耗')}" />
+				<th:block th:replace="~{layout/common :: list-group-item('/admin/card-cost-User.html', 'glyphicon glyphicon-th-list', '每日新增统计')}" />
+				<!--<th:block th:replace="~{layout/common :: list-group-item('/admin/card-active-User.html', 'glyphicon glyphicon-print', '每日活跃统计')}" />-->
+				<th:block th:replace="~{layout/common :: list-group-item('/admin/pay-order-perday.html', 'glyphicon-barcode', '每日充值统计')}" />
+				<!--<th:block th:replace="~{layout/common :: list-group-item('/admin/wxpay-card.html', 'glyphicon glyphicon-repeat', '公众号充值统计')}" />-->
+				<th:block th:replace="~{layout/common :: list-group-item('/admin/card-gift.html', 'glyphicon-leaf', '房卡赠送')}" />
+				<th:block th:replace="~{layout/common :: list-group-item('/admin/game-score-locker.html', 'glyphicon-envelope', '卡线用户列表')}" />
+				<th:block th:replace="~{layout/common :: list-group-item('/admin/query-agentlist.html', 'glyphicon glyphicon-pencil', '授权合伙人')}" />
+				<th:block th:replace="~{layout/common :: list-group-item('/admin/query-partner.html', 'glyphicon glyphicon-heart', '已授权合伙人')}" />
+				<th:block th:replace="~{layout/common :: list-group-item('/admin/look_agent.html', 'glyphicon glyphicon-camera', 'VIP授权')}" />
+				<th:block th:replace="~{layout/common :: list-group-item('/admin/open_room.html', 'glyphicon glyphicon-minus-sign', '进代理后台')}" />
+				<th:block th:replace="~{layout/common :: list-group-item('/admin/user_inning.html', 'glyphicon glyphicon-grain', '用户局数统计')}" />
+				<th:block th:replace="~{layout/common :: list-group-item('/admin/query_all_room.html', 'glyphicon glyphicon-eye-open', '群局数统计')}" />
+				<th:block th:replace="~{layout/common :: list-group-item('/admin/clear.html', 'glyphicon-glass', '充值结算')}" />
+				<th:block th:replace="~{layout/common :: list-group-item('/admin/gold_clear.html', 'glyphicon glyphicon-tower', '金币结算')}" />
+				<th:block th:replace="~{layout/common :: list-group-item('/admin/operation.html', 'glyphicon-off', '操作')}" />
+				<!--<th:block th:replace="~{layout/common :: list-group-item('/admin/redeem-code.html', 'glyphicon glyphicon-camera', '兑换码')}" />-->
+				<th:block th:replace="~{layout/common :: list-group-item('/admin/turntable.html', 'glyphicon glyphicon-align-center', '设置转盘')}" />
+				<th:block th:replace="~{layout/common :: list-group-item('/admin/withdrawal.html', 'glyphicon glyphicon-indent-right', '红包提现')}" />
+				<th:block th:replace="~{layout/common :: list-group-item('/admin/cash_record.html', 'glyphicon glyphicon-briefcase', '兑现记录')}" />
 			</div>
 		</div>
 
-		<div class="list-group">
-			<th:block th:replace="~{layout/common :: list-group-item('/agent/index.html', 'glyphicon-euro', '代理商')}" />
-			<th:block th:replace="~{layout/common :: list-group-item('/admin/system-info.html', 'glyphicon-asterisk', '系统信息查询')}" />
-			<th:block th:replace="~{layout/common :: list-group-item('/admin/sys-agent-info.html', 'glyphicon-user', '用户信息查询')}" />
-			<th:block th:replace="~{layout/common :: list-group-item('/admin/card-cost-perday.html', 'glyphicon-credit-card', '每日房卡消耗')}" />
-			<th:block th:replace="~{layout/common :: list-group-item('/admin/card-cost-User.html', 'glyphicon glyphicon-th-list', '每日新增统计')}" />
-			<th:block th:replace="~{layout/common :: list-group-item('/admin/pay-order-perday.html', 'glyphicon-barcode', '每日充值统计')}" />
-			<th:block th:replace="~{layout/common :: list-group-item('/admin/card-gift.html', 'glyphicon-leaf', '房卡赠送')}" />
-			<th:block th:replace="~{layout/common :: list-group-item('/admin/game-score-locker.html', 'glyphicon-envelope', '卡线用户列表')}" />
-			<th:block th:replace="~{layout/common :: list-group-item('/admin/clear.html', 'glyphicon-glass', '结算')}" />
-			<th:block th:replace="~{layout/common :: list-group-item('/admin/operation.html', 'glyphicon-off', '操作')}" />
-		</div>
+		<!--<div id="two">
+			<div class="list-group">
+				<th:block th:replace="~{layout/common :: list-group-item('/admin/sys-agent-info.html', 'glyphicon-user', '用户信息查询')}" />
+				<th:block th:replace="~{layout/common :: list-group-item('/admin/card-gift.html', 'glyphicon-leaf', '房卡赠送')}" />
+				<th:block th:replace="~{layout/common :: list-group-item('/admin/game-score-locker.html', 'glyphicon-envelope', '卡线用户列表')}" />
+				<th:block th:replace="~{layout/common :: list-group-item-for-model('#updatePwdModel', 'glyphicon-pencil', '密码修改')}" />
+			</div>
+		</div>-->
 
+		<!--<div id="three">
+			<div class="list-group">
+				<th:block th:replace="~{layout/common :: list-group-item('/agent/index.html', 'glyphicon-euro', '代理商')}" />
+				<th:block th:replace="~{layout/common :: list-group-item('/admin/card-gift.html', 'glyphicon-leaf', '房卡赠送')}" />
+				<th:block th:replace="~{layout/common :: list-group-item('/admin/give-agentlist.html', 'glyphicon glyphicon-pencil', '授权合伙人')}" />
+				<th:block th:replace="~{layout/common :: list-group-item('/admin/give-query-partner.html', 'glyphicon glyphicon-heart', '已授权合伙人')}" />
+				<th:block th:replace="~{layout/common :: list-group-item-for-model('#updatePwdModel', 'glyphicon-pencil', '密码修改')}" />
+				<th:block th:replace="~{layout/common :: list-group-item('/admin/query-sum-card.html', 'glyphicon glyphicon glyphicon-file', '代理充值明细')}" />
+			</div>
+		</div>-->
+
+		<th:block th:replace="model/updatePwdModel :: updatePwdModel" />
 	</div>
+
+
+	<th:block id="selfJs">
+
+		<th:block th:replace="~{model/updatePwdModel :: updatePwdModelJs}" />
+		<script type="text/javascript">
+
+        <!--$(function(){-->
+              <!--$.ajax({-->
+                <!--type: 'get',-->
+                <!--url:'/admin/getService/',-->
+                <!--async: false,-->
+                <!--dataType:'Json',-->
+                <!--success:function(result){-->
+                <!--console.log(JSON.stringify(result));-->
+                  <!--var i=result.n;-->
+                    <!--if(i=='10002'){-->
+                    	<!--$("#one").hide();-->
+                    	<!--$("#three").hide();-->
+                    <!--}else if(i=='10001'){-->
+						<!--$("#two").hide();-->
+						<!--$("#three").hide();-->
+                    <!--}else if(i=='10003'){-->
+						<!--$("#one").hide();-->
+						<!--$("#two").hide();-->
+                    <!--}-->
+            <!--}-->
+        <!--});-->
+     <!--})-->
+        </script>
+
+
+	</th:block>
 
 </body>
 </html>

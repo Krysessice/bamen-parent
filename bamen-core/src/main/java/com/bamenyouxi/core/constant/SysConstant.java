@@ -67,6 +67,7 @@ public class SysConstant {
 		public static final int PAY_ORDER_SYN_INTERVAL = 1000 * 60 * 30;    //订单数据同步间隔时间
 
 		public static final LocalDate BASE_PAY_ORDER_STATISTIC_DATE = LocalDate.parse("2017-06-01"); //订单基准时间
+		public static final LocalDate BASE_USER_GOLD_ORDER_STATISTIC_DATE = LocalDate.parse("2018-01-26"); //金币消耗基准时间
 	}
 
 	public static class CommandLineOrder {
@@ -82,6 +83,11 @@ public class SysConstant {
 		public static final int RESET_SHOW_ANNOUNCE = 10;                    // 重置代理公告显示
 		public static final int GAME_TYPE_SYN_TASK = 11;                    // 游戏类型同步
 		public static final int SYS_AGENT_NICK_NAME_SYN_TASK = 12;          // 用户昵称校验与统一
+		public static final int SYS_Gold_Field_SYN_TASK = 13;				//金币消耗同步
+		public static final int Gold_INFO_INIT = 14;                       // 金币信息初始化
+		public static final int USER_GOLD_PERDAY_STATISTIC_TASK = 15;       // 每日金币统计
+		public static final int SYS_Gold_CLEAR_RECORD_SERVICE_RUNNER = 16;
+		public static final int SYS_WITHDIAW_RECORD_SERVICE_RUNNER = 17;
 	}
 
 	/**

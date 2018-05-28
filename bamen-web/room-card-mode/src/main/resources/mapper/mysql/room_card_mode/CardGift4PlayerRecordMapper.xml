@@ -15,7 +15,28 @@
 		<result property="presentee" column="F_PRESENTEE" />
 		<result property="cardNum" column="F_CARD_NUM" />
 		<result property="giftReason" column="F_GIFT_REASON" />
+		<result property="account" column="F_ACCOUNT"/>
+		<result property="nickName" column="F_NICK_NAME"/>
 	</resultMap>
+
+	<select id="queryAgentPlayer" resultMap="resultMap">
+		SELECT
+		b.F_ID,
+		b.F_PRESENTER,
+		b.F_PRESENTEE,
+		b.F_CARD_NUM,
+		b.F_GIFT_REASON,
+		b.F_CREATE_TIME
+		FROM
+		t_sys_agent a
+		INNER JOIN t_card_gift_for_player_record b ON a.F_ACCOUNT = b.F_PRESENTER
+		WHERE
+		a.F_ACCOUNT = #{account}
+	</select>
+
+	<select id="queryCardPlayer" resultMap="resultMap">
+		select F_ID,F_PRESENTER,F_PRESENTEE,F_CARD_NUM,F_GIFT_REASON,F_CREATE_TIME FROM t_card_gift_for_player_record
+	</select>
 
 	<insert id="save" parameterType="com.bamenyouxi.room_card_mode.model.mysql.room_card_mode.CardGift4PlayerRecord">
 		INSERT INTO t_card_gift_for_player_record (
@@ -48,5 +69,12 @@
 		)
 	</insert>
 
+
+	<select id="queryNumTwo" resultMap="resultMap" >
+		select ifnull(sum(F_CARD_NUM), 0)as F_CARD_NUM from t_card_gift_for_player_record
+		<where>
+			F_PRESENTER=#{presenter}
+		</where>
+	</select>
 
 </mapper>

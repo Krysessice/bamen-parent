@@ -67,6 +67,20 @@ public final class DBConstant {
 		public final static String TRANSACTION_MANAGER_NAME = DATASOURCE_NAME + "_TransactionManager";
 	}
 
+	public static class QPRecordDb {
+		private final static String PACKAGE = ".record";
+		public final static String DATASOURCE_NAME = "record";
+
+		public final static String MODEL_PACKAGE = SQLSERVER_MODEL_BASE_PACKAGE + PACKAGE;
+		public final static String MAPPER_PACKAGE = SQLSERVER_MAPPER_BASE_PACKAGE + PACKAGE;
+
+		public final static String XML_PATH = "classpath:/mapper/sqlserver/record/*.xml";
+		public final static String PREFIX = "spring.datasource.sqlserver.record";
+		public final static String FACTORY_NAME = DATASOURCE_NAME + "_SqlSessionFactory";
+		public final static String TEMPLATE_NAME = DATASOURCE_NAME + "_SqlSessionTemplate";
+		public final static String TRANSACTION_MANAGER_NAME = DATASOURCE_NAME + "_TransactionManager";
+	}
+
 	public enum E_DBConstant {
 		INVITE_CODE_MODE(MYSQL_MODEL_BASE_PACKAGE + ".invite_code_mode", MYSQL_MAPPER_BASE_PACKAGE + ".invite_code_mode");
 

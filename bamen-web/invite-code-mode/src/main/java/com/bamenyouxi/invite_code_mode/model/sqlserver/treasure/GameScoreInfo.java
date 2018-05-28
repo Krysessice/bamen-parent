@@ -10,6 +10,7 @@ public final class GameScoreInfo extends BaseEntity {
 
 	private Integer userId;
 	private Long insureScore;
+	private Integer score;
 
 	private Integer gameId;
 
@@ -21,12 +22,17 @@ public final class GameScoreInfo extends BaseEntity {
 		return new GameScoreInfo(null, gameId, insureScore);
 	}
 
+	public static GameScoreInfo ofGameId(Integer gameId, int score) {
+		return new GameScoreInfo(null, gameId, (long) score);
+	}
+
 	private GameScoreInfo() {}
 
 	private GameScoreInfo(Integer userId, Integer gameId, Long insureScore) {
 		this.userId = userId;
 		this.gameId = gameId;
 		this.insureScore = insureScore;
+		this.score=score;
 	}
 
 	public Integer getUserId() {
@@ -35,5 +41,13 @@ public final class GameScoreInfo extends BaseEntity {
 
 	public Long getInsureScore() {
 		return insureScore;
+	}
+
+	public Integer getScore() {
+		return score;
+	}
+
+	public Integer getGameId() {
+		return gameId;
 	}
 }

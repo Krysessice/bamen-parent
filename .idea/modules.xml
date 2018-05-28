@@ -4,6 +4,7 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/bamen-core/bamen-core.iml" filepath="$PROJECT_DIR$/bamen-core/bamen-core.iml" />
       <module fileurl="file://$PROJECT_DIR$/bamen-parent.iml" filepath="$PROJECT_DIR$/bamen-parent.iml" />
+      <module fileurl="file://$PROJECT_DIR$/bamen-web/cow-nn-mode/cow-nn-mode.iml" filepath="$PROJECT_DIR$/bamen-web/cow-nn-mode/cow-nn-mode.iml" />
       <module fileurl="file://$PROJECT_DIR$/bamen-web/invite-code-mode/invite-code-mode.iml" filepath="$PROJECT_DIR$/bamen-web/invite-code-mode/invite-code-mode.iml" />
       <module fileurl="file://$PROJECT_DIR$/bamen-web/room-card-mode/room-card-mode.iml" filepath="$PROJECT_DIR$/bamen-web/room-card-mode/room-card-mode.iml" />
     </modules>

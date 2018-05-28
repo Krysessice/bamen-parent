@@ -11,6 +11,8 @@ public abstract class AbstractOpenRoomRecordEntity extends BaseEntity {
 	private Integer gameTypeId;
 	private Integer openRoomNum;
 	private Long cardCost;
+	private Integer gameType;
+	private Integer gameTypes;
 
 	private String gameName;
 
@@ -28,5 +30,13 @@ public abstract class AbstractOpenRoomRecordEntity extends BaseEntity {
 
 	public String getGameName() {
 		return gameName;
+	}
+
+	public Integer getGameType() {
+		return gameType;
+	}
+
+	public Integer getGameTypes() {
+		return gameTypes;
 	}
 }

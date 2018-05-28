@@ -7,16 +7,18 @@ import com.bamenyouxi.core.model.excel.ClearExcel;
 import com.bamenyouxi.core.util.PoiExcelUtil;
 import com.bamenyouxi.invite_code_mode.mapper.mysql.invite_code_mode.SysAgentMapper;
 import com.bamenyouxi.invite_code_mode.mapper.mysql.invite_code_mode.TeamPayOrderMapper;
-import com.bamenyouxi.invite_code_mode.model.mysql.invite_code_mode.SysAgent;
-import com.bamenyouxi.invite_code_mode.model.mysql.invite_code_mode.SystemInfo;
-import com.bamenyouxi.invite_code_mode.model.mysql.invite_code_mode.TeamPayOrder;
+import com.bamenyouxi.invite_code_mode.model.mysql.invite_code_mode.*;
+import com.bamenyouxi.invite_code_mode.service.mysql.SysAgentClearRecordService;
 import com.bamenyouxi.invite_code_mode.util.RedisUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 
 import java.io.IOException;
 import java.math.BigDecimal;
+import java.sql.Date;
+import java.text.ParseException;
 import java.time.LocalDate;
 import java.util.*;
 
@@ -30,6 +32,7 @@ public class SysAgentClearExcelService {
 	private TeamPayOrderMapper teamPayOrderMapper;
 	@Autowired
 	private SysAgentMapper sysAgentMapper;
+
 	@Autowired
 	private RedisUtil redisUtil;
 
@@ -59,6 +62,9 @@ public class SysAgentClearExcelService {
 					add("付款时间");add("转账状态");add("游戏id");add("昵称");
 				}});
 	}
+
+
+
 
 	/**
 	 * 报表数据体

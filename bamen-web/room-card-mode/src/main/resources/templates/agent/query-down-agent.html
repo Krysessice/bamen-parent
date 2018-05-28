@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="layout/head :: common_head(_, _)">
+
+</head>
+<body th:replace="layout/body :: common_body(~{::div#container}, ~{::#selfJs})">
+
+<div id="container" class="container">
+
+    <th:block th:replace="~{layout/common :: page-header('下级代理')}"/>
+
+    <!--<th:block th:replace="~{layout/common :: start-end-date-input}" />-->
+
+    <th:block th:replace="~{layout/common :: table-paginator('table')}"/>
+
+
+    <th:block th:replace="~{layout/common :: table-paginator('table')}" />
+
+    <th:block th:replace="model/payOrderModel :: payOrderModel" />
+
+
+</div>
+
+<th:block id="selfJs">
+
+    <th:block th:replace="~{layout/common :: pageJs}"/>
+    <th:block th:replace="~{layout/common :: dateTimeJs}" />
+
+    <script type="text/javascript">
+			var commonJs = new CommonJs();
+
+             $('#payOrderModel').on('show.bs.modal', function (event) {
+				var modal = $(this);
+				var button = $(event.relatedTarget);
+				var element = button.parents('tr');
+				var teamNo = element.find('td[name="account"]').text();
+				var teamName = element.find('td[name="nickName"]').text();
+
+				modal.find('.modal-title').text(teamName + ' 所有下级代理');
+				$('#model-table').tableInit('queryAgentDown', teamNo);
+			})
+
+		</script>
+
+</th:block>
+
+
+</body>
+
+
+</html>

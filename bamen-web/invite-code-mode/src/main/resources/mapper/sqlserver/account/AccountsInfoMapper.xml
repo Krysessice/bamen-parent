@@ -25,7 +25,7 @@
 		select
 			<include refid="field_list" />
 			<if test="params.withCardNum == 1">
-				, InsureScore
+				, InsureScore,score
 			</if>
 		from AccountsInfo a
 		<if test="params.withCardNum == 1">
@@ -46,6 +46,49 @@
 			</foreach>
 		</where>
 	</select>
+
+
+	<select id="getActive" resultMap="resultMap">
+		SELECT COUNT(GameID) GameID,convert(varchar(10),LastLogonDate,120) LastLogonDate FROM [QPAccountsDB].[dbo].[AccountsInfo]
+		<where>
+			<if test="startDate != null">
+				and convert(varchar(10), LastLogonDate, 120) &gt;= convert(varchar(10), #{startDate}, 120)
+			</if>
+			<if test="endDate != null">
+				and convert(varchar(10), LastLogonDate, 120) &lt;= convert(varchar(10), #{endDate}, 120)
+			</if>
+			<if test="startTime != null">
+				and LastLogonDate &gt;= #{startTime}
+			</if>
+			<if test="endTime != null">
+				and LastLogonDate &lt;= #{endTime}
+			</if>
+		</where>
+		GROUP BY convert(varchar(10),LastLogonDate,120) order by LastLogonDate desc
+	</select>
+
+	<update id="updateAgentLookCard" parameterType="com.bamenyouxi.invite_code_mode.model.sqlserver.account.AccountsInfo">
+		UPDATE QPAccountsDB.dbo.AccountsInfo set CustomID=0 where GameID=#{gameId}
+	</update>
+
+	<select id="lookCard" resultMap="resultMap">
+		select UserID,GameID,NickName,CustomID from QPAccountsDB.dbo.AccountsInfo
+		<where>
+				and GameID = #{gameId}
+	    </where>
+	</select>
+
+	<update id="updateLook" parameterType="com.bamenyouxi.invite_code_mode.model.sqlserver.account.AccountsInfo">
+		UPDATE QPAccountsDB.dbo.AccountsInfo set CustomID=1
+		<where>
+				and GameID = #{gameId}
+		</where>
+	</update>
+
+	<select id="queryLook" resultMap="resultMap">
+		select UserID,GameID,NickName,CustomID,RegisterDate from QPAccountsDB.dbo.AccountsInfo where CustomID=1
+	</select>
+
 
 	<update id="update" parameterType="com.bamenyouxi.invite_code_mode.model.sqlserver.account.AccountsInfo">
 		update AccountsInfo
@@ -77,7 +120,7 @@
 
 	<select id="getOfSysAgent" resultType="com.bamenyouxi.invite_code_mode.model.mysql.invite_code_mode.SysAgent" parameterType="map">
 		select
-			UserID, GameID, Accounts, NickName, RegisterDate createTime
+			UserID, GameID, Accounts, NickName,LastLogonDate lastLoginTime, RegisterDate createTime
 		from
 			AccountsInfo
 		<where>

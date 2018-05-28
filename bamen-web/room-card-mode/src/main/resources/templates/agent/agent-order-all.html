@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="layout/head :: common_head(_, _)">
+
+</head>
+<body th:replace="layout/body :: common_body(~{::div#container}, ~{::#selfJs})">
+
+<div id="container" class="container">
+
+    <th:block th:replace="~{layout/common :: page-header('购卡记录')}"/>
+
+    <th:block th:replace="~{layout/common :: table-paginator('table')}"/>
+
+</div>
+
+<th:block id="selfJs">
+
+    <th:block th:replace="~{layout/common :: pageJs}"/>
+
+    <script type="text/javascript">
+			var commonJs = new CommonJs();
+
+			$("#table").tableInit('queryPayCard');
+		</script>
+
+</th:block>
+
+
+</body>
+
+
+</html>

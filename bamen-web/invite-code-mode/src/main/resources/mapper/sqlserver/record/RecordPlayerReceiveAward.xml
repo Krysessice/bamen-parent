@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bamenyouxi.invite_code_mode.mapper.sqlserver.record.RecordPlayerReceiveAwardMapper">
+	<resultMap id="resultMap" type="com.bamenyouxi.invite_code_mode.model.sqlserver.record.RecordPlayerReceiveAward">
+		<result property="recordawardno" column="recordAwardNO" />
+		<result property="userid" column="userID" />
+		<result property="playerturntime" column="playerTurnTime" />
+		<result property="recordawardtype" column="recordAwardType" />
+		<result property="recordawardamount" column="recordAwardAmount" />
+		<result property="gameId" column="GameID" />
+		<result property="nickName" column="NickName" />
+	</resultMap>
+
+
+	<insert id="addRMB" parameterType="com.bamenyouxi.invite_code_mode.model.sqlserver.record.RecordPlayerReceiveAward">
+		INSERT INTO QPRecordDB.dbo.RecordPlayerReceiveAward
+		(
+			UserID,playerTurnTime,recordAwardType,recordAwardAmount
+		)
+		VALUES
+		(#{userid},getdate(),6,#{rmb})
+	</insert>
+
+
+	<select id="getCashRecord" resultMap="resultMap">
+		SELECT
+		a.UserID,
+		a.GameID,
+		a.NickName,
+		b.recordAwardAmount,
+		b.playerTurnTime
+		FROM
+		QPAccountsDB.dbo.AccountsInfo AS a
+		INNER JOIN QPRecordDB.dbo.RecordPlayerReceiveAward AS b ON a.UseriD = b.UseriD
+		<where>
+			<if test="gameId !=null and gameId !='' ">
+				a.GameID=#{gameId}
+			</if>
+			<if test="startDate != null">
+				and convert(varchar(10), playerTurnTime, 120) &gt;= convert(varchar(10), #{startDate}, 120)
+			</if>
+			<if test="endDate != null">
+				and convert(varchar(10), playerTurnTime, 120) &lt;= convert(varchar(10), #{endDate}, 120)
+			</if>
+			ORDER BY playerTurnTime DESC
+		</where>
+	</select>
+
+
+</mapper>

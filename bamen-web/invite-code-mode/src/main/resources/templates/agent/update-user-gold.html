@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="layout/head :: common_head(_, ~{::link})">
+    <link rel="stylesheet" type="text/css" media="all"
+          href="../static/bootstrap/css/bootstrap-datetimepicker.min.css" th:href="@{/bootstrap/css/bootstrap-datetimepicker.min.css}" />
+</head>
+<body th:replace="layout/body :: common_body(~{::div#container}, ~{::#selfJs})">
+
+<div id="container" class="container">
+
+    <th:block th:replace="~{layout/common :: page-header('代理清理')}"/>
+
+    <form id="cardGiftForm" onsubmit="return commonJs.cardGift();">
+        <div class="form-group">
+
+            <label for="gameId">玩家游戏id</label>
+            <div class="row">
+                <div class="col-xs-1"></div>
+                <div class="col-xs-4">
+                    <input type="number" class="form-control col-xs-4" id="gameId" name="gameId" min="10001" max="99999" />
+                </div>
+                <div class="col-xs-4">
+                    <button type="button" class="btn btn-primary" id="selectEnd" >查　询</button>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="form-group">
+            <label for="score">下分金额</label>
+            <div class="row">
+                <div class="col-xs-1"></div>
+                <div class="col-xs-4">
+                    <input type="number" class="form-control col-xs-4" id="score" name="score" min="10001" max="99999" />
+                </div>
+                <div class="col-xs-4">
+                    <button type="button" class="btn btn-primary" id="withrawals" >请  理</button>
+                </div>
+            </div>
+        </div>
+
+    </form>
+
+    <hr/>
+
+    <th:block th:replace="~{layout/common :: table-paginator('table')}" />
+
+
+</div>
+
+<th:block id="selfJs">
+
+    <th:block th:replace="~{layout/common :: pageJs}"/>
+    <th:block th:replace="~{layout/common :: dateTimeJs}" />
+
+    <script type="text/javascript" th:inline="javascript">
+		var commonJs = new CommonJs();
+
+            $("#table").tableInit('queryUserGoldScore');
+
+	       $('button#selectEnd').on('click',function(){
+            var gameId=$('input#gameId').val();
+
+            if(gameId==""){
+				  $("#table").tableInit('queryUserGoldScore');
+              }
+
+            $("#table").html("");
+
+
+			$("#table").tableInit('queryUserGoldScore',gameId);
+
+          });
+
+           $('button#withrawals').on('click',function(){
+                var score=$('input#score').val();
+                var gameId=$('input#gameId').val();
+
+                if (gameId ==undefined && gameId == '')
+		            return alert('请输入ID');
+
+                if (score ==undefined && score == '')
+		            return alert('请输入提现金额');
+
+                $.ajax({
+		            type: 'put',
+		            url: '/update/gold/'+score+'/'+ gameId +'/',
+		            dataType: 'json',
+		            success: function(data) {
+		                if (data.status){
+		                    alert('操作成功');
+		                    location.reload();
+		                }else{
+		                    return alert(data.msg);
+                           }
+		            }
+		        });
+
+           });
+
+		</script>
+
+</th:block>
+
+
+</body>
+
+
+</html>

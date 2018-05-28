@@ -7,6 +7,7 @@
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <module name="bamen-core" />
+        <module name="cow-nn-mode" />
         <module name="invite-code-mode" />
         <module name="room-card-mode" />
       </profile>
@@ -15,8 +16,15 @@
       <module name="bamen-core" target="1.8" />
       <module name="bamen-parent" target="1.8" />
       <module name="bamen-web" target="1.8" />
+      <module name="cow-mode" target="1.8" />
+      <module name="cow-nn-mode" target="1.8" />
+      <module name="gold-field-mode" target="1.8" />
       <module name="invite-code-mode" target="1.8" />
+      <module name="n-n-mod" target="1.8" />
+      <module name="niuniu-mode" target="1.8" />
       <module name="room-card-mode" target="1.8" />
+      <module name="room-card-mode (1)" target="1.8" />
+      <module name="Turntable" target="1.8" />
     </bytecodeTargetLevel>
   </component>
 </project>

@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="layout/head :: common_head(_, ~{::link})">
+	<link rel="stylesheet" type="text/css" media="all"
+	      href="../static/bootstrap/css/bootstrap-datetimepicker.min.css" th:href="@{/bootstrap/css/bootstrap-datetimepicker.min.css}" />
+</head>
+<body th:replace="layout/body :: common_body(~{::div#container}, ~{::#selfJs})">
+
+	<div id="container" class="container">
+
+		<th:block th:replace="~{layout/common :: page-header('代理信息')}" />
+
+		<div id="monitorTime">
+			<th:block th:replace="~{layout/common :: start-end-date-input}"  />
+		</div>
+
+		<div class="form-group">
+			<div class="row">
+				<div class="col-xs-1"></div>
+				<div class="col-xs-4">
+					<span id="sums">日期间金额：</span>
+				</div>
+				<div class="col-xs-4">
+					<span id="price">总金额：</span>
+				</div>
+			</div>
+		</div>
+
+		<th:block th:replace="~{layout/common :: table-paginator('table')}" />
+
+	</div>
+
+	<th:block id="selfJs">
+
+		<th:block th:replace="~{layout/common :: pageJs}" />
+		<th:block th:replace="~{layout/common :: dateTimeJs}" />
+
+		<script type="text/javascript">
+		    var commonJs = new CommonJs();
+
+		     commonJs.datetimeInit(function() {
+	       		 $("#table").tableInit('queryAgent');
+	   		 });
+
+			$(function(){
+	            //document加载完触发
+	            queryMoneyAjax();
+	            queryPriceSumAjax();
+	            //日期Vlaue更改触发
+                $("#monitorTime").on('change',function(){
+                    queryMoneyAjax();
+                });
+
+            })
+
+            function queryMoneyAjax(){
+			 $.ajax({
+                    type: 'get',
+                    url:'/agent/queryAgentOneTime/',
+                    dataType:'Json',
+                    data:{
+                        startDate: $('#startDate').val(),
+                        endDate: $('#endDate').val(),
+                    },
+                    success:function(result){
+                          console.log(JSON.stringify(result));
+                          var sum=result.sumBig;
+                          if(sum<0){
+                            $("#sums").html('日期间金额：<font>' + 0 + '</font>');
+                          }else if(sum==null){
+                             $("#sums").html('日期间金额：<font>' + 0 + '</font>');
+                          }
+                          else{
+                            $("#sums").html('日期间金额：<font>' + sum + '</font>');
+                          }
+
+                    }
+            });
+
+		}
+
+		     function queryPriceSumAjax(){
+			 $.ajax({
+                    type: 'get',
+                    url:'/agent/queryAgentOne/',
+                    dataType:'Json',
+                    success:function(result){
+                          console.log(JSON.stringify(result));
+                          var sum=result.sumBig;
+                          if(sum<0){
+                            $("#price").html('总金额：<font>' + 0 + '</font>');
+                          }else if(sum==null){
+                             $("#price").html('总金额：<font>' + 0 + '</font>');
+                          }
+                          else{
+                            $("#price").html('总金额：<font>' + sum + '</font>');
+                          }
+
+                    }
+            });
+
+		}
+
+		</script>
+
+	</th:block>
+
+</body>
+</html>

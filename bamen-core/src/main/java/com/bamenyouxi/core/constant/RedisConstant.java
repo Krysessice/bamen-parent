@@ -10,5 +10,7 @@ public final class RedisConstant {
 
 	public static class DataBase {
 		public static final int SYSTEM_INFO_DB = 2;
+		public static final int GOLD_INFO_DB = 2;
 	}
+
 }

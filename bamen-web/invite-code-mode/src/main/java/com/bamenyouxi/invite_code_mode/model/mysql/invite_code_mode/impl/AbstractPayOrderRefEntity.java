@@ -10,11 +10,16 @@ public abstract class AbstractPayOrderRefEntity extends AbstractUserInfoEntity {
 
 	protected BigDecimal payPrice;
 	protected Integer cardGold;
+	private BigDecimal systemCost;
 
 	protected String nickName;
 
 	public BigDecimal getPayPrice() {
 		return payPrice;
+	}
+
+	public BigDecimal getSystemCost() {
+		return systemCost;
 	}
 
 	public Integer getCardGold() {

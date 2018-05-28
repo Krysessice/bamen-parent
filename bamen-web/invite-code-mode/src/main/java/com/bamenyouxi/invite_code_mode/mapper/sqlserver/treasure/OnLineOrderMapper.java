@@ -13,7 +13,7 @@ import java.util.Map;
  * Created by hc on 2017/7/9.
  */
 @Mapper
-public interface OnLineOrderMapper extends CrudMapper<OnLineOrder, Integer> {
+public interface OnLineOrderMapper extends CrudMapper<OnLineOrder, Long> {
 
 	/**
 	 * 转换OnLineOrder为PayOrder输出

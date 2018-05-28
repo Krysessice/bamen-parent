@@ -9,7 +9,7 @@ import java.sql.Timestamp;
 
 /**
  * mysql top model class
- * Created by hc on 2017/7/9.
+ * Created by hc on 2018/5/10.
  */
 public abstract class BaseEntity implements Serializable {
     private static final long serialVersionUID = 1L;
@@ -44,6 +44,10 @@ public abstract class BaseEntity implements Serializable {
 
     public Timestamp getModifyTime() {
         return modifyTime;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     @Override

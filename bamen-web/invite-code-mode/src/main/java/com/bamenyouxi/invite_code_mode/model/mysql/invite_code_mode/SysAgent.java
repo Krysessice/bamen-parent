@@ -17,9 +17,11 @@ import java.util.Map;
  * model for t_sys_agent
  * Created by hc on 2017/7/9.
  */
-public final class SysAgent extends AbstractUserInfoEntity {
+public  class SysAgent extends AbstractUserInfoEntity {
 
     private String realName;
+    private Integer  partner;
+    private Integer  partners;
     private String tel;
     private String openingBank;
     private String bankAccount;
@@ -28,6 +30,7 @@ public final class SysAgent extends AbstractUserInfoEntity {
     private Boolean isFinishInfo;
     private String password;
     private String secretKey;
+    @JsonFormat(locale = SysConstant.JsonFormat.DEFAULT_LOCAL, timezone = SysConstant.JsonFormat.DEFAULT_TIMEZONE, pattern = SysConstant.JsonFormat.DEFAULT_PATTERN)
     private Timestamp lastLoginTime;
     private Integer superAgentGameId;
     @JsonFormat(locale = SysConstant.JsonFormat.DEFAULT_LOCAL, timezone = SysConstant.JsonFormat.DEFAULT_TIMEZONE, pattern = SysConstant.JsonFormat.DEFAULT_PATTERN)
@@ -37,6 +40,17 @@ public final class SysAgent extends AbstractUserInfoEntity {
     private Timestamp authorizedTime;
     private Integer recruitNum;
     private Boolean showAnnounce;
+    private BigDecimal payPrice;
+    private Integer lookGold;
+    private  BigDecimal systemcost;
+
+    public void setPayPrice(BigDecimal payPrice) {
+        this.payPrice = payPrice;
+    }
+
+    public void setSystemcost(BigDecimal systemcost) {
+        this.systemcost = systemcost;
+    }
 
     private BigDecimal clearPrice;
 
@@ -44,7 +58,19 @@ public final class SysAgent extends AbstractUserInfoEntity {
     private Integer _superAgentGameId;
     private int recruitNumInt = 0; //招募人数的操作，1自增，-1自减，0无操作，默认0
 
-    private SysAgent() {}
+    public SysAgent() {}
+
+    public Integer getPartners() {
+        return partners;
+    }
+
+    public BigDecimal getPayPrice() {
+        return payPrice;
+    }
+
+    public BigDecimal getSystemcost() {
+        return systemcost;
+    }
 
     public void emptySecretKey() {
         this.secretKey = null;
@@ -130,11 +156,19 @@ public final class SysAgent extends AbstractUserInfoEntity {
         return recruitNumInt;
     }
 
+    public Integer getPartner() {
+        return partner;
+    }
+
+    public Integer getLookGold() {
+        return lookGold;
+    }
+
     public void setClearPrice(BigDecimal clearPrice) {
         this.clearPrice = clearPrice;
     }
 
-    private SysAgent(Builder builder) {
+    public SysAgent(Builder builder) {
         this.id = builder.id;
         this.userId = builder.userId;
         this.gameId = builder.gameId;
@@ -163,6 +197,7 @@ public final class SysAgent extends AbstractUserInfoEntity {
 
         this.recruitNumInt = builder.recruitNumInt;
     }
+
 
     public static class Builder {
         private Long id;

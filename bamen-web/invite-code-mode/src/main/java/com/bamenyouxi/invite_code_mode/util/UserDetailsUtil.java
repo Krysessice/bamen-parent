@@ -23,8 +23,8 @@ public final class UserDetailsUtil {
 	private static Authentication getAuthentication() {
 		return SecurityContextHolder.getContext().getAuthentication();
 	}
-
-	private static UserDetails getUserDetails() {
+//能获取到登录的账号
+	public static UserDetails getUserDetails() {
 		return userDetails = (UserDetails) getAuthentication().getPrincipal();
 	}
 

@@ -3,7 +3,6 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.bamenyouxi.invite_code_mode.mapper.mysql.invite_code_mode.PayOrderPerdayStatisticMapper">
-    <cache />
     <resultMap id="resultMap" type="com.bamenyouxi.invite_code_mode.model.mysql.invite_code_mode.PayOrderPerdayStatistic">
         <id property="id" column="F_ID" />
         <result property="sysFlag" column="F_SYS_FLAG" />
@@ -21,16 +20,16 @@
 
     <select id="get" resultMap="resultMap">
         select
-            <choose>
-                <when test="params.groupBy == null">
-                    *
-                </when>
-                <otherwise>
-                    F_USER_ID, F_GAME_ID, F_ACCOUNTS,
-                    sum(F_PAY_PRICE) as F_PAY_PRICE, sum(F_CARD_GOLD) as F_CARD_GOLD,
-                    convert(F_CREATE_TIME, date) F_CREATE_TIME
-                </otherwise>
-            </choose>
+        <choose>
+            <when test="params.groupBy == null">
+                *
+            </when>
+            <otherwise>
+                F_USER_ID, F_GAME_ID, F_ACCOUNTS,
+                sum(F_PAY_PRICE) as F_PAY_PRICE, sum(F_CARD_GOLD) as F_CARD_GOLD,
+                convert(F_CREATE_TIME, date) F_CREATE_TIME
+            </otherwise>
+        </choose>
         from t_pay_order_perday_statistic
         <where>
             <foreach collection="params" index="key" item="value">
@@ -51,47 +50,47 @@
                         <when test="key == 'superAgentGameId'">
                             <if test="params.teamNo == 't1'">
                                 and F_GAME_ID in (
-                                    select F_GAME_ID from t_sys_agent where F_SUPER_AGENT_GAME_ID = #{value}
-                                    and F_IS_AUTHORIZED is false
+                                select F_GAME_ID from t_sys_agent where F_SUPER_AGENT_GAME_ID = #{value}
+                                and F_IS_AUTHORIZED is false
 
-                                    union
+                                union
 
-                                    select #{value}
+                                select #{value}
                                 )
                             </if>
                             <if test="params.teamNo == 't2'">
                                 and F_GAME_ID in (
-                                    select F_GAME_ID from t_sys_agent where F_SUPER_AGENT_GAME_ID = #{value}
-                                    and F_IS_AUTHORIZED is true
+                                select F_GAME_ID from t_sys_agent where F_SUPER_AGENT_GAME_ID = #{value}
+                                and F_IS_AUTHORIZED is true
 
-                                    union
+                                union
 
-                                    select F_GAME_ID from t_sys_agent where F_SUPER_AGENT_GAME_ID in (
-                                        select F_GAME_ID from t_sys_agent
-                                        where F_SUPER_AGENT_GAME_ID = #{value}
-                                        AND F_IS_AUTHORIZED IS TRUE
-                                    ) and F_IS_AUTHORIZED is false
+                                select F_GAME_ID from t_sys_agent where F_SUPER_AGENT_GAME_ID in (
+                                select F_GAME_ID from t_sys_agent
+                                where F_SUPER_AGENT_GAME_ID = #{value}
+                                AND F_IS_AUTHORIZED IS TRUE
+                                ) and F_IS_AUTHORIZED is false
                                 )
                             </if>
                             <if test="params.teamNo == 't3'">
                                 and F_GAME_ID in (
-                                    select F_GAME_ID from t_sys_agent where F_SUPER_AGENT_GAME_ID in (
-                                        select F_GAME_ID from t_sys_agent where F_SUPER_AGENT_GAME_ID = #{value}
-                                        and F_IS_AUTHORIZED is true
-                                    )
-                                    and F_IS_AUTHORIZED is true
+                                select F_GAME_ID from t_sys_agent where F_SUPER_AGENT_GAME_ID in (
+                                select F_GAME_ID from t_sys_agent where F_SUPER_AGENT_GAME_ID = #{value}
+                                and F_IS_AUTHORIZED is true
+                                )
+                                and F_IS_AUTHORIZED is true
 
-                                    union
+                                union
 
-                                    select F_GAME_ID from t_sys_agent where F_SUPER_AGENT_GAME_ID in (
-                                        select F_GAME_ID from t_sys_agent
-                                        where F_SUPER_AGENT_GAME_ID in (
-                                            select F_GAME_ID from t_sys_agent
-                                            where F_SUPER_AGENT_GAME_ID = #{value}
-                                            and F_IS_AUTHORIZED is true
-                                        )
-                                        AND F_IS_AUTHORIZED IS TRUE
-                                    ) AND F_IS_AUTHORIZED IS false
+                                select F_GAME_ID from t_sys_agent where F_SUPER_AGENT_GAME_ID in (
+                                select F_GAME_ID from t_sys_agent
+                                where F_SUPER_AGENT_GAME_ID in (
+                                select F_GAME_ID from t_sys_agent
+                                where F_SUPER_AGENT_GAME_ID = #{value}
+                                and F_IS_AUTHORIZED is true
+                                )
+                                AND F_IS_AUTHORIZED IS TRUE
+                                ) AND F_IS_AUTHORIZED IS false
                                 )
                             </if>
                         </when>
@@ -106,6 +105,7 @@
             group by ${params.groupBy}
         </if>
     </select>
+
 
     <update id="update" parameterType="com.bamenyouxi.invite_code_mode.model.mysql.invite_code_mode.PayOrderPerdayStatistic">
         update t_pay_order_perday_statistic

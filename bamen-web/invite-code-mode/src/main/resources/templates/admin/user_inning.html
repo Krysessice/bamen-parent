@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="layout/head :: common_head(_, ~{::link})">
+    <link rel="stylesheet" type="text/css" media="all"
+          href="../static/bootstrap/css/bootstrap-datetimepicker.min.css" th:href="@{/bootstrap/css/bootstrap-datetimepicker.min.css}" />
+</head>
+<body th:replace="layout/body :: common_body(~{::div#container}, ~{::#selfJs})">
+
+<div id="container" class="container">
+
+    <th:block th:replace="~{layout/common :: page-header('局数记录')}"/>
+
+    <th:block th:replace="~{layout/common :: start-end-date-input}"  />
+
+    <!--<div class="input-group col-xs-10">-->
+        <!--<input type="text" class="form-control" id="gameIdNames" placeholder="请输入用户ID" aria-describedby="gameIdNames" value="48757" />-->
+        <!--<span class="input-group-addon" id="gameId">查询</span>-->
+    <!--</div>-->
+    <div class="form-group">
+        <label for="gameIdNames">玩家ID</label>
+        <div class="row">
+            <div class="col-xs-1"></div>
+            <div class="col-xs-4">
+                <input type="number" class="form-control col-xs-4" id="gameIdNames" name="gameIdNames" min="1" max="6" />
+            </div>
+            <div class="col-xs-4">
+                <button type="button" id="gameId" class="btn btn-primary">查　询</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label >记录</label>
+        <div class="row">
+            <div class="col-xs-1"></div>
+            <div class="col-xs-4">
+                <span id="count">日期间总局数：0</span>
+            </div>
+            <div class="col-xs-4">
+                <span id="score">日期间总分数：0</span>
+            </div>
+        </div>
+    </div>
+
+    <th:block th:replace="~{layout/common :: table-paginator('table')}"/>
+
+
+</div>
+
+<th:block id="selfJs">
+
+    <th:block th:replace="~{layout/common :: pageJs}"/>
+    <th:block th:replace="~{layout/common :: dateTimeJs}" />
+
+    <script type="text/javascript">
+			var commonJs = new CommonJs();
+
+             commonJs.datetimeInit(function() {
+
+	        });
+
+	         $('button#gameId').on('click',function(){
+	                var gameid=$('input#gameIdNames').val();
+                    $.ajax({
+                         type:'get',
+                         url:'/user/heade/',
+                         dataType:'Json',
+                         data:{
+                            gameid:gameid,
+                            startDate: $('#startDate').val(),
+                            endDate: $('#endDate').val()
+                           },
+                          success:function(result){
+                              console.log(JSON.stringify(result));
+                              var count=result.count;
+                              var score=result.score;
+                              if(count<0 && score<0 ){
+                                $("#count").html('日期间总局数：<font>' + 0 + '</font>');
+                                $("#score").html('日期间总分数：<font>' + 0 + '</font>');
+                              }else if(count==null && score==null){
+                                 $("#count").html('日期间总局数：<font>' + 0 + '</font>');
+                                 $("#score").html('日期间总分数：<font>' + 0 + '</font>');
+                              }
+                              else{
+                                $("#count").html('日期间总局数：<font>' + count + '</font>');
+                                 $("#score").html('日期间总分数：<font>' + score + '</font>');
+                              }
+
+
+                               var gameid=$('input#gameIdNames').val();
+
+                                 if(gameid==""){
+                                    $("#table").tableInit("");
+                                    }
+
+                                 $("#table").html("");
+
+                                $("#table").tableInit('getUserScore',gameid)
+
+                             }
+                    });
+
+	          });
+
+	</script>
+
+</th:block>
+
+
+</body>
+
+
+</html>

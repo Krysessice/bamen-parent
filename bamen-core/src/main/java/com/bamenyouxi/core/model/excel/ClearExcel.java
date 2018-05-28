@@ -58,6 +58,9 @@ public class ClearExcel<T extends ClearExcel.Field> extends AbstractExportExcel<
 			private String openingBank;
 			private String province;
 			private String city;
+			private BigDecimal t1_commission;
+			private BigDecimal t2_commission;
+			private BigDecimal t3_commission;
 			private Integer gameId;
 			private String nickName;
 
@@ -105,6 +108,18 @@ public class ClearExcel<T extends ClearExcel.Field> extends AbstractExportExcel<
 				nickName = val;
 				return this;
 			}
+			public BuilderField t1_commission(BigDecimal val) {
+				t1_commission = val;
+				return this;
+			}
+			public BuilderField t2_commission(BigDecimal val) {
+				t2_commission = val;
+				return this;
+			}
+			public BuilderField t3_commission(BigDecimal val) {
+				t3_commission = val;
+				return this;
+			}
 
 			public Field build() {
 				return new Field(this);
@@ -126,8 +141,11 @@ public class ClearExcel<T extends ClearExcel.Field> extends AbstractExportExcel<
 		private String subbranch;       //支行
 		private String province;
 		private String city;
+		private BigDecimal t1_commission;
+		private BigDecimal t2_commission;
+		private BigDecimal t3_commission;
 		private String transOutAccount; //转出账号
-		private String payType = "实时";
+//		private String payType = "实时";
 		private String transferState;   //转账状态
 		private Integer gameId;
 		private String nickName;
@@ -139,6 +157,9 @@ public class ClearExcel<T extends ClearExcel.Field> extends AbstractExportExcel<
 			this.openingBank = build.openingBank;
 			this.province = build.province;
 			this.city = build.city;
+			this.t1_commission=build.t1_commission;
+			this.t2_commission=build.t2_commission;
+			this.t3_commission=build.t3_commission;
 			this.gameId = build.gameId;
 			this.nickName = build.nickName;
 		}

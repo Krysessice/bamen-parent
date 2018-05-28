@@ -14,6 +14,8 @@
 		<result property="gameTypeId" column="F_GAME_TYPE_ID" />
 		<result property="openRoomNum" column="F_OPEN_ROOM_NUM" />
 		<result property="cardCost" column="F_CARD_COST" />
+		<result property="gameType" column="F_GAME_TYPE" />
+		<result property="gameTypes" column="F_GAME_TYPES" />
 	</resultMap>
 
 	<select id="get" resultMap="resultMap">
@@ -30,13 +32,16 @@
 	<insert id="saveMul">
 		INSERT ignore INTO t_open_room_perhour_record
 			(
-			F_GAME_TYPE_ID, F_OPEN_ROOM_NUM, F_CARD_COST, F_CREATE_TIME
+			F_GAME_TYPE_ID, F_OPEN_ROOM_NUM, F_CARD_COST, F_GAME_TYPE,F_CREATE_TIME
 			)
 		VALUES
 		<foreach collection="list" item="item" separator=",">
 			(
-				#{item.gameTypeId}, #{item.openRoomNum}, #{item.cardCost}, #{item.createTime}
+				#{item.gameTypeId}, #{item.openRoomNum}, #{item.cardCost},#{item.gameType},#{item.createTime}
 			)
 		</foreach>
 	</insert>
+
+
+
 </mapper>

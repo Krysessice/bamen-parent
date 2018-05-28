@@ -34,6 +34,7 @@ class SysAgentInviteCodeSynTask extends AbstractDataSynTask<AccountsInfo, SysAge
 	@Autowired
 	private SysResourceMapper sysResourceMapper;
 
+
 	@Override
 	public List<SysAgent> dataScanForRun() {
 		transMemberTime = Timestamp.from(Instant.now());
@@ -57,6 +58,7 @@ class SysAgentInviteCodeSynTask extends AbstractDataSynTask<AccountsInfo, SysAge
 		transMemberTime = Timestamp.from(Instant.now());
 		return sysAgents;
 	}
+
 
 	@Override
 	public void dataSyn(List<SysAgent> list) {

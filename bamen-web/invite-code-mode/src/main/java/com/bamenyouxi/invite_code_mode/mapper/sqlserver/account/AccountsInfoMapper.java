@@ -3,6 +3,7 @@ package com.bamenyouxi.invite_code_mode.mapper.sqlserver.account;
 import com.bamenyouxi.core.impl.mapper.CrudMapper;
 import com.bamenyouxi.invite_code_mode.model.mysql.invite_code_mode.SysAgent;
 import com.bamenyouxi.invite_code_mode.model.sqlserver.account.AccountsInfo;
+import com.bamenyouxi.invite_code_mode.model.sqlserver.account.GroupRoom;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
 
@@ -21,8 +22,20 @@ public interface AccountsInfoMapper extends CrudMapper<AccountsInfo, Integer> {
 	List<SysAgent> getBySuperAgentTimeBetweenOfSysAgent(Map<String, Object> params);
 
 	@Select("select " +
-			"   GameID gameId, PlayingGame superAgentGameId, SuperAgentTime transMemberTime LastLogonDate" +
+			"   GameID gameId, PlayingGame superAgentGameId, SuperAgentTime transMemberTime, LastLogonDate " +
 			"from AccountsInfo " +
 			"where SuperAgentTime is not null")
 	List<SysAgent> findBySuperAgentTimeNotNullOfSysAgent();
+
+
+	List<AccountsInfo> lookCard(Integer gameId);
+
+	int updateLook(int gameId);
+
+	List<AccountsInfo> queryLook(Map<String,Object> params);
+
+	int updateAgentLookCard(int gameId);
+
+	List<SysAgent> getActive(Map<String, Object> params);
+
 }

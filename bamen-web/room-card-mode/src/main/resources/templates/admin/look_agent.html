@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="zh-CN" xmlns:th="dfhttp://www.thymeleaf.org">
+<head th:replace="layout/head :: common_head(_, _)">
+
+</head>
+<body th:replace="layout/body :: common_body(~{::div#container}, ~{::#selfJs})">
+
+<div id="container" class="container">
+
+	<th:block th:replace="~{layout/common :: page-header('VIP列表')}" />
+
+	<div class="form-group">
+		<div class="col-xs-4">
+			<input type="text" class="form-control" id="gameId" name="gameId" placeholder="请输入代理ID"  required  />
+		</div>
+		<button type="button" class="btn btn-default" id="invitedCodeBtn">授权</button>
+	</div>
+
+	<hr/>
+
+	<div class="table-responsive">
+		<th:block th:replace="~{layout/common :: table-paginator('table')}" />
+
+	</div>
+
+
+</div>
+
+<th:block id="selfJs">
+
+	<th:block th:replace="~{layout/common :: pageJs}" />
+
+	<script type="text/javascript">
+		var commonJs = new CommonJs();
+	    $("#table").tableInit('queryLook');
+
+	    $('button#invitedCodeBtn').on('click',function(){
+	        var gameId = $('input[name="gameId"]').val();
+	        $.ajax({
+				type: 'get',
+				url: '/account/lookCard/'+ gameId ,
+				dataType: 'json',
+				success: function(data) {
+					if (data.status)
+						$('#table').bootstrapTable('reloadGrid');
+					alert(data.msg);
+				}
+			});
+	    })
+
+	</script>
+
+</th:block>
+
+</body>
+</html>

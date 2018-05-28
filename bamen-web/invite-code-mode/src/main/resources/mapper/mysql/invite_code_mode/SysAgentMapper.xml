@@ -3,7 +3,6 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.bamenyouxi.invite_code_mode.mapper.mysql.invite_code_mode.SysAgentMapper">
-    <cache />
     <resultMap id="resultMap" type="com.bamenyouxi.invite_code_mode.model.mysql.invite_code_mode.SysAgent">
         <id property="id" column="F_ID" />
         <result property="sysFlag" column="F_SYS_FLAG" />
@@ -16,6 +15,8 @@
         <result property="gameId" column="F_GAME_ID" />
         <result property="accounts" column="F_ACCOUNTS" />
         <result property="nickName" column="F_NICK_NAME" />
+        <result property="partner" column="F_PARTNER" />
+        <result property="partners" column="F_PARTNERS" />
         <result property="realName" column="F_REAL_NAME" />
         <result property="tel" column="F_TEL" />
         <result property="openingBank" column="F_OPENING_BANK" />
@@ -32,8 +33,14 @@
         <result property="showAnnounce" column="F_SHOW_ANNOUNCE" />
         <result property="province" column="F_PROVINCE" />
         <result property="city" column="F_CITY" />
+        <result property="lookGold" column="F_LOOK_GOLD" />
 
+        <result property="systemcost" column="SystemCost" />
         <result property="payPrice" column="F_PAY_PRICE" />
+    </resultMap>
+
+    <resultMap id="sysAgentVoMap" type="com.bamenyouxi.invite_code_mode.model.mysql.invite_code_mode.SysAgentVo" extends="resultMap">
+        <result property="leve" column="LEVE"/>
     </resultMap>
 
     <select id="get" resultMap="resultMap">
@@ -54,6 +61,263 @@
         </where>
     </select>
 
+    <!--start合伙人-->
+    <select id="query4list" resultMap="sysAgentVoMap">
+    SELECT
+    a.F_ID,
+    a.F_GAME_ID,
+    a.F_NICK_NAME,
+    sum(b.F_PAY_PRICE) as F_PAY_PRICE,
+    a.F_SUPER_AGENT_GAME_ID,
+    b.F_CREATE_TIME,
+    a.F_IS_AUTHORIZED
+    FROM
+    t_sys_agent a
+    LEFT JOIN t_pay_order b ON a.F_GAME_ID = b.F_GAME_ID
+    <where>
+        a.F_SUPER_AGENT_GAME_ID=#{gameId}
+        <if test="startDate != null">
+            and convert(b.F_CREATE_TIME, DATE) &gt;= convert(#{startDate},DATE)
+        </if>
+        <if test="endDate != null">
+            and convert(b.F_CREATE_TIME, DATE) &lt;= convert(#{endDate}, DATE)
+        </if>
+        GROUP BY  a.F_GAME_ID
+    </where>
+    </select>
+
+    <select id="queryAllAgent" resultMap="sysAgentVoMap">
+        SELECT
+        a.F_ID,
+        a.F_GAME_ID,
+        a.F_NICK_NAME,
+        0 as F_PAY_PRICE,
+        a.F_SUPER_AGENT_GAME_ID,
+        a.F_IS_AUTHORIZED
+        FROM
+        t_sys_agent a
+        where
+            a.F_SUPER_AGENT_GAME_ID=#{gameId}
+            and a.F_IS_AUTHORIZED=1
+            GROUP BY  a.F_GAME_ID
+    </select>
+
+
+    <select id="querysubclass" resultMap="sysAgentVoMap">
+        SELECT
+        a.F_ID,
+        a.F_GAME_ID,
+        a.F_NICK_NAME,
+        sum(b.F_PAY_PRICE) as F_PAY_PRICE,
+        a.F_SUPER_AGENT_GAME_ID,
+        b.F_CREATE_TIME,
+        a.F_IS_AUTHORIZED
+        FROM
+        t_sys_agent a
+        LEFT JOIN t_pay_order b ON a.F_GAME_ID = b.F_GAME_ID
+        <where>
+            a.F_SUPER_AGENT_GAME_ID IN
+            <foreach collection="list"  item="item" open="(" separator="," close=")" >
+                #{item}
+            </foreach>
+            <if test="startDate != null">
+                and convert(b.F_CREATE_TIME, DATE) &gt;= convert(#{startDate},DATE)
+            </if>
+            <if test="endDate != null">
+                and convert(b.F_CREATE_TIME, DATE) &lt;= convert(#{endDate}, DATE)
+            </if>
+            GROUP BY a.F_GAME_ID
+        </where>
+    </select>
+
+    <select id="querysubclassAll" resultMap="sysAgentVoMap">
+        SELECT
+        a.F_ID,
+        a.F_GAME_ID,
+        a.F_NICK_NAME,
+        0 as F_PAY_PRICE,
+        a.F_SUPER_AGENT_GAME_ID,
+        a.F_IS_AUTHORIZED
+        FROM
+        t_sys_agent a
+         <where>
+            a.F_SUPER_AGENT_GAME_ID IN
+            <foreach collection="list"  item="item" open="(" separator="," close=")" >
+                #{item}
+            </foreach>
+            and a.F_IS_AUTHORIZED=1
+        </where>
+    </select>
+    <!--end合伙人-->
+
+
+    <!--start金币消耗-->
+    <select id="queryGoldlist" resultMap="sysAgentVoMap">
+        SELECT
+        a.F_ID,
+        a.F_GAME_ID,
+        a.F_NICK_NAME,
+        sum(b.F_SystemCost /100) as systemcost,
+        a.F_SUPER_AGENT_GAME_ID,
+        b.F_CREATE_TIME,
+        a.F_IS_AUTHORIZED
+        FROM
+        t_sys_agent a
+        LEFT JOIN t_user_gold b ON a.F_GAME_ID = b.F_GAME_ID
+        <where>
+            a.F_SUPER_AGENT_GAME_ID=#{gameId}
+            <if test="startDate != null">
+                and convert(b.F_CREATE_TIME, DATE) &gt;= convert(#{startDate},DATE)
+            </if>
+            <if test="endDate != null">
+                and convert(b.F_CREATE_TIME, DATE) &lt;= convert(#{endDate}, DATE)
+            </if>
+            GROUP BY  a.F_GAME_ID
+        </where>
+    </select>
+
+    <select id="queryGoldAllAgent" resultMap="sysAgentVoMap">
+        SELECT
+        a.F_ID,
+        a.F_GAME_ID,
+        a.F_NICK_NAME,
+        0 as systemcost,
+        a.F_SUPER_AGENT_GAME_ID,
+        a.F_IS_AUTHORIZED
+        FROM
+        t_sys_agent a
+        where
+        a.F_SUPER_AGENT_GAME_ID=#{gameId}
+        and a.F_IS_AUTHORIZED=1
+        GROUP BY  a.F_GAME_ID
+    </select>
+
+
+    <select id="queryGoldSubclassAll" resultMap="sysAgentVoMap">
+        SELECT
+        a.F_ID,
+        a.F_GAME_ID,
+        a.F_NICK_NAME,
+        sum(b.F_SystemCost /100) as systemcost,
+        a.F_SUPER_AGENT_GAME_ID,
+        b.F_CREATE_TIME,
+        a.F_IS_AUTHORIZED
+        FROM
+        t_sys_agent a
+        LEFT JOIN t_user_gold b ON a.F_GAME_ID = b.F_GAME_ID
+        <where>
+            a.F_SUPER_AGENT_GAME_ID IN
+            <foreach collection="list"  item="item" open="(" separator="," close=")" >
+                #{item}
+            </foreach>
+            <if test="startDate != null">
+                and convert(b.F_CREATE_TIME, DATE) &gt;= convert(#{startDate},DATE)
+            </if>
+            <if test="endDate != null">
+                and convert(b.F_CREATE_TIME, DATE) &lt;= convert(#{endDate}, DATE)
+            </if>
+            GROUP BY a.F_GAME_ID
+        </where>
+    </select>
+
+    <select id="queryGoldSubclass" resultMap="sysAgentVoMap">
+        SELECT
+        a.F_ID,
+        a.F_GAME_ID,
+        a.F_NICK_NAME,
+        0 as systemcost,
+        a.F_SUPER_AGENT_GAME_ID,
+        a.F_IS_AUTHORIZED
+        FROM
+        t_sys_agent a
+        <where>
+            a.F_SUPER_AGENT_GAME_ID IN
+            <foreach collection="list"  item="item" open="(" separator="," close=")" >
+                #{item}
+            </foreach>
+            and a.F_IS_AUTHORIZED=1
+        </where>
+    </select>
+    <!--end金币消耗-->
+
+
+    <select id="querySubset" resultMap="resultMap">
+        SELECT *FROM t_sys_agent where F_GAME_ID=#{gameId}
+    </select>
+
+    <select id="querySubsets" resultMap="resultMap">
+        SELECT * FROM t_sys_agent where F_GAME_ID=#{gameId}
+    </select>
+
+
+    <select id="getService" resultMap="resultMap">
+        SELECT
+        F_ID,
+        F_GAME_ID,
+        F_NICK_NAME
+        FROM
+        t_sys_agent
+        WHERE
+        F_GAME_ID = #{gameId}
+    </select>
+
+    <select id="getPartner" resultMap="resultMap">
+        SELECT
+        F_ID,
+        F_GAME_ID,
+        F_NICK_NAME,
+        F_PARTNER,
+        F_IS_AUTHORIZED,
+        F_CREATE_TIME
+        FROM
+        t_sys_agent
+        WHERE
+        F_SUPER_AGENT_GAME_ID=10001
+        AND
+        F_PARTNER = 0
+        AND F_IS_AUTHORIZED = 1
+        <if test="gameId !=null">
+            and F_GAME_ID=#{gameId}
+        </if>
+    </select>
+
+    <select id="cancelPartner" resultMap="resultMap">
+        SELECT
+        F_ID,
+        F_GAME_ID,
+        F_NICK_NAME,
+        F_PARTNER,
+        F_IS_AUTHORIZED,
+        F_CREATE_TIME
+        FROM
+        t_sys_agent
+        WHERE
+        F_SUPER_AGENT_GAME_ID=10001
+        AND  F_PARTNER = 1
+        AND F_IS_AUTHORIZED = 1;
+    </select>
+
+    <select id="pages" resultMap="resultMap">
+        select F_PARTNER,F_LOOK_GOLD from t_sys_agent
+        <where>
+            F_GAME_ID = #{gameId}
+        </where>
+    </select>
+
+    <update id="updateAgentId" parameterType="com.bamenyouxi.invite_code_mode.model.mysql.invite_code_mode.SysAgent">
+        UPDATE t_sys_agent SET F_PARTNER = 1
+        <where>
+            F_GAME_ID = #{gameId}
+        </where>
+    </update>
+
+    <update id="updateAgentIds" parameterType="com.bamenyouxi.invite_code_mode.model.mysql.invite_code_mode.SysAgent">
+        UPDATE t_sys_agent SET F_PARTNER = 0
+        <where>
+            F_GAME_ID = #{gameId}
+        </where>
+    </update>
+
     <select id="getNewInsert" resultMap="resultMap">
         SELECT count(F_GAME_ID)F_GAME_ID,F_CREATE_TIME FROM t_sys_agent
         <where>
@@ -71,6 +335,43 @@
             group by ${groupBy}
         </if>
     </select>
+
+
+
+    <select id="giveAgentList" resultMap="resultMap">
+        SELECT
+        F_ID,
+        F_GAME_ID,
+        F_NICK_NAME,
+        F_PARTNERS,
+        F_CREATE_TIME
+        FROM
+        t_sys_agent
+        WHERE
+        F_SUPER_AGENT_GAME_ID = 10003 and F_PARTNERS=0 and  F_IS_AUTHORIZED = 1
+    </select>
+
+    <update id="updateAiveAgentList" parameterType="com.bamenyouxi.invite_code_mode.model.mysql.invite_code_mode.SysAgent">
+            update t_sys_agent set F_PARTNERS=1 where F_GAME_ID=#{gameId}
+    </update>
+
+    <select id="queryGiveAgentList" resultMap="resultMap">
+        SELECT
+        F_ID,
+        F_GAME_ID,
+        F_NICK_NAME,
+        F_PARTNERS,
+        F_IS_AUTHORIZED,
+        F_CREATE_TIME
+        FROM
+        t_sys_agent
+        WHERE
+        F_SUPER_AGENT_GAME_ID = 10003 and F_PARTNERS=1 and  F_IS_AUTHORIZED = 1
+    </select>
+
+    <update id="updateNoAiveAgentList" parameterType="com.bamenyouxi.invite_code_mode.model.mysql.invite_code_mode.SysAgent">
+        update t_sys_agent set F_PARTNERS=0 where F_GAME_ID=#{gameId}
+    </update>
 
 
 
@@ -97,10 +398,10 @@
         insert ignore into t_sys_agent
         (
             F_USER_ID, F_GAME_ID, F_ACCOUNTS, F_NICK_NAME,
-            F_PASSWORD, F_SECRET_KEY, F_CREATE_TIME
+            F_PASSWORD, F_SECRET_KEY,F_LAST_LOGIN_TIME, F_CREATE_TIME
         ) values(
             #{userId}, #{gameId}, #{accounts}, #{nickName},
-            #{password}, #{secretKey}, #{createTime}
+            #{password}, #{secretKey},#{lastLoginTime},#{createTime}
         )
     </insert>
 

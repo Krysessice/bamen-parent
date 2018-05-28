@@ -8,7 +8,17 @@ import com.bamenyouxi.room_card_mode.model.mysql.room_card_mode.impl.AbstractCar
  */
 public final class CardGift4AgentRecord extends AbstractCardGiftRecordEntity {
 
+	private String account;
+	private String nickName;
 	private Long presentee;
+
+	public String getAccount() {
+		return account;
+	}
+
+	public String getNickName() {
+		return nickName;
+	}
 
 	private CardGift4AgentRecord() {}
 

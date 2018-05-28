@@ -19,6 +19,126 @@ CommonJs.prototype.getByGameId = function(gameId, fn) {
      });
 }
 
+
+CommonJs.prototype.updateAiveAgentList = function(e) {
+     var id = $(e).parents('tr').find('td[name="id"]').text();
+     var gameId = $(e).parents('tr').find('td[name="gameId"]').text();
+     if (window.confirm('确定为 ' + gameId + ' 授权吗?')) {
+         $.ajax({
+             type: 'put',
+             url: '/admin/updateAiveAgentList/' + gameId + '/',
+             dataType: 'json',
+             success: function(data) {
+                 if (data.status){
+                     alert('授权成功');
+                 }
+                 else
+                     return alert(data.msg);
+                 $(e).parents('table').bootstrapTable('reloadGrid');
+             }
+         });
+     }
+ }
+
+ CommonJs.prototype.loginAgent = function(e) {
+      var gameId = $(e).parents('tr').find('td[name="gameId"]').text();
+      if (window.confirm('确定要进 ' + gameId + ' 后台吗?')) {
+        top.location.href='/agent/loginAgent/' + gameId + '/';
+      }
+  }
+
+CommonJs.prototype.getAccredit = function(e) {
+    var gameId = $(e).parents('tr').find('td[name="gameId"]').text();
+    if (window.confirm('确定要进 ' + gameId + ' 后台吗?')) {
+      top.location.href='/admin/getAccredit/' + gameId + '/';
+    }
+}
+
+
+ CommonJs.prototype.updateNoAiveAgentList = function(e) {
+     var id = $(e).parents('tr').find('td[name="id"]').text();
+     var gameId = $(e).parents('tr').find('td[name="gameId"]').text();
+     if (window.confirm('确定为 ' + gameId + '取消授权吗?')) {
+         $.ajax({
+             type: 'put',
+             url: '/admin/updateNoAiveAgentList/' + gameId + '/',
+             dataType: 'json',
+             success: function(data) {
+                 if (data.status){
+                     alert('取消成功');
+                 }
+                 else
+                     return alert(data.msg);
+                 $(e).parents('table').bootstrapTable('reloadGrid');
+             }
+         });
+     }
+ }
+
+
+
+ CommonJs.prototype.authorizeLookCard = function(e) {
+     var id = $(e).parents('tr').find('td[name="id"]').text();
+     var gameId = $(e).parents('tr').find('td[name="gameId"]').text();
+     if (window.confirm('确定为 ' + gameId + '取消授权吗?')) {
+         $.ajax({
+             type: 'put',
+             url: '/account/updateAgentLookCard/' + gameId + '/',
+             dataType: 'json',
+             success: function(data) {
+                 if (data.status){
+                     alert('取消成功');
+                 }
+                 else
+                     return alert(data.msg);
+                 $(e).parents('table').bootstrapTable('reloadGrid');
+             }
+         });
+     }
+ }
+
+CommonJs.prototype.authorizeAgent = function(e) {
+     var id = $(e).parents('tr').find('td[name="id"]').text();
+     var gameId = $(e).parents('tr').find('td[name="gameId"]').text();
+     if (window.confirm('确定为 ' + gameId + ' 授权吗?')) {
+         $.ajax({
+             type: 'put',
+             url: '/agent/authorizeAgent/' + gameId + '/',
+             dataType: 'json',
+             success: function(data) {
+                 if (data.status){
+                     alert('授权成功');
+                 }
+                 else
+                     return alert(data.msg);
+                 $(e).parents('table').bootstrapTable('reloadGrid');
+             }
+         });
+     }
+ }
+
+ CommonJs.prototype.authorizeNo = function(e) {
+     var id = $(e).parents('tr').find('td[name="id"]').text();
+     var gameId = $(e).parents('tr').find('td[name="gameId"]').text();
+     if (window.confirm('确定为 ' + gameId + ' 取消授权吗?')) {
+         $.ajax({
+             type: 'put',
+             url: '/agent/authorizeNo/' + gameId + '/',
+             dataType: 'json',
+             success: function(data) {
+                 if (data.status){
+                     alert('取消成功');
+                 }
+                 else
+                     return alert(data.msg);
+                 $(e).parents('table').bootstrapTable('reloadGrid');
+             }
+         });
+     }
+ }
+
+
+
 CommonJs.prototype.getByGameIDWithCardNum = function(gameId, fn) {
      $.ajax({
          type: 'get',
@@ -37,6 +157,10 @@ CommonJs.prototype.getByGameIDWithCardNum = function(gameId, fn) {
          }
      });
 }
+
+
+
+
 
 /* 代理信息表单渲染 */
 CommonJs.prototype.sysAgentInfoFormRender = function() {
@@ -181,6 +305,7 @@ CommonJs.prototype.closeAnnounce = function() {
     });
 }
 
+
 /* 赠送靓号后刷新代理信息 */
 CommonJs.prototype.refresh = function() {
     var srcGameId = $('input#srcGameId').val();
@@ -219,6 +344,7 @@ CommonJs.prototype.cardGift = function() {
                 if (data.status) {
                     $('form#cardGiftForm')[0].reset();
                     $('#table').bootstrapTable('reloadGrid');
+                    location.reload();
                     alert('操作成功');
                 }
                 else
@@ -228,6 +354,31 @@ CommonJs.prototype.cardGift = function() {
 
     return false;
 }
+
+CommonJs.prototype.payGold = function() {
+    if (window.confirm('确定为 ' + $('input#presentee').val() + ' 赠送 ' + $('input#goldNum').val() + ' 金币吗？'))
+        $.ajax({
+            type: 'put',
+            url: '/admin/payGold/',
+            dataType: 'json',
+            data: $('form#payGoldForm').serialize(),
+            success: function(data) {
+
+                if (data.status) {
+                    $('form#payGoldForm')[0].reset();
+                    $('#table').bootstrapTable('reloadGrid');
+                    location.reload();
+                    alert('操作成功');
+                }
+                else
+                    alert(data.msg);
+            }
+        });
+
+    return false;
+}
+
+
 
 /* 清理卡线 */
 CommonJs.prototype.delGameScoreLocker = function(e) {

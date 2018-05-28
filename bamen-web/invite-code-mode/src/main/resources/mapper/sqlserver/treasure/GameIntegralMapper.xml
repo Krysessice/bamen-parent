@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bamenyouxi.invite_code_mode.mapper.sqlserver.treasure.GameIntegralMapper">
+    <resultMap id="resultMap" type="com.bamenyouxi.invite_code_mode.model.sqlserver.treasure.GameIntegral">
+        <result column="Userid" property="userid" />
+        <result column="Integral" property="integral" />
+        <result column="RMB" property="rmb" />
+        <result property="gameId" column="GameID" />
+        <result property="userIds" column="UserID" />
+        <result property="nickName" column="NickName" />
+    </resultMap>
+
+    <select id="getWithrawal" resultMap="resultMap">
+        SELECT
+        a.UserID,
+        a.GameID,
+        a.NickName,
+        b.Integral,
+        b.RMB
+        FROM
+        QPAccountsDB.dbo.AccountsInfo AS a
+        INNER JOIN QPTreasureDB.dbo.GameIntegral AS b ON a.UserID = b.UserID
+        <where>
+            <if test="gameId !=null">
+                a.GameID = #{gameId}
+            </if>
+        </where>
+    </select>
+
+    <select id="getWithrawalOne" resultMap="resultMap">
+        SELECT
+        a.UserID,
+        a.GameID,
+        a.NickName,
+        b.Integral,
+        b.RMB
+        FROM
+        QPAccountsDB.dbo.AccountsInfo AS a
+        INNER JOIN QPTreasureDB.dbo.GameIntegral AS b ON a.UserID = b.UserID
+        <where>
+            a.GameID = #{gameId}
+        </where>
+    </select>
+
+    <update id="updateRMB" parameterType="com.bamenyouxi.invite_code_mode.model.sqlserver.treasure.GameIntegral">
+        update QPTreasureDB.dbo.GameIntegral set RMB=RMB - #{rmb}
+        <where>
+            UserID=#{userid}
+        </where>
+
+    </update>
+
+
+</mapper>

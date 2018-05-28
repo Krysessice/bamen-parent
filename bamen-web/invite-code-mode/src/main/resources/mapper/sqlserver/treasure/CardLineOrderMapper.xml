@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bamenyouxi.invite_code_mode.mapper.sqlserver.treasure.CardLineOrderMapper">
+    <resultMap id="resultMap" type="com.bamenyouxi.invite_code_mode.model.sqlserver.treasure.CardLineOrder">
+        <result column="UserID" property="userid" />
+        <result column="GameID" property="gameId" />
+        <result column="Accounts" property="account" />
+        <result property="orderId" column="OrderID" />
+        <result property="priceCard" column="PriceCard" />
+        <result property="payCard" column="PayCard" />
+        <result property="createTime" column="CreateTime" />
+    </resultMap>
+
+    <select id="getWxPay" resultMap="resultMap">
+        select GameID,PriceCard,PayCard,CreateTime from QPTreasureDB.dbo.CardLineOrder
+        <where>
+            <if test="startDate != null">
+                and convert(varchar(10), CreateTime, 120) &gt;= convert(varchar(10), #{startDate}, 120)
+            </if>
+            <if test="endDate != null">
+                and convert(varchar(10), CreateTime, 120) &lt;= convert(varchar(10), #{endDate}, 120)
+            </if>
+            ORDER BY CreateTime DESC
+        </where>
+    </select>
+
+</mapper>

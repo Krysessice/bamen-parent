@@ -32,7 +32,6 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 @SpringBootApplication(exclude = {DataSourceAutoConfiguration.class})
 @EnableScheduling
 public class InviteCodeModeApplication {
-
 	public static void main(String[] args) {
 		SpringApplication.run(InviteCodeModeApplication.class, args);
 	}

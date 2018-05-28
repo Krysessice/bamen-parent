@@ -22,6 +22,8 @@
 		<result property="nickName" column="F_NICK_NAME" />
 		<result property="lastLoginTime" column="F_LAST_LOGIN_TIME" />
 		<result property="gameId" column="F_GAME_ID"/>
+		<result property="gameType" column="F_GAME_TYPE" />
+		<result property="gameTypes" column="F_GAME_TYPES" />
 
 	</resultMap>
 
@@ -75,13 +77,36 @@
 
 	<insert id="saveMul">
 		insert ignore into t_user_open_room_perday_record(
-			F_GAME_TYPE_ID, F_USER_ID, F_GAME_ID, F_ACCOUNTS, F_OPEN_ROOM_NUM, F_CARD_COST, F_CREATE_TIME
+			F_GAME_TYPE_ID, F_USER_ID, F_GAME_ID, F_ACCOUNTS,F_GAME_TYPE,F_OPEN_ROOM_NUM, F_CARD_COST, F_CREATE_TIME
 		) values
 		<foreach item="item" collection="list" separator=",">
 			(
 				#{item.gameTypeId}, #{item.userId}, #{item.gameId}, #{item.accounts},
-				#{item.openRoomNum}, #{item.cardCost}, #{item.createTime}
+				#{item.gameType},#{item.openRoomNum}, #{item.cardCost}, #{item.createTime}
 			)
 		</foreach>
 	</insert>
+
+
+	<select id="getGameType" resultMap="resultMap">
+		SELECT
+		F_ID,
+		F_GAME_TYPE_ID,
+		F_GAME_TYPE,
+		sum(F_CARD_COST) AS F_CARD_COST,
+		sum(F_OPEN_ROOM_NUM) AS F_GAME_TYPES,
+		F_CREATE_TIME
+		FROM
+		t_user_open_room_perday_record
+		<where>
+			F_GAME_TYPE_ID = #{gameTypeId}
+			AND F_CREATE_TIME = #{createTime}
+			GROUP BY
+			F_GAME_TYPE
+			ORDER BY
+			F_CREATE_TIME DESC
+		</where>
+
+	</select>
+
 </mapper>
