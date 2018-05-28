@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="layout/head :: common_head(_, _)">
+
+</head>
+<body th:replace="layout/body :: common_body(~{::div#container}, ~{::#selfJs})">
+
+<div id="container" class="container">
+
+    <div class="page-header"></div>
+
+    <div class="well" >
+        <div>
+            赠送<span class="text-primary">玩家</span>房卡。
+        </div>
+        <div align="right">
+            <span  id="card" ></span>
+        </div>
+    </div>
+
+
+    <hr/>
+
+    <form id="saveplayer" class="form-horizontal" onsubmit="return false;" >
+
+        <div class="form-group">
+            <label for="presentee" class="col-xs-4 control-label">受赠者</label>
+            <div class="col-xs-4">
+                <input type="text" class="form-control" id="presentee" name="presentee"  placeholder="请输入受赠者" minlength="1" maxlength="6"  required />
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="cardNum" class="col-xs-4 control-label" >赠送房卡数量</label>
+            <div class="col-xs-4">
+                <input type="number" class="form-control" id="cardNum" name="cardNum"  required placeholder="请输入增卡数量" min="1" max="99999" />
+            </div>
+
+        </div>
+
+        <div class="form-group">
+            <label for="giftReason" class="col-xs-4 control-label" >赠卡备注</label>
+            <div class="col-xs-6">
+                <textarea class="form-control" id="giftReason" name="giftReason" rows="4"  required placeholder="请输入赠送原因" ></textarea>
+            </div>
+        </div>
+
+        <div class="col-xs-3" >
+            <button type="reset" class="btn btn-warning">重 置</button>
+        </div>
+
+        <div class="col-xs-3">
+            <button type="submit" class="btn btn-primary" id="save">赠 卡</button>
+        </div>
+
+    </form>
+
+    <div class="page-header">
+        <h4>赠卡记录</h4>
+    </div>
+    <th:block th:replace="~{layout/common :: table-paginator('table')}" />
+
+</div>
+
+
+<th:block id="selfJs">
+
+    <th:block th:replace="~{layout/common :: pageJs}"/>
+
+             <script type="text/javascript">
+
+                var commonJs=new CommonJs();
+
+               $("#table").tableInit('queryAgentPlayer');
+
+                            $(function(){
+                                $.ajax({
+                                        type: 'get',
+                                        url:'/agent/queryNum',
+                                        dataType:'Json',
+                                        success:function(result){
+                                        console.log(JSON.stringify(result));
+                                              var sum=result.sum;
+                                              if(sum<0){
+                                                 $("#card").html('您还剩余<font style="color:red">' + 0 + '</font>张房卡');
+                                              }else if(sum==null){
+                                                 $("#card").html('您还剩余<font style="color:red">' + 0 + '</font>张房卡');
+                                              }
+                                              else{
+                                                $("#card").html('您还剩余<font style="color:red">' + sum + '</font>张房卡');
+                                              }
+
+                                        }
+                                    });
+                            })
+
+                         $("#saveplayer").submit(function(){
+                            if (window.confirm('确定为 ' + $('input#presentee').val() + ' 赠送 ' + $('input#cardNum').val() + ' 张房卡吗？'))
+                                $.ajax({
+                                    type: 'put',
+                                    url: '/agent/agentCardGift/',
+                                    dataType: 'json',
+                                    data: $('form#saveplayer').serialize(),
+                                    success: function(data) {
+                                         if (data.status) {
+                                                alert('赠送成功');
+                                                window.location.reload();
+                                            }
+                                            else
+                                                alert(data.msg);
+                                    }
+                                });
+
+                            return false;
+                        })
+
+            </script>
+
+
+
+</th:block>
+
+</body>
+
+</html>

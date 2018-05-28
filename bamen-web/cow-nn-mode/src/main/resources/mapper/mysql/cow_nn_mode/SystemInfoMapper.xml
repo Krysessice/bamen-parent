@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bamenyouxi.cow_nn_mode.mapper.mysql.cow_nn_mode.SystemInfoMapper">
+    <resultMap id="resultMap" type="com.bamenyouxi.cow_nn_mode.model.mysql.cow_nn_mode.SystemInfo">
+        <id property="id" column="F_ID" />
+        <result property="sysFlag" column="F_SYS_FLAG" />
+        <result property="creator" column="F_CREATOR" />
+        <result property="createTime" column="F_CREATE_TIME" />
+        <result property="modifier" column="F_MODIFIER" />
+        <result property="modifyTime" column="F_MODIFY_TIME" />
+        <result property="gameName" column="F_GAME_NAME" />
+        <result property="title" column="F_TITLE" />
+        <result property="ratelv1" column="F_RATE_LV1"/>
+        <result property="ratelv2" column="F_RATE_LV2"/>
+        <result property="ratelv3" column="F_RATE_LV3"/>
+        <result property="ratelv4" column="F_RATE_LV4"/>
+    </resultMap>
+
+    <select id="get" resultMap="resultMap">
+        select * from t_system_info
+        <where>
+            <foreach collection="params" index="key" item="value">
+                <if test="value != null">
+                    and ${key}=#{value}
+                </if>
+            </foreach>
+        </where>
+    </select>
+
+    <insert id="save" parameterType="com.bamenyouxi.cow_nn_mode.model.mysql.cow_nn_mode.SystemInfo">
+        insert ignore into t_system_info(F_GAME_NAME, F_TITLE, F_SYS_FLAG) values(#{gameName}, #{title}, #{sysFlag})
+    </insert>
+</mapper>

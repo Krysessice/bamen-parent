@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="layout/head :: common_head(_, _)">
+
+</head>
+<body th:replace="layout/body :: common_body(~{::div#container}, _)">
+
+	<div id="container" class="container">
+
+		<div class="page-header"></div>
+
+		<div class="well" th:object="${principal.sysAgent}">
+			<div class="row">
+				<div class="col-xs-4">代　理　号</div>
+				<div class="col-xs-8">[[*{account}]]</div>
+			</div>
+			<div class="row">
+				<div class="col-xs-4">用 户 昵 称</div>
+				<div class="col-xs-8">[[*{nickName}]]</div>
+			</div>
+			<div class="row">
+				<div class="col-xs-4">注 册 日 期</div>
+				<div class="col-xs-8">[[*{#dates.format(createTime, 'yyyy-MM-dd')}]]</div>
+			</div>
+			<div class="row">
+				<div class="col-xs-4">游   戏  ID</div>
+				<div class="col-xs-8">[[*{gameId}]]</div>
+			</div>
+		</div>
+
+		<div class="list-group">
+			<th:block th:replace="~{layout/common :: list-group-item('/agent/message.html', 'glyphicon-euro', '代理商')}" />
+			<th:block th:replace="~{layout/common :: list-group-item('/admin/agent-register.html', 'glyphicon-plus', '开通办事处')}" />
+			<th:block th:replace="~{layout/common :: list-group-item('/admin/card-cost-User.html', 'glyphicon glyphicon-th-list', '每日新增统计')}" />
+			<th:block th:replace="~{layout/common :: list-group-item('/admin/pay-order-perday.html', 'glyphicon-barcode', '每日充值统计')}" />
+			<th:block th:replace="~{layout/common :: list-group-item('/admin/office-message.html', 'glyphicon glyphicon-envelope', '办事处信息')}" />
+			<th:block th:replace="~{layout/common :: list-group-item('/admin/clear.html', 'glyphicon glyphicon-glass', '提现结算')}" />
+			<th:block th:replace="~{layout/common :: list-group-item('/admin/admin-card-gift.html', 'glyphicon glyphicon-leaf', '给代理赠卡')}" />
+			<th:block th:replace="~{layout/common :: list-group-item('/admin/admin-card-player.html', 'glyphicon glyphicon-calendar', '给玩家赠卡')}" />
+			<th:block th:replace="~{layout/common :: list-group-item('/admin/give_agent.html', 'glyphicon glyphicon-retweet', '授权玩家权限')}" />
+			<th:block th:replace="~{layout/common :: list-group-item('/admin/operation.html', 'glyphicon-off', '操作')}" />
+		</div>
+
+	</div>
+
+</body>
+</html>

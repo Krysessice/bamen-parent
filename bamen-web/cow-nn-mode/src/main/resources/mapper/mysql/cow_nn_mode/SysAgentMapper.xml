@@ -1,0 +1,504 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bamenyouxi.cow_nn_mode.mapper.mysql.cow_nn_mode.SysAgentMapper">
+    <resultMap id="resultMap" type="com.bamenyouxi.cow_nn_mode.model.mysql.cow_nn_mode.SysAgent">
+        <id property="id" column="F_ID" />
+        <result property="gameId" column="F_GAME_ID" />
+        <result property="sysFlag" column="F_SYS_FLAG" />
+        <result property="creator" column="F_CREATOR" />
+        <result property="createTime" column="F_CREATE_TIME" />
+        <result property="modifier" column="F_MODIFIER" />
+        <result property="modifyTime" column="F_MODIFY_TIME" />
+
+        <result property="account" column="F_ACCOUNT" />
+        <result property="nickName" column="F_NICK_NAME" />
+        <result property="password" column="F_PASSWORD" />
+        <result property="secretKey" column="F_SECRET_KEY" />
+
+        <result property="roleId" column="F_ROLE_ID" />
+        <result property="superRoleId" column="F_SUPER_ROLE_ID" />
+        <result property="superName" column="F_SUPER_NAME" />
+        <result property="realName" column="F_REAL_NAME" />
+        <result property="tel" column="F_TEL" />
+        <result property="openingBank" column="F_OPENING_BANK" />
+        <result property="bankAccount" column="F_BANK_ACCOUNT" />
+        <result property="isFinishInfo" column="F_IS_FINISH_INFO" />
+        <result property="superAgentId" column="F_SUPER_AGENT_ID" />
+        <result property="partner" column="F_PARTNER" />
+        <result property="firstChargeTime" column="F_FIRST_CHARGE_TIME" />
+        <result property="lastLoginTime" column="F_LAST_LOGIN_TIME" />
+        <result property="province" column="F_PROVINCE" />
+        <result property="city" column="F_CITY" />
+        <result property="payPrice" column="F_PAY_PRICE" />
+        <result property="cardNum" column="F_CARD_NUM" />
+        <result property="cardGift" column="F_CARD_GIFT"/>
+        <result property="withdraw" column="F_WITHDRAW" />
+    </resultMap>
+
+
+    <resultMap id="sysAgentVoMap" type="com.bamenyouxi.cow_nn_mode.model.mysql.cow_nn_mode.SysAgentVo" extends="resultMap">
+        <result property="leve" column="LEVE"/>
+    </resultMap>
+
+
+    <select id="get" resultMap="resultMap">
+        select a.*, b.F_ACCOUNT superAccount, b.F_NICK_NAME superNickName from t_sys_agent a
+        left join t_sys_agent b on a.F_SUPER_AGENT_ID = b.F_ID
+        <where>
+            <foreach collection="params" index="key" item="value">
+                <if test="value != null">
+                    and a.${key} = #{value}
+                </if>
+            </foreach>
+        </where>
+    </select>
+
+    <select id="gets" resultMap="resultMap">
+        select a.*,sum(b.F_WITHDRAW)as F_WITHDRAW  from t_sys_agent as a INNER JOIN t_withdraw as b on a.F_ACCOUNT=b.F_ACCOUNT
+        <where>
+            <foreach collection="params" index="key" item="value">
+                <if test="value != null">
+                    and a.${key} = #{value}
+                </if>
+            </foreach>
+        </where>
+        GROUP BY a.F_ACCOUNT
+    </select>
+
+    <select id="getSuperAgentID" resultMap="resultMap">
+        SELECT
+        *
+        FROM
+        t_sys_agent
+        <where>
+            F_ACCOUNT in (#{superAgentId});
+        </where>
+    </select>
+
+
+
+    <select id="getOfficeAgentPayMessage" resultMap="resultMap">
+        SELECT
+        a.F_ID,
+        a.F_ACCOUNT,
+        a.F_NICK_NAME,
+        b.F_PAY_PRICE,
+        b.F_CARD_NUM,
+        a.F_SUPER_AGENT_ID,
+        a.F_SUPER_NAME,
+        b.F_CREATE_TIME
+        FROM
+        t_sys_agent AS a
+        INNER JOIN t_pay_order AS b ON a.F_ACCOUNT = b.F_SYS_AGENT_ID
+       <where>
+           <if test="superAgentId !=null">
+               F_SUPER_AGENT_ID LIKE "%"#{superAgentId}"%"
+           </if>
+           <if test="startDate != null">
+               and convert(b.F_CREATE_TIME, DATE) &gt;= convert(#{startDate},DATE)
+           </if>
+           <if test="endDate != null">
+               and convert(b.F_CREATE_TIME, DATE) &lt;= convert(#{endDate}, DATE)
+           </if>
+       </where>
+    </select>
+    
+    <select id="getOfficeAgentSumPayMessage" resultMap="resultMap">
+        SELECT
+        sum(b.F_PAY_PRICE)as F_PAY_PRICE
+        FROM
+        t_sys_agent AS a
+        INNER JOIN t_pay_order AS b ON a.F_ACCOUNT = b.F_SYS_AGENT_ID
+        <where>
+            <if test="superAgentId !=null">
+                F_SUPER_AGENT_ID LIKE "%"#{superAgentId}"%"
+            </if>
+            <if test="startDate != null">
+                and convert(b.F_CREATE_TIME, DATE) &gt;= convert(#{startDate},DATE)
+            </if>
+            <if test="endDate != null">
+                and convert(b.F_CREATE_TIME, DATE) &lt;= convert(#{endDate}, DATE)
+            </if>
+        </where>
+    </select>
+
+
+
+    <update id="update" parameterType="com.bamenyouxi.cow_nn_mode.model.mysql.cow_nn_mode.SysAgent">
+        update t_sys_agent
+        <set>
+            <if test="account != null">
+                F_ACCOUNT = #{account},
+            </if>
+            <if test="nickName != null">
+                F_NICK_NAME = #{nickName},
+            </if>
+            <if test="realName != null">
+                F_REAL_NAME = #{realName},
+            </if>
+            <if test="tel != null">
+                F_TEL = #{tel},
+            </if>
+            <if test="openingBank != null">
+                F_OPENING_BANK = #{openingBank},
+            </if>
+            <if test="bankAccount != null">
+                F_BANK_ACCOUNT = #{bankAccount},
+            </if>
+            <if test="isFinishInfo != null">
+                F_IS_FINISH_INFO = #{isFinishInfo},
+            </if>
+            <if test="password != null">
+                F_PASSWORD = #{password},
+            </if>
+            <if test="secretKey != null">
+                F_SECRET_KEY = #{secretKey},
+            </if>
+            <if test="superAgentId != null">
+                F_SUPER_AGENT_ID = #{superAgentId},
+            </if>
+           <!-- <if test="sysFlag != null">
+                F_SYS_FLAG = #{sysFlag},
+            </if>-->
+            <if test="province != null">
+                F_PROVINCE = #{province},
+            </if>
+            <if test="city != null">
+                F_CITY = #{city},
+            </if>
+            <if test="isFinishInfo != null">
+                F_IS_FINISH_INFO = #{isFinishInfo},
+            </if>
+        </set>
+        <where>
+            <choose>
+                <when test="_superAgentAccount != null">
+                    and F_SUPER_AGENT_ID = #{_superAgentAccount}
+                </when>
+                <when test="id != null">
+                    and F_ID = #{id}
+                </when>
+                <when test="_account != null">
+                    and F_ACCOUNT = #{_account}
+                </when>
+                <otherwise>
+                    and F_ID = 0
+                </otherwise>
+            </choose>
+        </where>
+    </update>
+
+
+    <!--冻结代理的修改-->
+    <update id="updateFreeze" parameterType="com.bamenyouxi.cow_nn_mode.model.mysql.cow_nn_mode.SysAgent">
+        update t_sys_agent
+        <set>
+            <if test="account !=null">
+                F_ACCOUNT=#{account},
+            </if>
+            <if test="nickName !=null">
+                F_NICK_NAME=#{nickName},
+            </if>
+            <if test="password !=null">
+                F_PASSWORD=#{password},
+            </if>
+            <if test="secretKey != null">
+                F_SECRET_KEY = #{secretKey},
+            </if>
+            <if test="sysFlag !=null">
+                F_SYS_FLAG=#{sysFlag}
+            </if>
+            <if test="superAgentId !=null">
+                F_SUPER_AGENT_ID=#{superAgentId},
+            </if>
+        </set>
+        <where>
+            <if test="account !=null">
+                F_ACCOUNT=#{account}
+            </if>
+        </where>
+    </update>
+
+    <select id="getAccount" resultMap="resultMap">
+        SELECT
+        F_ID,
+        F_ACCOUNT,
+        F_NICK_NAME,
+        F_SYS_FLAG
+        FROM
+        t_sys_agent
+        <where>
+            F_ACCOUNT = #{account}
+        </where>
+    </select>
+
+    <select id="salesmanPayOrderModel" resultMap="resultMap">
+        SELECT
+        a.F_ID,
+        a.F_ACCOUNT,
+        a.F_NICK_NAME,
+        a.F_SUPER_AGENT_ID,
+        a.F_SUPER_NAME,
+        b.F_PAY_PRICE,
+        b.F_CREATE_TIME
+        FROM
+        t_sys_agent AS a
+        RIGHT JOIN t_pay_order AS b ON a.F_ACCOUNT = b.F_SYS_AGENT_ID
+        <where>
+            <if test="superAgentId !=null">
+                F_SUPER_AGENT_ID LIKE "%"#{superAgentId}"%"
+            </if>
+            <if test="startDate != null">
+                and convert(b.F_CREATE_TIME, DATE) &gt;= convert(#{startDate},DATE)
+            </if>
+            <if test="endDate != null">
+                and convert(b.F_CREATE_TIME, DATE) &lt;= convert(#{endDate}, DATE)
+            </if>
+        </where>
+    </select>
+
+    <select id="getSalesmanPayOrderSum" resultMap="resultMap">
+        SELECT
+        IFNULL(sum(F_PAY_PRICE),0)as F_PAY_PRICE
+        FROM
+        t_sys_agent AS a
+        RIGHT JOIN t_pay_order AS b ON a.F_ACCOUNT = b.F_SYS_AGENT_ID
+        <where>
+            <if test="superAgentId !=null">
+                F_SUPER_AGENT_ID LIKE "%"#{superAgentId}"%"
+            </if>
+            <if test="startDate != null">
+                and convert(b.F_CREATE_TIME, DATE) &gt;= convert(#{startDate},DATE)
+            </if>
+            <if test="endDate != null">
+                and convert(b.F_CREATE_TIME, DATE) &lt;= convert(#{endDate}, DATE)
+            </if>
+        </where>
+    </select>
+
+
+    <select id="getNewInsert" resultMap="resultMap">
+        SELECT count(F_ACCOUNT)F_ACCOUNT,F_CREATE_TIME FROM t_sys_agent
+        <where>
+            <if test="startDate != null">
+                and convert(F_CREATE_TIME, DATE) &gt;= convert(#{startDate},DATE)
+            </if>
+            <if test="endDate != null">
+                and convert(F_CREATE_TIME, DATE) &lt;= convert(#{endDate}, DATE)
+            </if>
+            <if test="groupBy != null">
+
+            </if>
+        </where>
+        <if test="groupBy != null">
+            group by ${groupBy}
+        </if>
+    </select>
+
+
+
+
+
+
+
+
+
+
+
+    <select id="getJurisdiction" resultMap="resultMap">
+        select * from t_sys_agent
+        <where>
+            F_ACCOUNT=#{account}
+        </where>
+    </select>
+
+
+
+    <insert id="save" parameterType="com.bamenyouxi.cow_nn_mode.model.mysql.cow_nn_mode.SysAgent" useGeneratedKeys="true" keyProperty="id">
+        insert ignore into t_sys_agent
+        (
+            F_ACCOUNT, F_NICK_NAME, F_PASSWORD, F_SECRET_KEY
+            <if test="superAgentId != null">
+                , F_SUPER_AGENT_ID
+            </if>
+        ) values (
+            #{account}, #{nickName}, #{password}, #{secretKey}
+            <if test="superAgentId != null">
+                , #{superAgentId}
+            </if>
+        )
+    </insert>
+
+    <insert id="saveAll" parameterType="com.bamenyouxi.cow_nn_mode.model.mysql.cow_nn_mode.SysAgent" useGeneratedKeys="true" keyProperty="id">
+        insert ignore into t_sys_agent
+        (
+        F_ACCOUNT, F_NICK_NAME, F_PASSWORD, F_SECRET_KEY, F_SUPER_AGENT_ID
+        ) values (
+        #{account}, #{nickName}, #{password}, #{secretKey},#{superAgentId})
+    </insert>
+
+    <insert id="OpenOffice" parameterType="com.bamenyouxi.cow_nn_mode.model.mysql.cow_nn_mode.SysAgent" useGeneratedKeys="true" keyProperty="id">
+        insert ignore into t_sys_agent
+        (
+        <if test="gameId != null">
+            F_GAME_ID,
+        </if>
+        F_ACCOUNT, F_NICK_NAME, F_PASSWORD, F_SECRET_KEY
+        <if test="superAgentId != null">
+            , F_SUPER_AGENT_ID
+        </if>
+        <if test="roleId != null">
+            , F_ROLE_ID
+        </if>
+        <if test="superRoleId != null">
+            , F_SUPER_ROLE_ID
+        </if>
+        <if test="superName != null">
+            , F_SUPER_NAME
+        </if>
+        ) values (
+        <if test="gameId !=null">
+            #{gameId},
+        </if>
+        <if test="account !=null">
+            #{account},
+        </if>
+        <if test="nickName !=null">
+            #{nickName},
+        </if>
+        #{password}, #{secretKey}
+        <if test="superAgentId != null">
+            , #{superAgentId}
+        </if>
+        <if test="roleId != null">
+            , #{roleId}
+        </if>
+        <if test="superRoleId != null">
+            , #{superRoleId}
+        </if>
+        <if test="superName != null">
+            , #{superName}
+        </if>
+        )
+    </insert>
+
+    <select id="getId" resultMap="resultMap">
+        select F_ID,F_ACCOUNT,F_NICK_NAME from t_sys_agent
+        <where>
+            F_ID=#{id}
+        </where>
+    </select>
+
+    <select id="getAll" resultMap="resultMap">
+        select F_ID,F_ACCOUNT,F_NICK_NAME from t_sys_agent
+        <where>
+            F_ACCOUNT=#{account}
+        </where>
+    </select>
+
+
+
+    <select id="getGameId" resultMap="resultMap">
+        SELECT
+        F_ID,
+        F_GAME_ID,
+        F_ACCOUNT,
+        F_NICK_NAME,
+        F_SYS_FLAG
+        FROM
+        t_sys_agent
+        <where>
+            F_GAME_ID = #{gameId}
+        </where>
+    </select>
+
+    <update id="updateAgentId" parameterType="com.bamenyouxi.cow_nn_mode.model.mysql.cow_nn_mode.SysAgent">
+        UPDATE t_sys_agent SET F_PARTNER = 1
+        <where>
+                F_ACCOUNT = #{account}
+        </where>
+    </update>
+
+    <update id="updateAgentIds" parameterType="com.bamenyouxi.cow_nn_mode.model.mysql.cow_nn_mode.SysAgent">
+        UPDATE t_sys_agent SET F_PARTNER = 0
+        <where>
+            F_ACCOUNT = #{account}
+        </where>
+    </update>
+
+    <update id="updated" parameterType="com.bamenyouxi.cow_nn_mode.model.mysql.cow_nn_mode.SysAgent">
+        update t_sys_agent
+        <set>
+            <if test="account !=null">
+                F_ACCOUNT=#{account},
+            </if>
+            <if test="nickName !=null">
+                F_NICK_NAME=#{nickName},
+            </if>
+            <if test="password !=null">
+                F_PASSWORD=#{password},
+            </if>
+            <if test="secretKey != null">
+                F_SECRET_KEY = #{secretKey},
+            </if>
+            <if test="superAgentId !=null">
+                F_SUPER_AGENT_ID=#{superAgentId},
+            </if>
+        </set>
+        <where>
+            <choose>
+                <when test="superAgentId != null">
+                    and F_SUPER_AGENT_ID = #{superAgentId}
+                </when>
+                <when test="id != null">
+                    and F_ID = #{id}
+                </when>
+            </choose>
+        </where>
+    </update>
+
+
+
+
+    <!--重置密码的修改-->
+    <update id="updates" parameterType="com.bamenyouxi.cow_nn_mode.model.mysql.cow_nn_mode.SysAgent">
+        update t_sys_agent
+        <set>
+            <if test="account !=null">
+                F_ACCOUNT=#{account},
+            </if>
+            <if test="password !=null">
+                F_PASSWORD=#{password},
+            </if>
+            <if test="secretKey != null">
+                F_SECRET_KEY = #{secretKey},
+            </if>
+        </set>
+        <where>
+            <if test="account !=null">
+                F_ACCOUNT=#{account}
+            </if>
+        </where>
+    </update>
+
+
+    <!--查看剩余房卡-->
+    <select id="queryMun" resultMap="resultMap" parameterType="com.bamenyouxi.cow_nn_mode.model.mysql.cow_nn_mode.SysAgent">
+        select(
+        (
+        SELECT ifnull(sum(TabsA.F_CARD_NUM), 0) from (
+        select a.F_ID as afid,a.F_CARD_NUM,a.F_ORDER_NO,b.F_ID,b.F_ACCOUNT,b.F_NICK_NAME from t_pay_order as a INNER JOIN t_sys_agent as b on
+        b.F_ACCOUNT=#{account} and a.F_SYS_AGENT_ID = b.F_ACCOUNT
+        )as TabsA
+        ) +
+        (
+        select ifnull(sum(F_CARD_NUM), 0)as F_CARD_NUM from t_card_gift_for_agent_record where F_PRESENTEE=#{account}
+        )
+        ) as F_CARD_NUM from dual
+    </select>
+
+
+
+</mapper>

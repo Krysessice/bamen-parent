@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bamenyouxi.cow_nn_mode.mapper.sqlserver.account.AccountsInfoMapper">
+	<resultMap id="resultMap" type="com.bamenyouxi.cow_nn_mode.model.sqlserver.account.AccountsInfo">
+		<result property="userId" column="UserID" />
+		<result property="gameId" column="GameID" />
+		<result property="accounts" column="Accounts" />
+		<result property="nickName" column="NickName" />
+		<result property="agentLevel" column="AgentLevel" />
+		<result property="loveLiness" column="LoveLiness" />
+		<result property="playingGame" column="PlayingGame" />
+		<result property="registerDate" column="RegisterDate" />
+		<result property="superAgentTime" column="SuperAgentTime" />
+
+		<result property="insureScore" column="InsureScore" />
+	</resultMap>
+
+	<select id="get" resultMap="resultMap">
+		select *from QPAccountsDB.dbo.AccountsInfo
+		<where>
+			<foreach collection="params" index="key" item="value">
+				<if test="value != null">
+					and ${key} = #{value}
+				</if>
+			</foreach>
+		</where>
+	</select>
+
+	<select id="getList" resultMap="resultMap">
+		select *from QPAccountsDB.dbo.AccountsInfo
+	</select>
+
+
+	<update id="update" parameterType="com.bamenyouxi.cow_nn_mode.model.sqlserver.account.AccountsInfo">
+		update AccountsInfo
+		<set>
+			<if test="loveLiness != null">
+				LoveLiness = #{loveLiness}
+			</if>
+		</set>
+		<where>
+			<choose>
+				<when test="userId != null">
+					and UserID = #{userId}
+				</when>
+				<otherwise>
+					and UserID = 0
+				</otherwise>
+			</choose>
+		</where>
+	</update>
+
+
+</mapper>
+
+
+
+

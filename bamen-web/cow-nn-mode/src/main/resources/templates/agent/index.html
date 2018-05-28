@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="layout/head :: common_head(_, _)">
+
+</head>
+<body th:replace="layout/body :: common_body(~{::div#container},~{::#selfJs})">
+
+<div id="container" class="container">
+
+    <div class="page-header"></div>
+
+    <div class="well" th:object="${principal.sysAgent}">
+        <div class="row">
+            <div class="col-xs-4">代　理　号</div>
+            <div class="col-xs-8">[[*{account}]]</div>
+        </div>
+        <div class="row">
+            <div class="col-xs-4">用 户 昵 称</div>
+            <div class="col-xs-8">[[*{nickName}]]</div>
+        </div>
+        <div class="row">
+            <div class="col-xs-4">注 册 日 期</div>
+            <div class="col-xs-8">[[*{#dates.format(createTime, 'yyyy-MM-dd')}]]</div>
+        </div>
+        <!--<div class="row">-->
+            <!--<div class="col-xs-4">上级代理号</div>-->
+            <!--<div class="col-xs-8">[[*{superAgentId}]]</div>-->
+        <!--</div>-->
+        <div class="row">
+            <div class="col-xs-4">游   戏  ID</div>
+            <div class="col-xs-8">[[*{gameId}]]</div>
+        </div>
+    </div>
+
+    <div class="list-group">
+        <th:block th:replace="~{layout/common :: list-group-item('/agent/announcements.html', 'glyphicon-bullhorn', '代理商')}"/>
+        <th:block th:replace="~{layout/common :: list-group-item('/agent/cover.html', 'glyphicon glyphicon-pencil', '完善个人信息')}" />
+        <th:block th:replace="~{layout/common :: list-group-item('/agent/rechargeable-drill.html', 'glyphicon glyphicon-yen', '充钻')}" />
+        <th:block th:replace="~{layout/common :: list-group-item('/agent/getSalesman-limits.html', 'glyphicon glyphicon-envelope', '代理充值/返利')}" />
+        <th:block th:replace="~{layout/common :: list-group-item('/agent/agent-play-card.html', 'glyphicon glyphicon-user', '玩家赠卡')}"/>
+        <th:block th:replace="~{layout/common :: list-group-item('/agent/agent-card-gift.html', 'glyphicon glyphicon-leaf', '代理赠卡')}" />
+        <th:block th:replace="~{layout/common :: list-group-item('/agent/pay-order.html', 'glyphicon-list-alt', '我的充值明细')}" />
+        <th:block th:replace="~{layout/common :: list-group-item-for-model('#updatePwdModel', 'glyphicon-pencil', '密码修改')}" />
+    </div>
+    <th:block th:replace="model/updatePwdModel :: updatePwdModel" />
+</div>
+
+    <th:block id="selfJs">
+
+        <th:block th:replace="~{model/updatePwdModel :: updatePwdModelJs}" />
+
+        <script type="text/javascript">
+
+        $(function(){
+              $.ajax({
+                type: 'get',
+                url:'/agent/getJurisdiction/',
+                async: false,
+                dataType:'Json',
+                success:function(result){
+                console.log(JSON.stringify(result));
+                  var i=result.n;
+                    if(i=='1'){
+                        var htmlTh_Blocks2= $(".list-group").append('<a href="/agent/agent-register.html" class="list-group-item">'
+                        +'<span class="glyphicon glyphicon-plus"></span> 开通代理'
+                        +'<span style="float: right;">&gt;</span></a>');
+
+                        var htmlTh_Blocks3= $(".list-group").append('<a href="/agent/getAgentPay.html" class="list-group-item">'
+                        +'<span class="glyphicon glyphicon-search"></span> 代理充值信息'
+                        +'<span style="float: right;">&gt;</span></a>');
+
+                    }else if(i=='2'){
+                        var htmlTh_Blocks3= $(".list-group").append('<a href="/agent/salesman-limits.html" class="list-group-item">'
+                        +'<span class="glyphicon glyphicon-plus"></span> 开通代理'
+                        +'<span style="float: right;">&gt;</span></a>');
+                    }else if(i=='3'){
+                        var htmlTh_Blocks3= $(".list-group").append('<a href="/agent/getAgent-limits.html" class="list-group-item">'
+                        +'<span class="glyphicon glyphicon-plus"></span> 开通代理'
+                        +'<span style="float: right;">&gt;</span></a>');
+                    }else if(i=='4'){
+                        var htmlTh_Blocks3= $(".list-group").append('<a href="/agent/zdAgent-limits.html" class="list-group-item">'
+                        +'<span class="glyphicon glyphicon-plus"></span> 开通代理'
+                        +'<span style="float: right;">&gt;</span></a>');
+                    }
+            }
+        });
+      })
+
+        </script>
+
+
+    </th:block>
+</body>
+</html>

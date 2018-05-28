@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="layout/head :: common_head(_, ~{::link})">
+    <link rel="stylesheet" type="text/css" media="all"
+          href="../static/bootstrap/css/bootstrap-datetimepicker.min.css" th:href="@{/bootstrap/css/bootstrap-datetimepicker.min.css}" />
+</head>
+<body th:replace="layout/body :: common_body(~{::div#container}, ~{::#selfJs})">
+
+        <div id="container" class="container">
+
+            <th:block th:replace="~{layout/common :: page-header('充值/返利记录')}"/>
+
+            <div id="monitorTime">
+                <th:block th:replace="~{layout/common :: start-end-date-input}"  />
+            </div>
+
+            <div class="row">
+                <div class="col-xs-4">
+                    <button class="btn btn-info" type="button" disabled>充值总额 <span id="PayPrice" class="badge"></span></button>
+                </div>
+                <div class="col-xs-4">
+                    <button class="btn btn-info" type="button" disabled>返利总额 <span id="rebateMoney" class="badge"></span></button>
+                </div>
+                <div class="col-xs-4">
+                    <button class="btn btn-info" type="button" disabled>可提现总额 <span id="ClearPrice" class="badge"></span></button>
+                </div>
+            </div>
+
+            <hr/>
+
+            <div class="form-group">
+                <label for="withdraw">提现金额</label>
+                <div class="row">
+                    <div class="col-xs-1"></div>
+                    <div class="col-xs-4">
+                        <input type="number" class="form-control col-xs-4"  placeholder="至少100开提" id="withdraw" name="withdraw" min="1" max="6" />
+                    </div>
+                    <div class="col-xs-4">
+                        <button type="button" id="affirm" class="btn btn-primary" onclick="affirm();">确　认</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="page-header"></div>
+
+            <th:block th:replace="~{layout/common :: table-paginator('table')}"/>
+            <th:block th:replace="model/salesmanPayOrderModel :: salesmanPayOrderModel" />
+
+        </div>
+
+        <th:block id="selfJs">
+            <th:block th:replace="~{layout/common :: pageJs}"/>
+            <th:block th:replace="~{layout/common :: dateTimeJs}" />
+            <th:block th:replace="~{model/salesmanPayOrderModel :: salesmanPayOrderModelJS}" />
+
+        <script type="text/javascript" >
+                var commonJs=new CommonJs();
+                commonJs.datetimeInit(function() {
+                    var F_endDate = new Date(new Date().valueOf() - 24 * 60 * 60 ).format('yyyy-MM-dd');
+                    $('#startDate').datetimepicker('setEndDate', F_endDate);
+                    $('#endDate').datetimepicker('setEndDate', F_endDate);
+                    $('#endDate').val(F_endDate);
+
+                    $("#table").tableInit('getDetail');
+
+                      $('.form_date').datetimepicker().on('changeDate', function(ev) {
+                            getClear();
+                      });
+
+	                  getClear();
+                });
+
+                function getClear() {
+                    $.ajax({
+                        type: 'get',
+                        url: '/rebate/getDetailSum/',
+                        dataType: 'json',
+                        data: {
+                            startDate : $('#startDate').val(),
+                            endDate : $('#endDate').val()
+                        },
+                        success: function(result) {
+                            $('span#PayPrice').text(result.n);
+                            $('span#rebateMoney').text(result.s);
+                            $('span#ClearPrice').text(result.sum);
+                        }
+                    });
+                }
+
+               function affirm(){
+                    var withdraw=$('input#withdraw').val();
+                    $.ajax({
+                        type: 'post',
+                        url: '/withdraw/add/ '+ withdraw +'/',
+                        dataType: 'json',
+                        success: function(data) {
+                           if (data.status) {
+			                    alert('提现成功！  预计明天早上9点打款。');
+			                    window.location.reload();
+			                } else
+			                    return alert(data.msg);
+                        }
+                    });
+               }
+
+
+        </script>
+
+        </th:block>
+
+</body>
+
+</html>
+
+
+

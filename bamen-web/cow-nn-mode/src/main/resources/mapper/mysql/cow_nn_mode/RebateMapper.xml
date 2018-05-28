@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+		PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+		"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bamenyouxi.cow_nn_mode.mapper.mysql.cow_nn_mode.RebateMapper">
+	<resultMap id="resultMap" type="com.bamenyouxi.cow_nn_mode.model.mysql.cow_nn_mode.Rebate">
+		<id property="id" column="F_ID" />
+		<result property="createTime" column="F_CREATE_TIME" />
+		<result property="modifier" column="F_MODIFIER" />
+		<result property="modifyTime" column="F_MODIFY_TIME" />
+
+		<result property="orderNo" column="ORDER_NO" />
+		<result property="account" column="F_ACCOUNT" />
+		<result property="nickName" column="F_NICK_NAME" />
+		<result property="payPrice" column="F_PAY_PRICE" />
+		<result property="rebateRate" column="REBATE_RATE" />
+		<result property="rebateMoney" column="REBATE_MONEY" />
+		<result property="favorerAccount" column="FAVORER_ACCOUNT" />
+		<result property="favorerRoleId" column="FAVORER_ROLE_ID" />
+
+	</resultMap>
+
+
+	<select id="get" resultMap="resultMap">
+		select * from t_rebate
+		<where>
+			<foreach collection="params" index="key" item="value">
+				<if test="value != null">
+					and ${key}=#{value}
+				</if>
+			</foreach>
+		</where>
+	</select>
+	
+	
+	<select id="getDetail" resultMap="resultMap">
+		SELECT
+		F_ID,
+		F_ACCOUNT ,
+		F_NICK_NAME ,
+		IFNULL(SUM(F_PAY_PRICE), 0) AS F_PAY_PRICE,
+		IFNULL(SUM(REBATE_MONEY), 0) AS REBATE_MONEY,
+		F_CREATE_TIME
+		FROM
+		t_rebate
+		<where>
+			<if test="favorerAccount !=null">
+				FAVORER_ACCOUNT = #{favorerAccount}
+			</if>
+			<if test="startDate != null">
+				and convert(F_CREATE_TIME, DATE) &gt;= convert(#{startDate},DATE)
+			</if>
+			<if test="endDate != null">
+				and convert(F_CREATE_TIME, DATE) &lt;= convert(#{endDate}, DATE)
+			</if>
+		</where>
+		GROUP BY F_ACCOUNT
+	</select>
+
+	<select id="getDetailSum" resultMap="resultMap">
+		SELECT
+		IFNULL(SUM(F_PAY_PRICE), 0) AS F_PAY_PRICE,
+		IFNULL(SUM(REBATE_MONEY), 0) AS REBATE_MONEY
+		FROM
+		t_rebate
+		<where>
+			<if test="favorerAccount !=null">
+				FAVORER_ACCOUNT = #{favorerAccount}
+			</if>
+			<if test="startDate != null">
+				and convert(F_CREATE_TIME, DATE) &gt;= convert(#{startDate},DATE)
+			</if>
+			<if test="endDate != null">
+				and convert(F_CREATE_TIME, DATE) &lt;= convert(#{endDate}, DATE)
+			</if>
+		</where>
+	</select>
+
+
+
+	<insert id="saves" parameterType="com.bamenyouxi.cow_nn_mode.model.mysql.cow_nn_mode.Rebate">
+		INSERT INTO t_rebate(
+		<if test="orderNo !=null">
+			ORDER_NO,
+		</if>
+		<if test="account !=null">
+			F_ACCOUNT,
+		</if>
+		<if test="nickName !=null">
+			F_NICK_NAME,
+		</if>
+		<if test="payPrice !=null">
+			F_PAY_PRICE,
+		</if>
+		<if test="rebateRate !=null">
+			REBATE_RATE,
+		</if>
+		<if test="rebateMoney !=null">
+			REBATE_MONEY,
+		</if>
+		<if test="favorerAccount !=null">
+			FAVORER_ACCOUNT,
+		</if>
+		<if test="favorerRoleId !=null">
+			FAVORER_ROLE_ID
+		</if>
+		)
+		VALUES(
+		<if test="orderNo !=null">
+			#{orderNo},
+		</if>
+		<if test="account !=null">
+			#{account},
+		</if>
+		<if test="nickName !=null">
+			#{nickName},
+		</if>
+		<if test="payPrice !=null">
+			#{payPrice},
+		</if>
+		<if test="rebateRate !=null">
+			#{rebateRate},
+		</if>
+		<if test="rebateMoney !=null">
+			#{rebateMoney},
+		</if>
+		<if test="favorerAccount !=null">
+			#{favorerAccount},
+		</if>
+		<if test="favorerRoleId !=null">
+			#{favorerRoleId}
+		</if>
+		)
+	</insert>
+
+
+</mapper>

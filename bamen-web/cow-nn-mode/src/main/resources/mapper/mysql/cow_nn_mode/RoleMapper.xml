@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bamenyouxi.cow_nn_mode.mapper.mysql.cow_nn_mode.RoleMapper">
+    <resultMap id="resultMap" type="com.bamenyouxi.cow_nn_mode.model.mysql.cow_nn_mode.Role">
+        <id property="roleId" column="ROLE_ID" />
+        <result property="roleName" column="ROLE_NAME" />
+        <result property="parentId" column="PARENT_ID" />
+    </resultMap>
+
+    <select id="get" resultMap="resultMap">
+        select * from t_role
+        <where>
+            <foreach collection="params" index="key" item="value">
+                <if test="value != null">
+                    and ${key}=#{value}
+                </if>
+            </foreach>
+        </where>
+    </select>
+
+    <select id="getOfficeLimits" resultMap="resultMap">
+        select * from t_role LIMIT 1,4
+    </select>
+    <select id="getSalesmanLimits" resultMap="resultMap">
+        select * from t_role LIMIT 2,3
+    </select>
+    <select id="getAgent" resultMap="resultMap">
+        select * from t_role where ROLE_ID in(4,5)
+    </select>
+    <select id="getZdOneAgent" resultMap="resultMap">
+        select * from t_role where ROLE_ID=5
+    </select>
+
+</mapper>

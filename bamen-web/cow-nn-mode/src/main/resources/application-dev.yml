@@ -1,0 +1,17 @@
+spring:
+  thymeleaf:
+    mode: HTML
+    encoding: UTF-8
+    content-type: text/html
+    cache: false
+  output:
+    ansi:
+      enabled: ALWAYS
+      # [DETECT] Try to detect whether ANSI coloring capabilities are available. The default value for AnsiOutput.
+      # [ALWAYS] Enable ANSI-colored output.
+      # [NEVER] Disable ANSI-colored output.
+
+#logging:
+#  level:
+#    root: INFO
+#    com.bamenyouxi.kaixin.mapper: TRACE

@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+		PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+		"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bamenyouxi.cow_nn_mode.mapper.mysql.cow_nn_mode.PayOrderMapper">
+	<resultMap id="resultMap" type="com.bamenyouxi.cow_nn_mode.model.mysql.cow_nn_mode.PayOrder">
+		<id property="id" column="F_ID" />
+		<result property="sysFlag" column="F_SYS_FLAG" />
+		<result property="creator" column="F_CREATOR" />
+		<result property="createTime" column="F_CREATE_TIME" />
+		<result property="modifier" column="F_MODIFIER" />
+		<result property="modifyTime" column="F_MODIFY_TIME" />
+
+		<result property="nickName" column="F_NICK_NAME"/>
+		<result property="orderNo" column="F_ORDER_NO" />
+		<result property="sysAgentRoleId" column="F_SYS_AGENT_ROLE_ID" />
+		<result property="sysAgentId" column="F_SYS_AGENT_ID" />
+		<result property="payPrice" column="F_PAY_PRICE" />
+		<result property="cardNum" column="F_CARD_NUM" />
+		<result property="account" column="F_ACCOUNT"/>
+
+	</resultMap>
+
+
+	<select id="get" resultMap="resultMap">
+		select * from t_pay_order
+		<where>
+			<foreach collection="params" index="key" item="value">
+				<if test="value != null">
+					and ${key}=#{value}
+				</if>
+			</foreach>
+		</where>
+	</select>
+
+	<select id="getAgentPayList" resultMap="resultMap">
+		select * from t_pay_order
+		<where>
+			<if test="sysAgentId != null ">
+				F_SYS_AGENT_ID=#{sysAgentId}
+			</if>
+			<if test="startDate != null">
+				and convert(F_CREATE_TIME, DATE) &gt;= convert(#{startDate},DATE)
+			</if>
+			<if test="endDate != null">
+				and convert(F_CREATE_TIME, DATE) &lt;= convert(#{endDate}, DATE)
+			</if>
+		</where>
+	</select>
+
+
+	<select id="getPayDay" resultMap="resultMap">
+		SELECT
+		F_SYS_AGENT_ID,
+		sum(F_PAY_PRICE) AS F_PAY_PRICE,
+		sum(F_CARD_NUM) AS F_CARD_NUM,
+		CONVERT (F_CREATE_TIME, date) F_CREATE_TIME
+		FROM
+		t_pay_order
+		GROUP BY
+		CONVERT (F_CREATE_TIME, date)
+	</select>
+
+
+
+	<select id="getPayAgent" resultMap="resultMap">
+		SELECT
+		a.F_ID,
+		a.F_ACCOUNT,
+		a.F_NICK_NAME,
+		sum(b.F_PAY_PRICE) as F_PAY_PRICE,
+		sum(b.F_CARD_NUM) as F_CARD_NUM,
+		b.F_CREATE_TIME
+		FROM
+		t_sys_agent AS a
+		RIGHT JOIN t_pay_order AS b ON a.F_ACCOUNT = b.F_SYS_AGENT_ID
+		<where>
+			<if test="superAgentId !=null">
+				a.F_SUPER_AGENT_ID LIKE "%"#{superAgentId}"%"
+			</if>
+			<if test="startDate != null">
+				and convert(b.F_CREATE_TIME, DATE) &gt;= convert(#{startDate},DATE)
+			</if>
+			<if test="endDate != null">
+				and convert(b.F_CREATE_TIME, DATE) &lt;= convert(#{endDate}, DATE)
+			</if>
+		</where>
+		GROUP BY a.F_ACCOUNT
+	</select>
+
+	<insert id="save" parameterType="com.bamenyouxi.cow_nn_mode.model.mysql.cow_nn_mode.PayOrder" useGeneratedKeys="true" keyProperty="id">
+		INSERT INTO t_pay_order(
+		<if test="orderNo !=null">
+			F_ORDER_NO,
+		</if>
+		<if test="sysAgentId !=null">
+			F_SYS_AGENT_ID,
+		</if>
+		<if test="sysAgentRoleId !=null">
+			F_SYS_AGENT_ROLE_ID,
+		</if>
+		<if test="payPrice !=null">
+			F_PAY_PRICE,
+		</if>
+		<if test="cardNum !=null">
+			F_CARD_NUM
+		</if>
+		)
+		VALUES(
+		<if test="orderNo !=null">
+			#{orderNo},
+		</if>
+		<if test="sysAgentId !=null">
+			#{sysAgentId},
+		</if>
+		<if test="sysAgentRoleId !=null">
+			#{sysAgentRoleId},
+		</if>
+		<if test="payPrice !=null">
+			#{payPrice},
+		</if>
+		<if test="cardNum !=null">
+			#{cardNum}
+		</if>
+		)
+	</insert>
+
+
+</mapper>

@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bamenyouxi.cow_nn_mode.mapper.mysql.cow_nn_mode.WithdrawMapper">
+    <resultMap id="resultMap" type="com.bamenyouxi.cow_nn_mode.model.mysql.cow_nn_mode.Withdraw">
+        <id property="id" column="F_ID" />
+        <result property="account" column="F_ACCOUNT" />
+        <result property="withdraw" column="F_WITHDRAW" />
+        <result property="createTime" column="F_CREATE_TIME" />
+        <result property="modifier" column="F_MODIFIER" />
+        <result property="modifyTime" column="F_MODIFY_TIME" />
+    </resultMap>
+
+    <select id="get" resultMap="resultMap">
+        select * from t_withdraw
+        <where>
+            <foreach collection="params" index="key" item="value">
+                <if test="value != null">
+                    and ${key}=#{value}
+                </if>
+            </foreach>
+        </where>
+    </select>
+
+
+    <select id="gets" resultMap="resultMap">
+        SELECT
+        a.F_ACCOUNT,
+        b.F_REAL_NAME,
+        sum(a.F_WITHDRAW)as F_WITHDRAW,
+        b.F_OPENING_BANK,
+        b.F_BANK_ACCOUNT,
+        b.F_PROVINCE,
+        b.F_CITY,
+        a.F_CREATE_TIME
+        FROM
+        t_withdraw AS a
+        LEFT JOIN t_sys_agent AS b ON a.F_ACCOUNT = b.F_ACCOUNT
+        <where>
+            <if test="account !=null">
+                a.F_ACCOUNT=#{account}
+            </if>
+            <if test="startDate != null">
+                and convert(a.F_CREATE_TIME, DATE) &gt;= convert(#{startDate},DATE)
+            </if>
+            <if test="endDate != null">
+                and convert(a.F_CREATE_TIME, DATE) &lt;= convert(#{endDate}, DATE)
+            </if>
+        </where>
+        GROUP BY a.F_ACCOUNT
+    </select>
+
+    <select id="getWithdraw" resultMap="resultMap">
+        select IFNULL(SUM(F_WITHDRAW),0)as F_WITHDRAW  from t_withdraw
+        <where>
+            <if test="account !=null">
+                F_ACCOUNT=#{account}
+            </if>
+         </where>
+    </select>
+
+    <insert id="add" parameterType="com.bamenyouxi.cow_nn_mode.model.mysql.cow_nn_mode.Withdraw">
+        insert into t_withdraw(F_ACCOUNT, F_WITHDRAW) values(#{account}, #{withdraw})
+    </insert>
+
+
+</mapper>

@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="zh-CN" xmlns:th="dfhttp://www.thymeleaf.org">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link href="/custom/css/bootstrap-3.3.7-dist/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
+<link href="/custom/css/index.css" rel="stylesheet" type="text/css" />
+<head th:replace="layout/head :: common_head(_, _)">
+</head>
+<body th:replace="layout/body :: common_body(~{::div#container}, ~{::#selfJs})">
+
+<div id="container" class="container">
+
+	<th:block th:replace="~{layout/common :: page-header('充值')}"/>
+
+	<th:block th:replace="~{layout/common :: table-paginator('table')}" />
+</div>
+
+<th:block id="selfJs">
+
+	<th:block th:replace="~{layout/common :: pageJs}"/>
+	<th:block th:replace="~{layout/common :: dateTimeJs}" />
+
+	<script type="text/javascript">
+		var commonJs = new CommonJs();
+		$("#table").tableInit('getPrice');
+
+	</script>
+
+</th:block>
+
+</body>
+</html>

@@ -1,0 +1,13 @@
+spring:
+  thymeleaf:
+    mode: HTML
+    encoding: UTF-8
+    content-type: text/html
+    cache: true
+  output:
+    ansi:
+      enabled: NEVER
+
+#logging:
+#  level:
+#    root: WARN

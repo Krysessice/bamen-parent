@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bamenyouxi.cow_nn_mode.mapper.mysql.cow_nn_mode.PriceMapper">
+    <resultMap id="resultMap" type="com.bamenyouxi.cow_nn_mode.model.mysql.cow_nn_mode.Price">
+        <id property="id" column="F_ID" />
+        <result property="image" column="IMAGE" />
+        <result property="rmb" column="RMB" />
+        <result property="drill" column="DRILL" />
+    </resultMap>
+
+    <select id="get" resultMap="resultMap">
+        select * from t_price
+        <where>
+            <foreach collection="params" index="key" item="value">
+                <if test="value != null">
+                    and ${key}=#{value}
+                </if>
+            </foreach>
+        </where>
+    </select>
+
+</mapper>
